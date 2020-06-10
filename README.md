@@ -2,5 +2,7 @@
 ## Usage
 1. Install the package `pip install sakurajima`
 2. Use it.
-```from sakurajima import Sakurajima
-aniwatch = Sakurajima("username", "passsword")```
+```python
+from sakurajima import Sakurajima
+aniwatch = Sakurajima("username", "passsword")
+```
