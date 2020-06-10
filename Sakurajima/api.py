@@ -7,7 +7,6 @@ class Sakurajima:
 
     def __init__(self, username=None, password=None, endpoint="https://aniwatch.me/api/ajax/APIHandle"):
         xsrf_token = self.__generate_xsrf_token()
-        print(xsrf_token)
         self.headers = { 'X-XSRF-TOKEN': xsrf_token }
         self.cookies = { 'XSRF-TOKEN': xsrf_token }
         self.API_URL = endpoint
