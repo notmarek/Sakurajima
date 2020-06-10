@@ -1,1 +1,1 @@
-from sakurajima.api import Sakurajima
+from Sakurajima.api import Sakurajima
