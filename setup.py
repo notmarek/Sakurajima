@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 
 setup(name='sakurajima',  
-      version='0.1.3',
+      version='0.1.4',
       license='MIT',
       author="Not Marek",
       author_email="notmarek@animex.tech",
