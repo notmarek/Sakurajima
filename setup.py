@@ -1,0 +1,14 @@
+from setuptools import setup, find_packages
+
+
+setup(name='sakurajima',  
+      version='0.1',
+      license='MIT',
+      author="Not Marek",
+      author_email="notmarek@animex.tech",
+      description="AniWatch.me API wrapper",
+      long_description=open("README.md", "r").read(),
+      long_description_content_type="text/markdown",
+      url="https://github.com/veselysps/Sakurajima",
+      packages=find_packages(),
+ )
