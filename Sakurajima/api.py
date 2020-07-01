@@ -8,23 +8,23 @@ class Sakurajima:
     def __init__(
         self,
         username=None,
-        password=None,
+        userId=None,
+        authToken=None,
         endpoint="https://aniwatch.me/api/ajax/APIHandle",
     ):
         xsrf_token = self.__generate_xsrf_token()
         self.headers = {"X-XSRF-TOKEN": xsrf_token}
         self.cookies = {"XSRF-TOKEN": xsrf_token}
         self.API_URL = endpoint
-        if username is not None and password is not None:
-            login_response = self.login(username, password)
-            self.headers["X-AUTH"] = login_response["auth"]
+        if username is not None and userId is not None and authToken is not None:
+            self.headers["X-AUTH"] = authToken
             self.cookies["SESSION"] = (
                 '{"userid":'
-                + str(login_response["user"]["userid"])
+                + str(userId)
                 + ',"username":"'
-                + str(login_response["user"]["username"])
+                + str(username)
                 + '","usergroup":4,"player_lang":1,"player_quality":0,"player_time_left_side":2,"player_time_right_side":3,"screen_orientation":1,"nsfw":1,"chrLogging":1,"mask_episode_info":0,"blur_thumbnails":0,"autoplay":1,"preview_thumbnails":1,"update_watchlist":1,"playheads":1,"seek_time":5,"cover":null,"title":"Member","premium":1,"lang":"en-US","auth":"'
-                + str(login_response["auth"])
+                + str(authToken)
                 + '","remember_login":true}'
             )
 
