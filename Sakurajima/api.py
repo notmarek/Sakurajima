@@ -1,5 +1,4 @@
-import cloudscraper # use cloudscraper instead of requests to bypass Cloudflare
-requests = cloudscraper.create_scraper()
+import requests
 import json
 import base64
 import random
@@ -14,13 +13,14 @@ class Sakurajima:
         endpoint="https://aniwatch.me/api/ajax/APIHandle",
     ):
         xsrf_token = self.__generate_xsrf_token()
-        print(xsrf_token)
-        self.headers = {"X-XSRF-TOKEN": xsrf_token}
-        self.cookies = {"XSRF-TOKEN": xsrf_token}
+
+        self.headers = {"x-xsrf-token": xsrf_token, "user-agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36"}
+        self.cookies = {"xsrf-token": xsrf_token}
+
         self.API_URL = endpoint
         if username is not None and userId is not None and authToken is not None:
-            self.headers["X-AUTH"] = authToken
-            self.cookies["SESSION"] = (
+            self.headers["x-auth"] = authToken
+            session_token = (
                 '{"userid":'
                 + str(userId)
                 + ',"username":"'
@@ -29,6 +29,8 @@ class Sakurajima:
                 + str(authToken)
                 + '","remember_login":true}'
             )
+            self.cookies["SESSION"] = session_token
+            self.headers["COOKIE"] = f"SESSION={session_token}; XSRF-TOKEN={xsrf_token};"
 
     def __generate_xsrf_token(self):
         characters = [
