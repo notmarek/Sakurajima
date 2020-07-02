@@ -1,4 +1,5 @@
-import requests
+import cloudscraper # use cloudscraper instead of requests to bypass Cloudflare
+requests = cloudscraper.create_scraper()
 import json
 import base64
 import random
@@ -13,6 +14,7 @@ class Sakurajima:
         endpoint="https://aniwatch.me/api/ajax/APIHandle",
     ):
         xsrf_token = self.__generate_xsrf_token()
+        print(xsrf_token)
         self.headers = {"X-XSRF-TOKEN": xsrf_token}
         self.cookies = {"XSRF-TOKEN": xsrf_token}
         self.API_URL = endpoint
@@ -59,6 +61,7 @@ class Sakurajima:
         with requests.post(
             self.API_URL, headers=self.headers, json=data, cookies=self.cookies
         ) as url:
+            print(url.text)
             return json.loads(url.text)
 
     def get_episode(self, episode_id, lang="en-US"):
