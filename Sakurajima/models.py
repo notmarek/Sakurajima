@@ -115,6 +115,15 @@ class Anime(object):
         data_dict = self.__post(data)['anime']
         return Anime(data_dict, headers=self.headers, cookies = self.cookies, api_url=self.API_URL)
     
+    def add_recommendation(self, recommended_anime_id):
+        data = {
+            "controller": "Anime",
+            "action": "addRecommendation",
+            "detail_id": str(self.anime_id),
+            "recommendation": str(recommended_anime_id),
+        }
+        return self.__post(data)
+    
     def get_dict(self):
         return self.data_dict
 
@@ -189,7 +198,7 @@ class Episode(object):
     def get_m3u8(self, quality: str):
         REFERER = self.__generate_referer()
         HEADERS = self.headers
-        HEADERS.update({'USER AGENT': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36', 'REFERER' : REFERER, 'ORIGIN' : 'https://aniwatch.me'})
+        HEADERS.update({'REFERER' : REFERER, 'ORIGIN' : 'https://aniwatch.me'})
         aniwatch_episode = self.get_aniwatch_episode()
         res = requests.get(aniwatch_episode.stream.sources[quality], headers = HEADERS, cookies = self.cookies)
         return M3U8(res.text)
@@ -198,7 +207,7 @@ class Episode(object):
         m3u8 = self.get_m3u8(quality)
         REFERER = self.__generate_referer()
         HEADERS = self.headers
-        HEADERS.update({'USER AGENT': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36', 'REFERER' : REFERER, 'ORIGIN' : 'https://aniwatch.me'})
+        HEADERS.update({'REFERER' : REFERER, 'ORIGIN' : 'https://aniwatch.me'})
         total_chunks = len(m3u8.data['segments'])
         chunks_done = 0
         with open(f'{file_name}.ts', 'wb') as videofile:
@@ -219,7 +228,7 @@ class Episode(object):
     def mark_as_watched(self):
         data = { "controller": "Profile", "action": "markAsWatched", "detail_id": str(self.anime_id), "episode_id": self.ep_id }
         return self.__post(data)['success']
-
+    
     def __repr__(self):
         return f'<Episode {self.number} : {self.title}>'
 
@@ -349,3 +358,69 @@ class MediaEntry(object):
         '''Marks the media as a favotite'''
         data = { "controller": "Media", "action": "favMedia", "media_id": str(self.id) }
         return self.__post(data)['success'] 
+
+class UserAnimeListEntry(object):
+    def __init__(self, data_dict, headers, cookies, api_url):
+        self.headers = headers
+        self.cookies = cookies
+        self.API_URL = api_url
+        self.title = data_dict.get('title', None)
+        self.episodes_max = data_dict.get('episodes_max', None)
+        self.type = data_dict.get('type', None)
+        self.cover = data_dict.get('cover', None)
+        self.anime_id = data_dict.get('details_id', None)
+        self.progress = data_dict.get('progress', None)
+        self.airing_start = data_dict.get('airing_start', None)
+        self.cur_episodes = data_dict.get('cur_episodes', None)
+        if data_dict.get('completed', None) == 1:
+            self.status = 'completed' 
+        elif data_dict.get('planned_to_watch', None) == 1:
+            self.status = 'planned_to_watch'
+        elif data_dict.get('on_hold', None) == 1:
+            self.status = 'on_hold'
+        elif data_dict.get('dropped', None) == 1:
+            self.status = 'dropped'
+
+    def __post(self, data):
+        with requests.post(self.API_URL, headers=self.headers, json=data, cookies=self.cookies) as url:
+            return json.loads(url.text)
+
+    def get_anime(self):
+        data = {"controller": "Anime", "action": "getAnime", "detail_id": str(self.anime_id)}
+        return Anime(self.__post(data)['anime'], headers=self.headers, cookies = self.cookies, api_url=self.API_URL)
+
+    def __repr__(self):
+            return f'<AnimeListEntry : {self.title}>'
+
+class UserOverview(object):
+    def __init__(self, data_dict):
+        self.anime = UserOverviewType(data_dict['anime'])
+        self.special = UserOverviewType(data_dict['special'])
+        self.movie = UserOverviewType(data_dict['movie'])
+        self.hentai = UserOverviewType(data_dict['hentai'])
+        self.stats = UserOverviewStats(data_dict['stats'])
+        self.mine =data_dict.get('mine', None)
+        self.username = data_dict.get('username', None)
+        self.title = data_dict.get('title', None)
+        self.admin = data_dict.get('admin', None)
+        self.staff = data_dict.get('staff', None)
+        self.cover = data_dict.get('cover', None)
+        self.friend = data_dict.get('friend', None)
+
+    def __repr__(self):
+        return f'<UserOverView: {self.username}>'
+
+class UserOverviewType(object):
+    def __init__(self, data_dict):
+        self.total = data_dict.get('total', None)
+        self.episodes = data_dict.get('episodes', None)
+        self.icon = data_dict.get('icon', None)
+
+class UserOverviewStats(object):
+    def __init__(self, data_dict):
+        self.total = data_dict.get('total', None)
+        self.total_episodes = data_dict.get('total_episodes', None)
+        self.watched_hours = data_dict.get('watched_hours', None)
+        self.watched_days = data_dict.get('watched_days', None)
+        self.mean_score = data_dict.get('mean_score', None)
+        self.ratings = data_dict.get('ratings', None)

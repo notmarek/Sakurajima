@@ -13,6 +13,7 @@ class Sakurajima:
         endpoint="https://aniwatch.me/api/ajax/APIHandle",
     ):
         xsrf_token = self.__generate_xsrf_token()
+        self.userId = userId
         self.headers = {"x-xsrf-token": xsrf_token, "user-agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36"}
         self.cookies = {"xsrf-token": xsrf_token}
         self.API_URL = endpoint
@@ -108,19 +109,19 @@ class Sakurajima:
             "current_index": index,
             "current_year": year,
         }
-        return self.__post(data)
+        return [Anime(data_dict, self.headers, self.cookies, self.API_URL) for data_dict in self.__post(data)['entries']]
 
     def get_latest_releases(self):
         data = {"controller": "Anime", "action": "getLatestReleases"}
-        return self.__post(data)
+        return [Anime(data_dict, self.headers, self.cookies, self.API_URL) for data_dict in self.__post(data)['entries']]
 
     def get_latest_uploads(self):
         data = {"controller": "Anime", "action": "getLatestUploads"}
-        return self.__post(data)
+        return [Anime(data_dict, self.headers, self.cookies, self.API_URL) for data_dict in self.__post(data)['entries']]
 
     def get_latest_anime(self):
         data = {"controller": "Anime", "action": "getLatestAnime"}
-        return self.__post(data)
+        return [Anime(data_dict, self.headers, self.cookies, self.API_URL) for data_dict in self.__post(data)['entries']]
 
     def get_random_anime(self):
         data = {"controller": "Anime", "action": "getRandomAnime"}
@@ -171,13 +172,13 @@ class Sakurajima:
         data = {"controller": "XML", "action": "getStatsData"}
         return self.__post(data)
 
-    def get_user_overview(self, user_id):
+    def get_user_overview(self):
         data = {
             "controller": "Profile",
             "action": "getOverview",
-            "profile_id": str(user_id),
+            "profile_id": str(self.userId),
         }
-        return self.__post(data)
+        return UserOverview(self.__post(data)['overview'])
 
     def get_user_chronicle(self, user_id, page=1):
         data = {
@@ -188,13 +189,13 @@ class Sakurajima:
         }
         return self.__post(data)
 
-    def get_user_anime_list(self, user_id):
+    def get_user_anime_list(self):
         data = {
             "controller": "Profile",
             "action": "getAnimelist",
-            "profile_id": str(user_id),
+            "profile_id": str(self.userId),
         }
-        return self.__post(data)
+        return [UserAnimeListEntry(data_dict, self.headers, self.cookies, self.API_URL) for data_dict in self.__post(data)['animelist']]
 
     def get_user_media(self, user_id, page=1):
         data = {
@@ -427,7 +428,7 @@ class Sakurajima:
             "detail_id": 0,
             "page": page,
         }
-        return self.__post(data)
+        return [WatchListEntry(data_dict, self.headers, self.cookies, self.API_URL) for data_dict in self.__post(data)['entries']]
 
     def login(self, username, password):
         data = {
@@ -468,7 +469,7 @@ class Sakurajima:
             "maxEpisodes": 0,
             "hasRelation": False,
         }
-        return [Anime(data_dict, self.headers, self.cookies, self.API_URL) for data_dict in self.__post(data)['entries']]
+        return [Anime(data_dict, self.headers, self.cookies, self.API_URL) for data_dict in self.__post(data)]
 
     def get_media(self, anime_id):
         data = {"controller": "Media", "action": "getMedia", "detail_id": str(anime_id)}
