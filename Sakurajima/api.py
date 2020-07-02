@@ -13,8 +13,10 @@ class Sakurajima:
         endpoint="https://aniwatch.me/api/ajax/APIHandle",
     ):
         xsrf_token = self.__generate_xsrf_token()
+
         self.headers = {"x-xsrf-token": xsrf_token, "user-agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36"}
         self.cookies = {"xsrf-token": xsrf_token}
+
         self.API_URL = endpoint
         if username is not None and userId is not None and authToken is not None:
             self.headers["x-auth"] = authToken
@@ -61,6 +63,7 @@ class Sakurajima:
         with requests.post(
             self.API_URL, headers=self.headers, json=data, cookies=self.cookies
         ) as url:
+            print(url.text)
             return json.loads(url.text)
 
     def get_episode(self, episode_id, lang="en-US"):
