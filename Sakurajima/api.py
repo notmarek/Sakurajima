@@ -204,7 +204,7 @@ class Sakurajima:
             "profile_id": str(self.userId),
             "page": page,
         }
-        return self.__post(data)
+        return [UserMedia(data_dict, self.headers, self.cookies, self.API_URL) for data_dict in self.__post(data)['entries']]
 
     def send_image_to_discord(self, episode_id, base64_image, episode_time):
         data = {
