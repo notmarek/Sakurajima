@@ -170,7 +170,7 @@ class Sakurajima:
 
     def get_stats(self):
         data = {"controller": "XML", "action": "getStatsData"}
-        return self.__post(data)
+        return AniwatchStats(self.__post(data))
 
     def get_user_overview(self):
         data = {
@@ -180,14 +180,14 @@ class Sakurajima:
         }
         return UserOverview(self.__post(data)['overview'])
 
-    def get_user_chronicle(self, user_id, page=1):
+    def get_user_chronicle(self, page=1):
         data = {
             "controller": "Profile",
             "action": "getChronicle",
-            "profile_id": str(user_id),
+            "profile_id": str(self.userId),
             "page": page,
         }
-        return self.__post(data)
+        return [ChronicleEntry(data_dict, self.headers, self.cookies, self.API_URL) for data_dict in self.__post(data)['chronicle']]
 
     def get_user_anime_list(self):
         data = {
@@ -197,11 +197,11 @@ class Sakurajima:
         }
         return [UserAnimeListEntry(data_dict, self.headers, self.cookies, self.API_URL) for data_dict in self.__post(data)['animelist']]
 
-    def get_user_media(self, user_id, page=1):
+    def get_user_media(self, page=1):
         data = {
             "controller": "Profile",
             "action": "getMedia",
-            "profile_id": str(user_id),
+            "profile_id": str(self.userId),
             "page": page,
         }
         return self.__post(data)
@@ -304,7 +304,7 @@ class Sakurajima:
             "detail_id": str(anime_id),
             "page": page,
         }
-        return self.__post(data)
+        return [ChronicleEntry(data_dict, self.headers, self.cookies, self.API_URL) for data_dict in self.__post(data)['chronicle']]
 
     def remove_chronicle_entry(self, chronicle_id):
         data = {

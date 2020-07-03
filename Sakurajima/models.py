@@ -85,6 +85,15 @@ class Anime(object):
         }
         return [RecommendationEntry(data_dict, self.headers, self.cookies, self.API_URL) for data_dict in self.__post(data)['entries']]
 
+    def get_chronicle(self, page=1):
+        data = {
+            "controller": "Profile",
+            "action": "getChronicle",
+            "detail_id": str(self.anime_id),
+            "page": page,
+        }
+        return [ChronicleEntry(data_dict, self.headers, self.cookies, self.API_URL) for data_dict in self.__post(data)['chronicle']]
+
     def mark_as_completed(self):
         data = { "controller": "Profile", "action": "markAsCompleted", "detail_id": str(self.anime_id) }
         return self.__post(data)['success']
@@ -367,6 +376,25 @@ class MediaEntry(object):
         data = { "controller": "Media", "action": "favMedia", "media_id": str(self.id) }
         return self.__post(data)['success'] 
 
+class UserMedia(object):
+    def __init__(self, data_dict, headers, cookies, api_url):
+        self.headers = headers
+        self.cookies = cookies
+        self.API_URL = api_url
+        self.title = data_dict.get('title', None)
+        self.media_id = data_dict.get('media_id', None)
+        try:
+            self.date = date_time.utcfromtimestamp(data_dict['date'])
+        except: 
+            self.date = None
+
+    def __post(self, data):
+        with requests.post(self.API_URL, headers=self.headers, json=data, cookies=self.cookies) as url:
+            return json.loads(url.text)
+
+    def __repr__(self):
+        return f'UserMedia: {self.title}'
+       
 class UserAnimeListEntry(object):
     def __init__(self, data_dict, headers, cookies, api_url):
         self.headers = headers
@@ -460,3 +488,54 @@ class RecommendationEntry(object):
     def get_anime(self):
         data = {"controller": "Anime", "action": "getAnime", "detail_id": str(self.anime_id)}
         return Anime(self.__post(data)['anime'], headers=self.headers, cookies = self.cookies, api_url=self.API_URL)
+
+class ChronicleEntry(object):
+    def __init__(self, data_dict, headers, cookies, api_url):
+        self.headers = headers
+        self.cookies = cookies
+        self.API_URL = api_url
+        self.episode = data_dict.get('episode', None)
+        self.anime_id = data_dict.get('id', None)
+        self.anime_title = data_dict.get('anime_title', None)
+        self.ep_title = data_dict.get('ep_title', None)
+        self.chronicle_id = data_dict.get('chronicle_id', None)
+        try: 
+            self.date = datetime.utcfromtimestamp(data_dict['date'])
+        except:
+            self.date = None
+
+    def __post(self, data):
+        with requests.post(self.API_URL, headers=self.headers, json=data, cookies=self.cookies) as url:
+            return json.loads(url.text)
+
+    def __repr__(self):
+        return f'<ChronicleEntry: {self.chronicle_id}>'
+
+    def remove_chronicle_entry(self):
+        data = {
+            "controller": "Profile",
+            "action": "removeChronicleEntry",
+            "chronicle_id": self.chronicle_id,
+        }
+        return self.__post(data)
+
+class AniwatchStats(object):
+    def __init__(self, data_dict):
+        self.total_streams = data_dict['hoster'][0]['count']
+        self.total_1080p_streams = data_dict['hoster'][0]['rows'][0]['count']        
+        self.total_720p_streams = data_dict['hoster'][0]['rows'][1]['count']
+        self.total_480p_streams = data_dict['hoster'][0]['rows'][2]['count']
+        self.total_360p_streams = data_dict['hoster'][0]['rows'][3]['count']
+        self.registered_users = data_dict['user'][0]['count']
+        self.registered_users_graph_data = data_dict['user'][0]['rows']
+        self.new_registered_users = data_dict['user'][1]['count']
+        self.new_registered_users_graph_data = data_dict['user'][1]['rows']
+        self.total_show = data_dict['entry']['count']
+        self.total_shows = data_dict['entry']['count']
+        self.total_animes = data_dict['entry']['rows'][0]['count']
+        self.total_specials = data_dict['entry']['rows'][1]['count']
+        self.total_movies = data_dict['entry']['rows'][2]['count']
+        self.total_hentais = data_dict['entry']['rows'][3]['count']
+        # I don't know what they mean by it, the api response has a "Unknown" column the same way it
+        # has the total anime and total movie column so I decided to include it.
+        self.total_unknowns = data_dict['entry']['rows'][4]['count'] 
