@@ -72,7 +72,7 @@ class Sakurajima:
             "ep_id": episode_id,
             "hoster": "",
         }
-        return self.__post(data)
+        return AniWatchEpisode(self.__post(data), episode_id)
 
     def get_episodes(self, anime_id):
         data = {
@@ -80,7 +80,7 @@ class Sakurajima:
             "action": "getEpisodes",
             "detail_id": str(anime_id),
         }
-        return self.__post(data)
+        return [Episode(data_dict, self.headers, self.cookies, self.API_URL, anime_id) for data_dict in self.__post(data)['episodes']]
 
     def get_anime(self, anime_id):
         data = {"controller": "Anime", "action": "getAnime", "detail_id": str(anime_id)}
@@ -92,7 +92,7 @@ class Sakurajima:
             "action": "getRecommendations",
             "detail_id": str(anime_id),
         }
-        return self.__post(data)
+        return [RecommendationEntry(data_dict, self.headers, self.cookies, self.API_URL) for data_dict in self.__post(data)['entries']]
 
     def get_relation(self, relation_id):
         data = {
@@ -100,7 +100,7 @@ class Sakurajima:
             "action": "getRelation",
             "relation_id": relation_id,
         }
-        return self.__post(data)
+        return Relation(self.__post(data)['relation'])
 
     def get_seasonal_anime(self, index="null", year="null"):
         data = {

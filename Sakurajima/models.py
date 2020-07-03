@@ -63,7 +63,7 @@ class Anime(object):
         if self.__episodes:
             return self.__episodes
         else:
-            self.__episodes = [Episode(data_dict, cookies = self.cookies, headers = self.headers, anime_id = self.anime_id, api_url = self.API_URL) for data_dict in self.__post(data)['episodes']]
+            self.__episodes = [Episode(data_dict, self.headers, self.cookies, self.API_URL, self.anime_id) for data_dict in self.__post(data)['episodes']]
             return self.__episodes
 
     def __post(self, data):
@@ -76,6 +76,14 @@ class Anime(object):
     def get_relations(self):
         data = { "controller": "Relation", "action": "getRelation", "relation_id": self.relation_id }
         return Relation(self.__post(data)['relation'])
+
+    def get_recommendations(self):
+        data = {
+            "controller": "Anime",
+            "action": "getRecommendations",
+            "detail_id": str(self.anime_id),
+        }
+        return [RecommendationEntry(data_dict, self.headers, self.cookies, self.API_URL) for data_dict in self.__post(data)['entries']]
 
     def mark_as_completed(self):
         data = { "controller": "Profile", "action": "markAsCompleted", "detail_id": str(self.anime_id) }
@@ -159,7 +167,7 @@ class AniWatchEpisode(object):
         return f'Episode ID : {self.episode_id}'
 
 class Episode(object):
-    def __init__(self, data_dict, cookies, headers, anime_id, api_url):
+    def __init__(self, data_dict, headers, cookies, api_url, anime_id,):
         self.cookies = cookies
         self.headers = headers
         self.anime_id = anime_id
@@ -311,7 +319,7 @@ class WatchListEntry(object):
         self.max_episodes = data_dict.get('max_episodes', None)
         self.cover = data_dict.get('cover', None)
         self.available_episodes = data_dict.get('available_episodes', None)
-        self.episodes = [Episode(data, self.cookies, self.headers, self.anime_id, self.API_URL) for data in data_dict.get('episodes', [])]
+        self.episodes = [Episode(data, self.headers, self.cookies, self.API_URL, self.anime_id) for data in data_dict.get('episodes', [])]
 
     def __repr__(self):
         return f'<WatchListEntry : {self.title}>'
@@ -424,3 +432,31 @@ class UserOverviewStats(object):
         self.watched_days = data_dict.get('watched_days', None)
         self.mean_score = data_dict.get('mean_score', None)
         self.ratings = data_dict.get('ratings', None)
+
+class RecommendationEntry(object):
+    def __init__(self, data_dict, headers, cookies, api_url):
+        self.headers = headers
+        self.cookies = cookies
+        self.API_URL = api_url
+        self.title = data_dict.get('title', None)
+        self.episodes_max = data_dict.get('episodes_max', None)
+        self.type = data_dict.get('type', None)
+        self.anime_id = data_dict.get('detail_id', None)
+        self.cover = data_dict.get('cover', None)
+        self.airing_start = data_dict.get('airing_start', None)
+        self.recommendations = data_dict.get('recommendations', None)
+        self.d_status = data_dict.get('d_status', None)
+        self.has_special = data_dict.get('hasSpecial', None)
+        self.progress = data_dict.get('progress', None)
+        self.cur_episodes = data_dict.get('cur_episodes', None)
+
+    def __post(self, data):
+        with requests.post(self.API_URL, headers=self.headers, json=data, cookies=self.cookies) as url:
+            return json.loads(url.text)
+
+    def __repr__(self):
+        return f'<RecommendationEntry: {self.title}>'
+    
+    def get_anime(self):
+        data = {"controller": "Anime", "action": "getAnime", "detail_id": str(self.anime_id)}
+        return Anime(self.__post(data)['anime'], headers=self.headers, cookies = self.cookies, api_url=self.API_URL)
