@@ -15,7 +15,8 @@ Login in to your aniwatch.me account and go to your profile.
 Step 2:
 Notice the URL of the page. The page URL contains your user ID. 
 The number following the "profile/" is your user ID.
-Example: aniwatch.me/profile/[YOUR-USERID]
+
+Example: `aniwatch.me/profile/[YOUR-USERID]`
 
 ![Step 2](docs/images/Step_2.png)
 
@@ -30,4 +31,4 @@ Step 4:
 Click on the 'APIHandle' and under the 'Headers' tab expand the 'Request Headers' list and look for a header called 'x-auth'. This string of random letters is your auth token.
 
 ![Step 4](docs/images/Step_4.png) 
->>>>>>> update-readme
+
