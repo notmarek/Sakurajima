@@ -1,6 +1,6 @@
 import requests
 import json
-from . base_models import Anime
+from . import base_models as bm
 
 class UserAnimeListEntry(object):
     def __init__(self, data_dict, headers, cookies, api_url):
@@ -30,7 +30,7 @@ class UserAnimeListEntry(object):
 
     def get_anime(self):
         data = {"controller": "Anime", "action": "getAnime", "detail_id": str(self.anime_id)}
-        return Anime(self.__post(data)['anime'], headers=self.headers, cookies = self.cookies, api_url=self.API_URL)
+        return bm.Anime(self.__post(data)['anime'], headers=self.headers, cookies = self.cookies, api_url=self.API_URL)
 
     def __repr__(self):
             return f'<AnimeListEntry : {self.title}>'
