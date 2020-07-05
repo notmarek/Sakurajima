@@ -195,7 +195,7 @@ class Episode(object):
         res = requests.get(aniwatch_episode.stream.sources[quality], headers = HEADERS, cookies = self.cookies)
         return M3U8(res.text)
 
-    def download(self, quality: str, file_name = 'download'):
+    def download(self, quality: str, file_name: str = 'download', on_progress = None, print_progress: bool = True):
         m3u8 = self.get_m3u8(quality)
         REFERER = self.__generate_referer()
         HEADERS = self.headers
@@ -204,6 +204,8 @@ class Episode(object):
         chunks_done = 0
         with open(f'{file_name}.ts', 'wb') as videofile:
             for segment in m3u8.data['segments']:
+                if on_progress:
+                    on_progress.__call__(chunks_done, total_chunks)
                 res = requests.get(segment['uri'], cookies = self.cookies, headers = HEADERS)
                 chunk = res.content
                 key_dict = segment.get('key', None)
@@ -215,7 +217,9 @@ class Episode(object):
                 else:
                     videofile.write(chunk)
                     chunks_done = chunks_done + 1
-                print(f'{chunks_done}/{total_chunks} done')
+                
+                if print_progress:
+                    print(f'{chunks_done}/{total_chunks} done.')
 
     def mark_as_watched(self):
         data = { "controller": "Profile", "action": "markAsWatched", "detail_id": str(self.anime_id), "episode_id": self.ep_id }
