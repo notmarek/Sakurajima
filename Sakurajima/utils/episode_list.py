@@ -25,10 +25,13 @@ class EpisodeList(object):
             ))[0]
     
     def __getitem__(self, position):
-        return self.__episode_list[position]
-    
+        if isinstance(position, int):
+            return self.__episode_list[position]
+        elif isinstance(position, slice):
+            return EpisodeList(self.__episode_list[position])
+
     def __reversed__(self):
         return self[::-1]
     
     def __repr__(self):
-        return f"<EpisodeList({self.__episode_list})>"
+        return f"EpisodeList({self.__episode_list})"

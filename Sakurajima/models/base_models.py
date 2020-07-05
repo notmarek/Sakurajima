@@ -8,7 +8,7 @@ from . recommendation import RecommendationEntry
 from . chronicle import ChronicleEntry
 from . media import Media
 from . helper_models import Language, Stream
-
+from ..utils.episode_list import EpisodeList
 
 class Anime(object):
     '''Wraps all the relevant data for an anime like anime_id 
@@ -69,7 +69,7 @@ class Anime(object):
         if self.__episodes:
             return self.__episodes
         else:
-            self.__episodes = [Episode(data_dict, self.headers, self.cookies, self.API_URL, self.anime_id) for data_dict in self.__post(data)['episodes']]
+            self.__episodes = EpisodeList([Episode(data_dict, self.headers, self.cookies, self.API_URL, self.anime_id) for data_dict in self.__post(data)['episodes']])
             return self.__episodes
 
     def __post(self, data):
