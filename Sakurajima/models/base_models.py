@@ -231,6 +231,10 @@ class Episode(object):
                 if print_progress:
                     print(f'{chunks_done}/{total_chunks} done.')
 
+    def get_available_qualities(self):
+        aniwatch_episode = self.get_aniwatch_episode()
+        return list(aniwatch_episode.stream.sources.keys())
+    
     def mark_as_watched(self):
         data = { "controller": "Profile", "action": "markAsWatched", "detail_id": str(self.anime_id), "episode_id": self.ep_id }
         return self.__post(data)['success']

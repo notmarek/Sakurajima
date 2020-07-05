@@ -30,6 +30,9 @@ class EpisodeList(object):
         elif isinstance(position, slice):
             return EpisodeList(self.__episode_list[position])
 
+    def __len__(self):
+        return len(self.__episode_list)
+    
     def __reversed__(self):
         return self[::-1]
     
