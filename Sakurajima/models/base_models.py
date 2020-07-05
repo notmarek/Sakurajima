@@ -167,6 +167,8 @@ class Episode(object):
         self.is_aired = data_dict.get('is_aired', None)
         self.lang = data_dict.get('lang', None)
         self.watched = data_dict.get('watched', None)
+        self.__aniwatch_episode = None
+        self.__m3u8 = None
 
     def __post(self, data):
         with requests.post(self.API_URL, headers=self.headers, json=data, cookies=self.cookies) as url:
@@ -184,16 +186,24 @@ class Episode(object):
         return decrytor.decrypt(chunk)
 
     def get_aniwatch_episode(self, lang = 'en-US'):
-        data = { "controller": "Anime", "action": "watchAnime", "lang": lang, "ep_id": self.ep_id, "hoster": "" }
-        return AniWatchEpisode(self.__post(data), self.ep_id)
+        if self.__aniwatch_episode:
+            return self.__aniwatch_episode
+        else:
+            data = { "controller": "Anime", "action": "watchAnime", "lang": lang, "ep_id": self.ep_id, "hoster": "" }
+            self.__aniwatch_episode = AniWatchEpisode(self.__post(data), self.ep_id)
+            return self.__aniwatch_episode
     
     def get_m3u8(self, quality: str):
-        REFERER = self.__generate_referer()
-        HEADERS = self.headers
-        HEADERS.update({'REFERER' : REFERER, 'ORIGIN' : 'https://aniwatch.me'})
-        aniwatch_episode = self.get_aniwatch_episode()
-        res = requests.get(aniwatch_episode.stream.sources[quality], headers = HEADERS, cookies = self.cookies)
-        return M3U8(res.text)
+        if self.__m3u8:
+            return self.__m3u8
+        else:
+            REFERER = self.__generate_referer()
+            HEADERS = self.headers
+            HEADERS.update({'REFERER' : REFERER, 'ORIGIN' : 'https://aniwatch.me'})
+            aniwatch_episode = self.get_aniwatch_episode()
+            res = requests.get(aniwatch_episode.stream.sources[quality], headers = HEADERS, cookies = self.cookies)
+            self.__m3u8 = M3U8(res.text)
+            return self.__m3u8
 
     def download(self, quality: str, file_name: str = 'download', on_progress = None, print_progress: bool = True):
         m3u8 = self.get_m3u8(quality)
