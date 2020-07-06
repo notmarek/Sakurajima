@@ -1,6 +1,6 @@
 import requests
 import json
-from . import base_models as bm
+from Sakurajima.models import base_models as bm
 
 
 class UserAnimeListEntry(object):
@@ -82,4 +82,3 @@ class UserOverviewStats(object):
         self.watched_days = data_dict.get("watched_days", None)
         self.mean_score = data_dict.get("mean_score", None)
         self.ratings = data_dict.get("ratings", None)
-

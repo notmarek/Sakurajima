@@ -3,12 +3,12 @@ import requests
 import json
 from m3u8 import M3U8
 from Crypto.Cipher import AES
-from .relation import Relation
-from .recommendation import RecommendationEntry
-from .chronicle import ChronicleEntry
-from .media import Media
-from .helper_models import Language, Stream
-from ..utils.episode_list import EpisodeList
+from Sakurajima.models.relation import Relation
+from Sakurajima.models.recommendation import RecommendationEntry
+from Sakurajima.models.chronicle import ChronicleEntry
+from Sakurajima.models.media import Media
+from Sakurajima.models.helper_models import Language, Stream
+from Sakurajima.utils.episode_list import EpisodeList
 import subprocess
 import os
 

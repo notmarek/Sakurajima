@@ -1,6 +1,6 @@
 import requests
 import json
-from . import base_models as bm
+from Sakurajima.models import base_models as bm
 
 
 class RecommendationEntry(object):

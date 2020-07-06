@@ -2,7 +2,21 @@ import requests
 import json
 import base64
 import random
-from Sakurajima.models import *
+from Sakurajima.models import (
+    Anime,
+    RecommendationEntry,
+    Relation,
+    AniWatchEpisode,
+    Episode,
+    ChronicleEntry,
+    UserAnimeListEntry,
+    UserMedia,
+    UserOverview,
+    AniwatchStats,
+    Notification,
+    WatchListEntry,
+    Media,
+)
 from Sakurajima.utils.episode_list import EpisodeList
 
 
