@@ -42,5 +42,4 @@ class Notification(object):
         return self.__post(data)["success"]
 
     def __repr__(self):
-        return f"<Notification ID : {self.id}, Date : {self.time}>"
-
+        return f"<Notification ID: {self.id}, Date: {self.time}>"

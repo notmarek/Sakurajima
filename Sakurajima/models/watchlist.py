@@ -20,5 +20,4 @@ class WatchListEntry(object):
         ]
 
     def __repr__(self):
-        return f"<WatchListEntry : {self.title}>"
-
+        return f"<WatchListEntry: {self.title}>"

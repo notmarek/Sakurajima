@@ -45,7 +45,7 @@ class UserAnimeListEntry(object):
         )
 
     def __repr__(self):
-        return f"<AnimeListEntry : {self.title}>"
+        return f"<AnimeListEntry: {self.title}>"
 
 
 class UserOverview(object):
