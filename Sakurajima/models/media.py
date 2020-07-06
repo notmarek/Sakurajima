@@ -28,7 +28,7 @@ class Media(object):
         ]
 
     def __repr__(self):
-        return f"<Media for Anime : {self.anime_id}>"
+        return f"<Media for Anime: {self.anime_id}>"
 
 
 class MediaEntry(object):
@@ -83,4 +83,3 @@ class UserMedia(object):
 
     def __repr__(self):
         return f"UserMedia: {self.title}"
-

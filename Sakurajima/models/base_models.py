@@ -100,7 +100,7 @@ class Anime(object):
             return json.loads(url.text)
 
     def __repr__(self):
-        return f"<Anime : {self.title}>"
+        return f"<Anime: {self.title}>"
 
     def get_relations(self):
         data = {
@@ -238,8 +238,8 @@ class Episode(object):
     def __init__(
         self, data_dict, headers, cookies, api_url, anime_id,
     ):
-        self.cookies = cookies
-        self.headers = headers
+        self.__cookies = cookies
+        self.__headers = headers
         self.anime_id = anime_id
         self.API_URL = api_url
         self.number = data_dict.get("number", None)
@@ -258,7 +258,7 @@ class Episode(object):
 
     def __post(self, data):
         with requests.post(
-            self.API_URL, headers=self.headers, json=data, cookies=self.cookies
+            self.API_URL, headers=self.__headers, json=data, cookies=self.__cookies
         ) as url:
             return json.loads(url.text)
 
@@ -292,13 +292,13 @@ class Episode(object):
             return self.__m3u8
         else:
             REFERER = self.__generate_referer()
-            HEADERS = self.headers
+            HEADERS = self.__headers
             HEADERS.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
             aniwatch_episode = self.get_aniwatch_episode()
             res = requests.get(
                 aniwatch_episode.stream.sources[quality],
                 headers=HEADERS,
-                cookies=self.cookies,
+                cookies=self.__cookies,
             )
             self.__m3u8 = M3U8(res.text)
             return self.__m3u8
@@ -315,7 +315,7 @@ class Episode(object):
             file_name = f"Download-{self.get_aniwatch_episode().episode_id}"
         m3u8 = self.get_m3u8(quality)
         REFERER = self.__generate_referer()
-        HEADERS = self.headers
+        HEADERS = self.__headers
         HEADERS.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
         total_chunks = len(m3u8.data["segments"])
         chunks_done = 0
@@ -324,12 +324,14 @@ class Episode(object):
                 if on_progress:
                     on_progress.__call__(chunks_done, total_chunks)
                 res = requests.get(
-                    segment["uri"], cookies=self.cookies, headers=HEADERS
+                    segment["uri"], cookies=self.__cookies, headers=HEADERS
                 )
                 chunk = res.content
                 key_dict = segment.get("key", None)
                 if key_dict is not None:
-                    key = self.__get_decrypt_key(key_dict["uri"], HEADERS, self.cookies)
+                    key = self.__get_decrypt_key(
+                        key_dict["uri"], HEADERS, self.__cookies
+                    )
                     decrypted_chunk = self.__decrypt_chunk(chunk, key)
                     videofile.write(decrypted_chunk)
                     chunks_done = chunks_done + 1
@@ -369,7 +371,7 @@ class Episode(object):
         return self.__post(data)["success"]
 
     def __repr__(self):
-        return f"<Episode {self.number} : {self.title}>"
+        return f"<Episode {self.number}: {self.title}>"
 
 
 class AniWatchEpisode(object):
@@ -379,4 +381,4 @@ class AniWatchEpisode(object):
         self.stream = Stream(data_dict.get("stream", None))
 
     def __repr__(self):
-        return f"Episode ID : {self.episode_id}"
+        return f"Episode ID: {self.episode_id}"
