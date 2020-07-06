@@ -9,6 +9,8 @@ from .chronicle import ChronicleEntry
 from .media import Media
 from .helper_models import Language, Stream
 from ..utils.episode_list import EpisodeList
+import subprocess
+import os
 
 
 class Anime(object):
@@ -307,6 +309,7 @@ class Episode(object):
         file_name: str = None,
         on_progress=None,
         print_progress: bool = True,
+        convert_to_mkv=False,
     ):
         if file_name is None:
             file_name = f"Download-{self.get_aniwatch_episode().episode_id}"
@@ -336,6 +339,21 @@ class Episode(object):
 
                 if print_progress:
                     print(f"{chunks_done}/{total_chunks} done.")
+        if convert_to_mkv:
+            # Requires ffmpeg to be installed
+            subprocess.run(
+                [
+                    "ffmpeg",
+                    "-i",
+                    f"{file_name}.ts",
+                    "-map",
+                    "0",
+                    "-c",
+                    "copy",
+                    f"{file_name}.mkv",
+                ]
+            )
+            os.remove(f"{file_name}.ts")
 
     def get_available_qualities(self):
         aniwatch_episode = self.get_aniwatch_episode()
