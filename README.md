@@ -3,7 +3,10 @@ Sakurajima is a Python 3 API wrapper for AniWatch.me and contains most endpoints
 ## Usage
 1. Install the package `pip install sakurajima`
 2. Use it.
+<<<<<<< HEAD
+=======
 
+>>>>>>> 8dd25a36d8d6ad4ac8c68fd50679a7c312690df7
 
 ## How to get auth token and user ID.
 Step 1:
@@ -31,4 +34,7 @@ Step 4:
 Click on the 'APIHandle' and under the 'Headers' tab expand the 'Request Headers' list and look for a header called 'x-auth'. This string of random letters is your auth token.
 
 ![Step 4](docs/images/Step_4.png) 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 8dd25a36d8d6ad4ac8c68fd50679a7c312690df7

@@ -3,6 +3,7 @@ import json
 import base64
 import random
 from . models import *
+from . utils.episode_list import EpisodeList
 
 class Sakurajima:
     def __init__(
@@ -63,7 +64,6 @@ class Sakurajima:
         with requests.post(
             self.API_URL, headers=self.headers, json=data, cookies=self.cookies
         ) as url:
-            print(url.text)
             return json.loads(url.text)
 
     def get_episode(self, episode_id, lang="en-US"):
@@ -82,7 +82,7 @@ class Sakurajima:
             "action": "getEpisodes",
             "detail_id": str(anime_id),
         }
-        return [Episode(data_dict, self.headers, self.cookies, self.API_URL, anime_id) for data_dict in self.__post(data)['episodes']]
+        return EpisodeList([Episode(data_dict, self.headers, self.cookies, self.API_URL, anime_id) for data_dict in self.__post(data)['episodes']])
 
     def get_anime(self, anime_id):
         data = {"controller": "Anime", "action": "getAnime", "detail_id": str(anime_id)}
