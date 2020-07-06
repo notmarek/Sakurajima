@@ -10,6 +10,8 @@ from Sakurajima.models.media import Media
 from Sakurajima.models.helper_models import Language, Stream
 from Sakurajima.utils.episode_list import EpisodeList
 import subprocess
+from time import sleep
+from multiprocessing import Process
 import os
 
 
@@ -303,10 +305,24 @@ class Episode(object):
             self.__m3u8 = M3U8(res.text)
             return self.__m3u8
 
+    def download_chunk(self, file_name, chunk_num, segment, headers):
+        with open(f"{file_name}-{chunk_num}.chunk.ts", "wb") as videofile:
+            res = requests.get(segment["uri"], cookies=self.__cookies, headers=headers)
+            chunk = res.content
+            key_dict = segment.get("key", None)
+            if key_dict is not None:
+                key = self.__get_decrypt_key(key_dict["uri"], headers, self.__cookies)
+                decrypted_chunk = self.__decrypt_chunk(chunk, key)
+                videofile.write(decrypted_chunk)
+            else:
+                videofile.write(chunk)
+
     def download(
         self,
         quality: str,
         file_name: str = None,
+        multi_threading: bool = False,
+        delete_chunks: bool = True,
         on_progress=None,
         print_progress: bool = True,
     ):
@@ -316,43 +332,50 @@ class Episode(object):
         REFERER = self.__generate_referer()
         HEADERS = self.__headers
         HEADERS.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
-        total_chunks = len(m3u8.data["segments"])
         chunks_done = 0
+        threads = []
+        cur_chunk = 0
+        for x in m3u8.data["segments"]:
+            # Remove useless segments (intro)
+            if "img.aniwatch.me" in x["uri"]:
+                m3u8.data["segments"].remove(x)
+        total_chunks = len(m3u8.data["segments"])
         for segment in m3u8.data["segments"]:
-            with open(f"chunk{file_name}-{chunks_done}.ts", "wb") as videofile:
+            if not multi_threading:
                 if on_progress:
                     on_progress.__call__(chunks_done, total_chunks)
-                res = requests.get(
-                    segment["uri"], cookies=self.__cookies, headers=HEADERS
-                )
-                chunk = res.content
-                key_dict = segment.get("key", None)
-                if key_dict is not None:
-                    key = self.__get_decrypt_key(
-                        key_dict["uri"], HEADERS, self.__cookies
-                    )
-                    decrypted_chunk = self.__decrypt_chunk(chunk, key)
-                    videofile.write(decrypted_chunk)
-                    chunks_done += 1
-                else:
-                    videofile.write(chunk)
-                    chunks_done += 1
-
+                self.download_chunk(file_name, chunks_done, segment, HEADERS)
+                chunks_done += 1
                 if print_progress:
                     print(f"{chunks_done}/{total_chunks} done.")
+            else:
+                threads.append(
+                    Process(
+                        target=self.download_chunk,
+                        args=(file_name, cur_chunk, segment, HEADERS,),
+                    )
+                )
+                cur_chunk += 1
+        if multi_threading:
+            for p in threads:
+                p.start()
+            print(f"[{datetime.now()}] Started download.")
+            for p in threads:
+                p.join()
+            print(f"[{datetime.now()}] Download finishing.")
+        print("Merging chunks into mp4.")
         concat = '"concat'
         for x in range(0, total_chunks):
             if x == 0:
-                # First chunk seems to always be just black
-                pass
-            if x == 1:
-                concat += f":chunk{file_name}-{x}.ts"
+                concat += f":{file_name}-{x}.chunk.ts"
             else:
-                concat += f"|chunk{file_name}-{x}.ts"
+                concat += f"|{file_name}-{x}.chunk.ts"
         concat += '"'
-        subprocess.run(["ffmpeg", "-i", concat, "-c", "copy", f"{file_name}.mp4"])
-        for x in range(0, total_chunks):
-            os.remove(f"chunk{file_name}-{x}.ts")
+        subprocess.run(f"ffmpeg -i {concat} -c copy {file_name}.mp4")
+        if delete_chunks:
+            for x in range(0, total_chunks):
+                # Remove chunk files
+                os.remove(f"{file_name}-{x}.chunk.ts")
 
     def get_available_qualities(self):
         aniwatch_episode = self.get_aniwatch_episode()
