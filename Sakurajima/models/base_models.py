@@ -327,7 +327,7 @@ class Episode(object):
         print_progress: bool = True,
     ):
         if file_name is None:
-            file_name = f"Download-{self.get_aniwatch_episode().episode_id}"
+            file_name = f"Download-{self.ep_id}"
         m3u8 = self.get_m3u8(quality)
         REFERER = self.__generate_referer()
         HEADERS = self.__headers
@@ -371,7 +371,7 @@ class Episode(object):
             else:
                 concat += f"|{file_name}-{x}.chunk.ts"
         concat += '"'
-        subprocess.run(f"ffmpeg -i {concat} -c copy {file_name}.mp4")
+        subprocess.run(f'ffmpeg -i {concat} -c copy "{file_name}.mp4"')
         if delete_chunks:
             for x in range(0, total_chunks):
                 # Remove chunk files
