@@ -309,7 +309,6 @@ class Episode(object):
         file_name: str = None,
         on_progress=None,
         print_progress: bool = True,
-        convert_to_mkv=False,
     ):
         if file_name is None:
             file_name = f"Download-{self.get_aniwatch_episode().episode_id}"
@@ -319,8 +318,8 @@ class Episode(object):
         HEADERS.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
         total_chunks = len(m3u8.data["segments"])
         chunks_done = 0
-        with open(f"{file_name}.ts", "wb") as videofile:
-            for segment in m3u8.data["segments"]:
+        for segment in m3u8.data["segments"]:
+            with open(f"chunk{file_name}-{chunks_done}.ts", "wb") as videofile:
                 if on_progress:
                     on_progress.__call__(chunks_done, total_chunks)
                 res = requests.get(
@@ -334,28 +333,26 @@ class Episode(object):
                     )
                     decrypted_chunk = self.__decrypt_chunk(chunk, key)
                     videofile.write(decrypted_chunk)
-                    chunks_done = chunks_done + 1
+                    chunks_done += 1
                 else:
                     videofile.write(chunk)
-                    chunks_done = chunks_done + 1
+                    chunks_done += 1
 
                 if print_progress:
                     print(f"{chunks_done}/{total_chunks} done.")
-        if convert_to_mkv:
-            # Requires ffmpeg to be installed
-            subprocess.run(
-                [
-                    "ffmpeg",
-                    "-i",
-                    f"{file_name}.ts",
-                    "-map",
-                    "0",
-                    "-c",
-                    "copy",
-                    f"{file_name}.mkv",
-                ]
-            )
-            os.remove(f"{file_name}.ts")
+        concat = '"concat'
+        for x in range(0, total_chunks):
+            if x == 0:
+                # First chunk seems to always be just black
+                pass
+            if x == 1:
+                concat += f":chunk{file_name}-{x}.ts"
+            else:
+                concat += f"|chunk{file_name}-{x}.ts"
+        concat += '"'
+        subprocess.run(["ffmpeg", "-i", concat, "-c", "copy", f"{file_name}.mp4"])
+        for x in range(0, total_chunks):
+            os.remove(f"chunk{file_name}-{x}.ts")
 
     def get_available_qualities(self):
         aniwatch_episode = self.get_aniwatch_episode()
