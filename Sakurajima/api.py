@@ -401,7 +401,7 @@ class Sakurajima:
             for data_dict in self.__post(data)["notifications"]
         ]
 
-    def mark_as_watched(self, anime_id, episode_id):
+    def toggle_mark_as_watched(self, anime_id, episode_id):
         data = {
             "controller": "Profile",
             "action": "markAsWatched",
@@ -553,4 +553,3 @@ class Sakurajima:
         return Media(
             self.__post(data), self.headers, self.cookies, self.API_URL, anime_id
         )
-

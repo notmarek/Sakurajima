@@ -341,7 +341,7 @@ class Episode(object):
         aniwatch_episode = self.get_aniwatch_episode()
         return list(aniwatch_episode.stream.sources.keys())
 
-    def mark_as_watched(self):
+    def toggle_mark_as_watched(self):
         data = {
             "controller": "Profile",
             "action": "markAsWatched",
