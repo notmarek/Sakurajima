@@ -25,4 +25,3 @@ class Relation(object):
 
     def __repr__(self):
         return f"<Relation {self.title}>"
-

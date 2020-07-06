@@ -14,7 +14,7 @@ import os
 
 
 class Anime(object):
-    """Wraps all the relevant data for an anime like anime_id 
+    """Wraps all the relevant data for an anime like anime_id
     (called as detail_id by AniWatch backend), title, airing date etc.
     Use the get_episodes method to get a list of available episodes"""
 

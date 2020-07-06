@@ -1,5 +1,6 @@
 import requests
 import json
+import datetime
 
 
 class ChronicleEntry(object):

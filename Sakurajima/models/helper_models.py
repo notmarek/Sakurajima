@@ -21,4 +21,3 @@ class Stream(object):
         self.hosterkey = data_dict.get("hosterKey", None)
         self.support = Support(data_dict.get("support", None))
         self.sprites = data_dict.get("sprites", None)
-
