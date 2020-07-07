@@ -16,20 +16,28 @@ class EpisodeList(object):
                 )
 
     def get_episode_by_number(self, episode_number):
-        return list(
+        result = list(
             filter(
                 lambda episode: True if episode.number == episode_number else False,
                 self.__episode_list,
             )
-        )[0]
+        )
+        if len(result) == 0:
+            return None
+        else:
+            return result[0]
 
     def get_episode_by_title(self, title):
-        return list(
+        result = list(
             filter(
                 lambda episode: True if episode.title == title else False,
                 self.__episode_list,
             )
-        )[0]
+        )
+        if len(result) == 0:
+            return None
+        else:
+            return result[0]
 
     def __getitem__(self, position):
         if isinstance(position, int):
