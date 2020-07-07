@@ -90,6 +90,7 @@ class Anime(object):
                         self.__cookies,
                         self.__API_URL,
                         self.anime_id,
+                        self.title,
                     )
                     for data_dict in self.__post(data)["episodes"]
                 ]
@@ -239,8 +240,9 @@ class Anime(object):
 
 class Episode(object):
     def __init__(
-        self, data_dict, headers, cookies, api_url, anime_id,
+        self, data_dict, headers, cookies, api_url, anime_id, anime_title=None
     ):
+        self.anime_title = anime_title
         self.__cookies = cookies
         self.__headers = headers
         self.anime_id = anime_id
@@ -333,7 +335,10 @@ class Episode(object):
         print_progress: bool = True,
     ):
         if file_name is None:
-            file_name = f"Download-{self.ep_id}"
+            if self.anime_title is None:
+                file_name = f"Download-{self.ep_id}"
+            else:
+                file_name = f"{self.anime_title[:128]}-{self.number}"  # limit anime title lenght to 128 chars so we don't surpass the filename limit
         m3u8 = self.get_m3u8(quality)
         REFERER = self.__generate_referer()
         HEADERS = self.__headers
