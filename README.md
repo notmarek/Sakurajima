@@ -18,13 +18,14 @@ Get you user details. If you have no idea how to do that feel free to read [our 
 
 ```python
 from Sakurajima import Sakurajima
-# Setup our instance of Sakurajima
-#                    Username      User ID   Auth token
-client = Sakurajima("Sakurajima", "106960", "J2ltJtj9yg1bmly4vKVZWcJe7PKlOF05")
-my_anime = client.search("Somali to Mori no Kamisama")[0] # Search for "Somali to Mori no Kamisama" and get the first Anime object in the list
-all_episodes = my_anime.get_episodes() # Get all the episodes from our Anime object
-episode = all_episodes.get_episode_by_number(4) # Get the 4th episode from our all_episodes object, you can also use all_episodes[3]
-episode.download("fullhd", "Somali - Ep. 4", True) # Download the episode in 1080p into "Somali - Ep. 4.mp4" using multiple threads
+if __name__ == "__main__":
+  # Setup our instance of Sakurajima
+  #                    Username      User ID   Auth token
+  client = Sakurajima("Sakurajima", "106960", "J2ltJtj9yg1bmly4vKVZWcJe7PKlOF05")
+  my_anime = client.search("Somali to Mori no Kamisama")[0] # Search for "Somali to Mori no Kamisama" and get the first Anime object in the list
+  all_episodes = my_anime.get_episodes() # Get all the episodes from our Anime object
+  episode = all_episodes.get_episode_by_number(4) # Get the 4th episode from our all_episodes object, you can also use all_episodes[3]
+  episode.download("fullhd", "Somali - Ep. 4", True) # Download the episode in 1080p into "Somali - Ep. 4.mp4" using multiple threads
 
 ```
 
