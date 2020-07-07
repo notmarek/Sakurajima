@@ -330,6 +330,7 @@ class Episode(object):
         file_name: str = None,
         multi_threading: bool = False,
         use_ffmpeg: bool = False,
+        include_intro_chunk: bool = False,
         delete_chunks: bool = True,
         on_progress=None,
         print_progress: bool = True,
@@ -346,10 +347,11 @@ class Episode(object):
         chunks_done = 0
         threads = []
         cur_chunk = 0
-        for x in m3u8.data["segments"]:
-            # Remove useless segments (intro)
-            if "img.aniwatch.me" in x["uri"]:
-                m3u8.data["segments"].remove(x)
+        if not include_intro_chunk:
+            for x in m3u8.data["segments"]:
+                # Remove useless segments (intro)
+                if "img.aniwatch.me" in x["uri"]:
+                    m3u8.data["segments"].remove(x)
         total_chunks = len(m3u8.data["segments"])
 
         for segment in m3u8.data["segments"]:
