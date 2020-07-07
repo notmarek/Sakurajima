@@ -13,6 +13,7 @@ import subprocess
 from time import sleep
 from multiprocessing import Process
 import os
+import shutil
 
 
 class Anime(object):
@@ -326,6 +327,7 @@ class Episode(object):
         quality: str,
         file_name: str = None,
         multi_threading: bool = False,
+        use_ffmpeg: bool = False,
         delete_chunks: bool = True,
         on_progress=None,
         print_progress: bool = True,
@@ -344,6 +346,7 @@ class Episode(object):
             if "img.aniwatch.me" in x["uri"]:
                 m3u8.data["segments"].remove(x)
         total_chunks = len(m3u8.data["segments"])
+
         for segment in m3u8.data["segments"]:
             if not multi_threading:
                 if on_progress:
@@ -367,15 +370,25 @@ class Episode(object):
             for p in threads:
                 p.join()
             print(f"[{datetime.now()}] Download finishing.")
-        print("Merging chunks into mp4.")
-        concat = '"concat'
-        for x in range(0, total_chunks):
-            if x == 0:
-                concat += f":chunks\/{file_name}-{x}.chunk.ts"
-            else:
-                concat += f"|chunks\/{file_name}-{x}.chunk.ts"
-        concat += '"'
-        subprocess.run(f'ffmpeg -i {concat} -c copy "{file_name}.mp4"')
+        if use_ffmpeg:
+            print("Merging chunks into mp4.")
+            concat = '"concat'
+            for x in range(0, total_chunks):
+                if x == 0:
+                    concat += f":chunks\/{file_name}-{x}.chunk.ts"
+                else:
+                    concat += f"|chunks\/{file_name}-{x}.chunk.ts"
+            concat += '"'
+            subprocess.run(f'ffmpeg -i {concat} -c copy "{file_name}.mp4"')
+
+        else:
+            print("Merging chunks into mp4")
+            with open(f"{file_name}.mp4", "wb") as merged:
+                for ts_file in [
+                    f"chunks\/{file_name}-{x}.chunk.ts" for x in range(0, total_chunks)
+                ]:
+                    with open(ts_file, "rb") as ts:
+                        shutil.copyfileobj(ts, merged)
         if delete_chunks:
             for x in range(0, total_chunks):
                 # Remove chunk files
