@@ -1,5 +1,6 @@
 # Sakurajima
 
+![Pypi downloads](https://img.shields.io/pypi/dm/sakurajima?label=Downloads&style=for-the-badge&logo=python)
 Sakurajima is a Python API wrapper for [AniWatch](https://aniwatch.me).
 
 ## Installation
