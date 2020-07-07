@@ -306,7 +306,11 @@ class Episode(object):
             return self.__m3u8
 
     def download_chunk(self, file_name, chunk_num, segment, headers):
-        with open(f"{file_name}-{chunk_num}.chunk.ts", "wb") as videofile:
+        try:
+            os.mkdir("chunks")
+        except FileExistsError:
+            pass
+        with open(f"chunks\/{file_name}-{chunk_num}.chunk.ts", "wb") as videofile:
             res = requests.get(segment["uri"], cookies=self.__cookies, headers=headers)
             chunk = res.content
             key_dict = segment.get("key", None)
@@ -367,15 +371,15 @@ class Episode(object):
         concat = '"concat'
         for x in range(0, total_chunks):
             if x == 0:
-                concat += f":{file_name}-{x}.chunk.ts"
+                concat += f":chunks\/{file_name}-{x}.chunk.ts"
             else:
-                concat += f"|{file_name}-{x}.chunk.ts"
+                concat += f"|chunks\/{file_name}-{x}.chunk.ts"
         concat += '"'
         subprocess.run(f'ffmpeg -i {concat} -c copy "{file_name}.mp4"')
         if delete_chunks:
             for x in range(0, total_chunks):
                 # Remove chunk files
-                os.remove(f"{file_name}-{x}.chunk.ts")
+                os.remove(f"chunks\/{file_name}-{x}.chunk.ts")
 
     def get_available_qualities(self):
         aniwatch_episode = self.get_aniwatch_episode()
