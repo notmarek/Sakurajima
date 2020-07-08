@@ -9,6 +9,7 @@ from Sakurajima.models.chronicle import ChronicleEntry
 from Sakurajima.models.media import Media
 from Sakurajima.models.helper_models import Language, Stream
 from Sakurajima.utils.episode_list import EpisodeList
+from Sakurajima.utils.downloader import Downloader
 import subprocess
 from time import sleep
 from multiprocessing import Process
@@ -323,6 +324,25 @@ class Episode(object):
                 videofile.write(decrypted_chunk)
             else:
                 videofile.write(chunk)
+
+    def download_using_downloader(
+        self,
+        quality: str,
+        file_name: str = None,
+        multi_threading: bool = False,
+        use_ffmpeg: bool = False,
+        include_intro_chunk: bool = False,
+        delete_chunks: bool = True,
+        on_progress=None,
+        print_progress: bool = True,
+    ):
+        m3u8 = self.get_m3u8(quality)
+        if file_name is None:
+            file_name = f"{self.anime_title[:128]}-{self.number}"
+         
+        dlr = Downloader(self.__headers, self.__cookies, m3u8, file_name)
+        dlr.download()
+        dlr.merge()
 
     def download(
         self,
