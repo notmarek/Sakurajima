@@ -347,6 +347,8 @@ class Episode(object):
         print(dlr)
         dlr.download()
         dlr.merge()
+        if delete_chunks:
+            dlr.remove_chunks()
 
     def download(
         self,

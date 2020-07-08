@@ -1,8 +1,9 @@
 import requests
 import os
 from Crypto.Cipher import AES
-from Sakurajima.utils.merger import ChunkMerger, FFmpegMerger
-from multiprocessing import Process
+from Sakurajima.utils.merger import ChunkMerger, FFmpegMerger, ChunkRemover
+from threading import Thread
+from progress.bar import IncrementalBar
 
 class Downloader(object):
     def __init__(
@@ -31,23 +32,29 @@ class Downloader(object):
                 if "img.aniwatch.me" in segment["uri"]:
                     self.m3u8.data["segments"].remove(segment)
         self.total_chunks = len(self.m3u8.data["segments"])
+        
         try:
             os.makedirs("chunks")
         except FileExistsError:
             pass
 
+        self.progress_bar = IncrementalBar("Downloading", max = self.total_chunks)
         for chunk_number, segment in enumerate(self.m3u8.data["segments"]):
             file_name = f"chunks\/{self.file_name}-{chunk_number}.chunk.ts"
             ChunkDownloader(self.headers, self.cookies, segment, file_name).download()
+            self.progress_bar.next()
             if self.on_progress:
                 self.on_progress.__call__(chunk_number+1, self.total_chunks)
+        self.progress_bar.finish()
 
     def merge(self):
         if self.use_ffmpeg:
             FFmpegMerger(self.file_name, self.total_chunks).merge()
         else:
             ChunkMerger(self.file_name, self.total_chunks).merge()
-
+ 
+    def remove_chunks(self):
+        ChunkRemover(self.file_name, self.total_chunks).remove()
 
 class ChunkDownloader(object):
     def __init__(
@@ -114,10 +121,10 @@ class MultiThreadDownloader(object):
                     self.m3u8.data["segments"].remove(segment)
         self.total_chunks = len(self.m3u8.data["segments"])
 
-    def init_processes(self):
-        self.processes = [
-            Process(
-                target = assign_target,
+    def init_threads(self):
+        self.threads = [
+            Thread(
+                target = self.assign_target,
                 args = (
                     self.headers,
                     self.cookies,
@@ -130,20 +137,20 @@ class MultiThreadDownloader(object):
     def assign_target(self, headers, cookies, segment, file_name):
         ChunkDownloader(headers, cookies, segment, file_name).download()
 
-    def start_processes(self):
-        print(f"Started downloading. Using {len(self.processes)} threads.")
-        for p in self.processes:
-            p.start()
-        for p in self.processes:
-            p.join()
+    def start_threads(self):
+        print(f"Started downloading. Using {len(self.threads)} threads.")
+        for t in self.threads:
+            t.start()
+        for t in self.threads:
+            t.join()
 
     def download(self):
         try:
             os.makedirs("chunks")
         except FileExistsError:
             pass
-        self.init_processes()
-        self.start_processes()
+        self.init_threads()
+        self.start_threads()
 
     def merge(self):
         if self.use_ffmpeg:
@@ -151,5 +158,6 @@ class MultiThreadDownloader(object):
         else:
             ChunkMerger(self.file_name, self.total_chunks).merge()
 
-def assign_target(headers, cookies, segment, file_name):
-    ChunkDownloader(headers, cookies, segment, file_name).download() 
+    def remove_chunks(self):
+        ChunkRemover(self.file_name, self.total_chunks).remove()
+
