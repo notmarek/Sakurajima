@@ -9,7 +9,7 @@ from Sakurajima.models.chronicle import ChronicleEntry
 from Sakurajima.models.media import Media
 from Sakurajima.models.helper_models import Language, Stream
 from Sakurajima.utils.episode_list import EpisodeList
-from Sakurajima.utils.downloader import Downloader
+from Sakurajima.utils.downloader import Downloader, MultiThreadDownloader
 import subprocess
 from time import sleep
 from multiprocessing import Process
@@ -339,8 +339,12 @@ class Episode(object):
         m3u8 = self.get_m3u8(quality)
         if file_name is None:
             file_name = f"{self.anime_title[:128]}-{self.number}"
-         
-        dlr = Downloader(self.__headers, self.__cookies, m3u8, file_name)
+
+        if multi_threading:
+            dlr = MultiThreadDownloader(self.__headers, self.__cookies, m3u8, file_name)
+        else:
+            dlr = Downloader(self.__headers, self.__cookies, m3u8, file_name)
+        print(dlr)
         dlr.download()
         dlr.merge()
 
@@ -403,7 +407,7 @@ class Episode(object):
             for x in range(0, total_chunks):
                 if x == 0:
                     concat += f":chunks\/{file_name}-{x}.chunk.ts"
-                else:
+                else:   
                     concat += f"|chunks\/{file_name}-{x}.chunk.ts"
             concat += '"'
             subprocess.run(f'ffmpeg -i {concat} -c copy "{file_name}.mp4"')
