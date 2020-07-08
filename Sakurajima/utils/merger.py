@@ -1,5 +1,6 @@
 import shutil
 import subprocess
+import os 
 
 class ChunkMerger(object):
     def __init__(
@@ -32,3 +33,19 @@ class FFmpegMerger(object):
                     concat += f"|chunks\/{self.file_name}-{x}.chunk.ts"
             concat += '"'
             subprocess.run(f'ffmpeg -i {concat} -c copy "{self.file_name}.mp4"')
+
+class ChunkRemover(object):
+    def __init__(
+        self,
+        file_name,
+        total_chunks
+    ):
+        self.file_name = file_name
+        self.total_chunks = total_chunks
+
+    def remove(self):
+        for chunk_number in range(self.total_chunks):
+            try:
+                os.remove(f"chunks\/{self.file_name}-{chunk_number}.chunk.ts")
+            except FileNotFoundError:
+                pass
