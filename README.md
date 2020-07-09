@@ -1,4 +1,4 @@
-# Sakurajima
+<img src="./docs/images/logo.png" width="1028" height="200" align="center" />
 
 ![Pypi downloads](https://img.shields.io/pypi/dm/sakurajima?label=Downloads&style=for-the-badge&logo=python)
 
@@ -28,6 +28,7 @@ if __name__ == "__main__":
   episode.download("fullhd", "Somali - Ep. 4", True) # Download the episode in 1080p into "Somali - Ep. 4.mp4" using multiple threads
 
 ```
+
 If you have problems playing downloaded videos in the default windows player you can use ffmpeg to merge the chunks or include the intro chunk.
 
 ## Contributing
