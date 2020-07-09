@@ -1,4 +1,6 @@
-<img src="./docs/images/logo.png" width="1028" height="200" align="center" />
+<img src="./docs/images/logo.png" width="512" height="100" align="right" />
+
+# Sakurajima
 
 ![Pypi downloads](https://img.shields.io/pypi/dm/sakurajima?label=Downloads&style=for-the-badge&logo=python)
 
