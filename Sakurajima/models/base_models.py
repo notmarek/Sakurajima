@@ -330,6 +330,7 @@ class Episode(object):
         quality: str,
         file_name: str = None,
         multi_threading: bool = False,
+        max_threads: int = None, 
         use_ffmpeg: bool = True,
         include_intro: bool = False,
         delete_chunks: bool = True,
@@ -341,12 +342,12 @@ class Episode(object):
             file_name = f"{self.anime_title[:128]}-{self.number}"
 
         if multi_threading:
-            dlr = BoundMultiThreadDownloader(
+            dlr = MultiThreadDownloader(
                 self.__headers,
                 self.__cookies,
                 m3u8,
                 file_name,
-                7,
+                max_threads,
                 use_ffmpeg,
                 include_intro,
                 delete_chunks,
@@ -361,7 +362,6 @@ class Episode(object):
                 include_intro,
                 delete_chunks
             )
-        print(dlr)
         dlr.download()
         dlr.merge()
         if delete_chunks:
