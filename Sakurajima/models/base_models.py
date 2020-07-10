@@ -9,7 +9,7 @@ from Sakurajima.models.chronicle import ChronicleEntry
 from Sakurajima.models.media import Media
 from Sakurajima.models.helper_models import Language, Stream
 from Sakurajima.utils.episode_list import EpisodeList
-from Sakurajima.utils.downloader import Downloader, MultiThreadDownloader
+from Sakurajima.utils.downloader import Downloader, MultiThreadDownloader, BoundMultiThreadDownloader
 import subprocess
 from time import sleep
 from multiprocessing import Process
@@ -330,8 +330,8 @@ class Episode(object):
         quality: str,
         file_name: str = None,
         multi_threading: bool = False,
-        use_ffmpeg: bool = False,
-        include_intro_chunk: bool = False,
+        use_ffmpeg: bool = True,
+        include_intro: bool = False,
         delete_chunks: bool = True,
         on_progress=None,
         print_progress: bool = True,
@@ -341,9 +341,26 @@ class Episode(object):
             file_name = f"{self.anime_title[:128]}-{self.number}"
 
         if multi_threading:
-            dlr = MultiThreadDownloader(self.__headers, self.__cookies, m3u8, file_name)
+            dlr = BoundMultiThreadDownloader(
+                self.__headers,
+                self.__cookies,
+                m3u8,
+                file_name,
+                7,
+                use_ffmpeg,
+                include_intro,
+                delete_chunks,
+            )
         else:
-            dlr = Downloader(self.__headers, self.__cookies, m3u8, file_name)
+            dlr = Downloader(
+                self.__headers,
+                self.__cookies,
+                m3u8,
+                file_name,
+                use_ffmpeg,
+                include_intro,
+                delete_chunks
+            )
         print(dlr)
         dlr.download()
         dlr.merge()
