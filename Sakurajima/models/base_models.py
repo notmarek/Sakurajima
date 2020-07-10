@@ -12,6 +12,7 @@ from Sakurajima.utils.episode_list import EpisodeList
 from Sakurajima.utils.downloader import Downloader, MultiThreadDownloader
 import subprocess
 from time import sleep
+from pathvalidate import sanitize_filename
 from multiprocessing import Process
 import os
 import shutil
@@ -338,8 +339,10 @@ class Episode(object):
         print_progress: bool = True,
     ):
         m3u8 = self.get_m3u8(quality)
+        
         if file_name is None:
             file_name = f"{self.anime_title[:128]}-{self.number}"
+        file_name = sanitize_filename(file_name)
 
         if multi_threading:
             dlr = MultiThreadDownloader(
