@@ -35,7 +35,8 @@ class Downloader(object):
                 "headers" : self.headers,
                 "cookies" : self.cookies,
                 "segments" : self.m3u8.data["segments"],
-                "file_name" : self.file_name
+                "file_name" : self.file_name,
+                "total_chunks": self.total_chunks
             }
         )
         with open(f"chunks\/.resume_data", "wb") as resume_data_file:
@@ -119,6 +120,7 @@ class ChunkDownloader(object):
         decryptor = AES.new(key, AES.MODE_CBC)
         return decryptor.decrypt(chunk)
 
+
 class MultiThreadDownloader(object):
     def __init__(
         self,
@@ -126,6 +128,7 @@ class MultiThreadDownloader(object):
         cookies: dict,
         m3u8,
         file_name: str,
+        max_threads: int = None,
         use_ffmpeg: bool = True,
         include_intro: bool = False,
         delete_chunks: bool = True,
@@ -137,84 +140,16 @@ class MultiThreadDownloader(object):
         self.use_ffmpeg = use_ffmpeg
         self.include_intro = include_intro
         self.delete_chunks = delete_chunks
-        if not include_intro:
-            for segment in self.m3u8.data["segments"]:
-                if "img.aniwatch.me" in segment["uri"]:
-                    self.m3u8.data["segments"].remove(segment)
-        self.total_chunks = len(self.m3u8.data["segments"])
-
-    def init_threads(self):
-        self.threads = [
-            Thread(
-                target = self.assign_target,
-                args = (
-                    self.headers,
-                    self.cookies,
-                    segment,
-                    f"chunks\/{self.file_name}-{chunk_number}.chunk.ts",
-                    )
-            ) for chunk_number, segment in enumerate(self.m3u8.data["segments"])
-        ]
-        
-    def assign_target(self, headers, cookies, segment, file_name):
-        ChunkDownloader(headers, cookies, segment, file_name).download()
-        self.update_progress_bar()
-
-    def start_threads(self):
-        for t in self.threads:
-            t.start()
-        for t in self.threads:
-            t.join()
-
-    def update_progress_bar(self):
-        self.progress_bar.next()
-
-    def download(self):
-        try:
-            os.makedirs("chunks")
-        except FileExistsError:
-            pass
-        self.init_threads()
-        print(f"Started downloading. Using {len(self.threads)} threads.")
-        self.progress_bar = IncrementalBar("Downloading", max = self.total_chunks)
-        self.start_threads()
-        self.progress_bar.finish()
-
-    def merge(self):
-        if self.use_ffmpeg:
-            FFmpegMerger(self.file_name, self.total_chunks).merge()
-        else:
-            ChunkMerger(self.file_name, self.total_chunks).merge()
-
-    def remove_chunks(self):
-        ChunkRemover(self.file_name, self.total_chunks).remove()
-
-class BoundMultiThreadDownloader(object):
-    def __init__(
-        self,
-        headers: dict,
-        cookies: dict,
-        m3u8,
-        file_name: str,
-        max_threads: int,
-        use_ffmpeg: bool = True,
-        include_intro: bool = False,
-        delete_chunks: bool = True,
-        ):
-        self.headers = headers
-        self.cookies = cookies
-        self.m3u8 = m3u8
-        self.file_name = file_name
-        self.use_ffmpeg = use_ffmpeg
-        self.include_intro = include_intro
-        self.delete_chunks = delete_chunks
-        self.max_threads = max_threads
         self.threads = []
         if not include_intro:
             for segment in self.m3u8.data["segments"]:
                 if "img.aniwatch.me" in segment["uri"]:
                     self.m3u8.data["segments"].remove(segment)
         self.total_chunks = len(self.m3u8.data["segments"])
+        if max_threads is None:
+            self.max_threads = self.total_chunks
+        else:
+            self.max_threads = max_threads
         try:
             os.makedirs("chunks")
         except FileExistsError:
@@ -248,8 +183,9 @@ class BoundMultiThreadDownloader(object):
                 self.start_threads()
                 self.reset_threads()
             except IndexError:
-                self.start_threads()
-                self.reset_threads()
+                if self.threads != []:
+                    self.start_threads()
+                    self.reset_threads()
                 break
     
     def merge(self):

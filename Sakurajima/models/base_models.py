@@ -9,7 +9,7 @@ from Sakurajima.models.chronicle import ChronicleEntry
 from Sakurajima.models.media import Media
 from Sakurajima.models.helper_models import Language, Stream
 from Sakurajima.utils.episode_list import EpisodeList
-from Sakurajima.utils.downloader import Downloader, MultiThreadDownloader, BoundMultiThreadDownloader
+from Sakurajima.utils.downloader import Downloader, MultiThreadDownloader
 import subprocess
 from time import sleep
 from multiprocessing import Process
