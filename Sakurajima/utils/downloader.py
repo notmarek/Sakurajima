@@ -194,7 +194,7 @@ class MultiThreadDownloader(object):
                     self.start_threads()
                     self.reset_threads()
                 break
-        progress_bar.finish()
+        self.progress_bar.finish()
 
     def merge(self):
         if self.use_ffmpeg:
