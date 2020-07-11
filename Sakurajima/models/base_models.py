@@ -342,6 +342,8 @@ class Episode(object):
         
         if file_name is None:
             file_name = f"{self.anime_title[:128]}-{self.number}"
+        else:
+            file_name = file_name.replace("<ep>", str(self.number)).replace("<eptitle>", self.title).replace('<anititle>', self.anime_title[:128])
         file_name = sanitize_filename(file_name)
 
         if multi_threading:
