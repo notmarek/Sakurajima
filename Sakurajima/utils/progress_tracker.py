@@ -1,12 +1,10 @@
 import pickle
 import os
-import threading
 
 class ProgressTracker(object):
     def __init__(self):
         self.resume_data = None
         self.chunks_done = []
-        self._lock = threading.Lock()
 
     def init_tracker(self, resume_data):
         with open("chunks\/.resume_data", "wb") as resume_data_file:
@@ -15,8 +13,7 @@ class ProgressTracker(object):
             pickle.dump(self.chunks_done, chunks_done_file)
     
     def update_chunks_done(self, chunk_done: int):
-        with self._lock:
-            self.chunks_done.append(chunk_done)
+        self.chunks_done.append(chunk_done)
         with open("chunks\/.chunks_done", "wb") as chunks_done_file:
             pickle.dump(self.chunks_done, chunks_done_file)
     

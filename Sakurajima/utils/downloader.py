@@ -2,7 +2,7 @@ import requests
 import os
 from Crypto.Cipher import AES
 from Sakurajima.utils.merger import ChunkMerger, FFmpegMerger, ChunkRemover
-from threading import Thread
+from threading import Thread, Lock
 from progress.bar import IncrementalBar
 from Sakurajima.utils.progress_tracker import ProgressTracker
 import pickle
@@ -78,12 +78,11 @@ class Downloader(object):
 
 
 class ChunkDownloader(object):
-    def __init__(self, headers, cookies, segment, file_name, progress_bar):
+    def __init__(self, headers, cookies, segment, file_name):
         self.headers = headers
         self.cookies = cookies
         self.segment = segment
         self.file_name = file_name
-        self.progress_bar = progress_bar
 
     def download(self):
         with open(self.file_name, "wb") as videofile:
@@ -98,7 +97,6 @@ class ChunkDownloader(object):
                 videofile.write(decrypted_chunk)
             else:
                 videofile.write(chunk)
-        self.progress_bar.next()
 
     def get_decrypt_key(self, uri):
         res = requests.get(uri, headers=self.headers, cookies=self.cookies)
@@ -130,6 +128,7 @@ class MultiThreadDownloader(object):
         self.delete_chunks = delete_chunks
         self.threads = []
         self.progress_tracker = ProgressTracker()
+        self.__lock = Lock()
         
         if not include_intro:
             for segment in self.m3u8.data["segments"]:
@@ -169,18 +168,14 @@ class MultiThreadDownloader(object):
     
     def assign_target(self, headers, cookies, segment, file_name, chunk_number):
         ChunkDownloader(headers, cookies, segment, file_name).download()
-        self.progress_tracker.update_chunks_done(chunk_number)
-    
+        with self.__lock:
+            self.progress_tracker.update_chunks_done(chunk_number)
+            self.progress_bar.next()
+
     def download(self):
         stateful_segment_list = StatefulSegmentList(self.m3u8.data["segments"])
+        self.progress_bar = IncrementalBar("Downloading", max=self.total_chunks)
         self.init_tracker()
-
-    def assign_target(self, headers, cookies, segment, file_name, progress_bar):
-        ChunkDownloader(headers, cookies, segment, file_name, progress_bar).download()
-
-    def download(self):
-        stateful_segment_list = StatefulSegmentList(self.m3u8.data["segments"])
-        progress_bar = IncrementalBar("Downloading", max=self.total_chunks)
         while True:
             try:
                 for x in range(self.max_threads):
@@ -194,12 +189,12 @@ class MultiThreadDownloader(object):
                     )
                 self.start_threads()
                 self.reset_threads()
-                progress_bar.finish()
             except IndexError:
                 if self.threads != []:
                     self.start_threads()
                     self.reset_threads()
                 break
+        progress_bar.finish()
 
     def merge(self):
         if self.use_ffmpeg:
