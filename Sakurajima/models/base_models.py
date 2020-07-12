@@ -23,9 +23,8 @@ class Anime(object):
     (called as detail_id by AniWatch backend), title, airing date etc.
     Use the get_episodes method to get a list of available episodes"""
 
-    def __init__(self, data_dict: dict, headers: dict, cookies: dict, api_url: str):
-        self.__headers = headers
-        self.__cookies = cookies
+    def __init__(self, data_dict: dict, session: requests.Session, api_url: str):
+        self.__session = session
         self.__API_URL = api_url
         self.data_dict = data_dict
         self.anime_id = data_dict.get("detail_id", None)
@@ -88,8 +87,7 @@ class Anime(object):
                 [
                     Episode(
                         data_dict,
-                        self.__headers,
-                        self.__cookies,
+                        self.__session,
                         self.__API_URL,
                         self.anime_id,
                         self.title,
@@ -100,9 +98,7 @@ class Anime(object):
             return self.__episodes
 
     def __post(self, data):
-        with requests.post(
-            self.__API_URL, headers=self.__headers, json=data, cookies=self.__cookies
-        ) as url:
+        with self.__session.post(self.__API_URL, json=data,) as url:
             return json.loads(url.text)
 
     def __repr__(self):
@@ -123,9 +119,7 @@ class Anime(object):
             "detail_id": str(self.anime_id),
         }
         return [
-            RecommendationEntry(
-                data_dict, self.__headers, self.__cookies, self.__API_URL
-            )
+            RecommendationEntry(data_dict, self.__session, self.__API_URL)
             for data_dict in self.__post(data)["entries"]
         ]
 
@@ -137,7 +131,7 @@ class Anime(object):
             "page": page,
         }
         return [
-            ChronicleEntry(data_dict, self.__headers, self.__cookies, self.__API_URL)
+            ChronicleEntry(data_dict, self.__session, self.__API_URL)
             for data_dict in self.__post(data)["chronicle"]
         ]
 
@@ -205,13 +199,7 @@ class Anime(object):
             "action": "getMedia",
             "detail_id": str(self.anime_id),
         }
-        return Media(
-            self.__post(data),
-            self.__headers,
-            self.__cookies,
-            self.__API_URL,
-            self.anime_id,
-        )
+        return Media(self.__post(data), self.__session, self.__API_URL, self.anime_id,)
 
     def get_complete_object(self):
         data = {
@@ -220,12 +208,7 @@ class Anime(object):
             "detail_id": str(self.anime_id),
         }
         data_dict = self.__post(data)["anime"]
-        return Anime(
-            data_dict,
-            headers=self.__headers,
-            cookies=self.__cookies,
-            api_url=self.__API_URL,
-        )
+        return Anime(data_dict, self.__session, api_url=self.__API_URL,)
 
     def add_recommendation(self, recommended_anime_id):
         data = {
@@ -241,12 +224,9 @@ class Anime(object):
 
 
 class Episode(object):
-    def __init__(
-        self, data_dict, headers, cookies, api_url, anime_id, anime_title=None
-    ):
+    def __init__(self, data_dict, session, api_url, anime_id, anime_title=None):
         self.anime_title = anime_title
-        self.__cookies = cookies
-        self.__headers = headers
+        self.__session = session
         self.anime_id = anime_id
         self.API_URL = api_url
         self.number = data_dict.get("number", None)
@@ -264,16 +244,14 @@ class Episode(object):
         self.__m3u8 = None
 
     def __post(self, data):
-        with requests.post(
-            self.API_URL, headers=self.__headers, json=data, cookies=self.__cookies
-        ) as url:
+        with self.__session.post(self.API_URL, json=data) as url:
             return json.loads(url.text)
 
     def __generate_referer(self):
         return f"https://aniwatch.me/anime/{self.anime_id}/{self.number}"
 
-    def __get_decrypt_key(self, url, headers, cookies):
-        res = requests.get(url, cookies=cookies, headers=headers)
+    def __get_decrypt_key(self, url):
+        res = self.__session.get(url)
         return res.content
 
     def __decrypt_chunk(self, chunk, key):
@@ -299,28 +277,23 @@ class Episode(object):
             return self.__m3u8
         else:
             REFERER = self.__generate_referer()
-            HEADERS = self.__headers
-            HEADERS.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
+            self.__session.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
             aniwatch_episode = self.get_aniwatch_episode()
-            res = requests.get(
-                aniwatch_episode.stream.sources[quality],
-                headers=HEADERS,
-                cookies=self.__cookies,
-            )
+            res = self.__session.get(aniwatch_episode.stream.sources[quality])
             self.__m3u8 = M3U8(res.text)
             return self.__m3u8
 
-    def download_chunk(self, file_name, chunk_num, segment, headers):
+    def download_chunk(self, file_name, chunk_num, segment):
         try:
             os.mkdir("chunks")
         except FileExistsError:
             pass
         with open(f"chunks\/{file_name}-{chunk_num}.chunk.ts", "wb") as videofile:
-            res = requests.get(segment["uri"], cookies=self.__cookies, headers=headers)
+            res = self.__session.get(segment["uri"])
             chunk = res.content
             key_dict = segment.get("key", None)
             if key_dict is not None:
-                key = self.__get_decrypt_key(key_dict["uri"], headers, self.__cookies)
+                key = self.__get_decrypt_key(key_dict["uri"])
                 decrypted_chunk = self.__decrypt_chunk(chunk, key)
                 videofile.write(decrypted_chunk)
             else:
@@ -331,7 +304,7 @@ class Episode(object):
         quality: str,
         file_name: str = None,
         multi_threading: bool = False,
-        max_threads: int = None, 
+        max_threads: int = None,
         use_ffmpeg: bool = True,
         include_intro: bool = False,
         delete_chunks: bool = True,
@@ -339,17 +312,20 @@ class Episode(object):
         print_progress: bool = True,
     ):
         m3u8 = self.get_m3u8(quality)
-        
+
         if file_name is None:
             file_name = f"{self.anime_title[:128]}-{self.number}"
         else:
-            file_name = file_name.replace("<ep>", str(self.number)).replace("<eptitle>", self.title).replace('<anititle>', self.anime_title[:128])
+            file_name = (
+                file_name.replace("<ep>", str(self.number))
+                .replace("<eptitle>", self.title)
+                .replace("<anititle>", self.anime_title[:128])
+            )
         file_name = sanitize_filename(file_name)
 
         if multi_threading:
             dlr = MultiThreadDownloader(
-                self.__headers,
-                self.__cookies,
+                self.__session,
                 m3u8,
                 file_name,
                 max_threads,
@@ -359,13 +335,12 @@ class Episode(object):
             )
         else:
             dlr = Downloader(
-                self.__headers,
-                self.__cookies,
+                self.__session,
                 m3u8,
                 file_name,
                 use_ffmpeg,
                 include_intro,
-                delete_chunks
+                delete_chunks,
             )
         dlr.download()
         dlr.merge()
@@ -390,8 +365,9 @@ class Episode(object):
                 file_name = f"{self.anime_title[:128]}-{self.number}"  # limit anime title lenght to 128 chars so we don't surpass the filename limit
         m3u8 = self.get_m3u8(quality)
         REFERER = self.__generate_referer()
-        HEADERS = self.__headers
-        HEADERS.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
+        self.__session.headers.update(
+            {"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"}
+        )
         chunks_done = 0
         threads = []
         cur_chunk = 0
@@ -406,7 +382,7 @@ class Episode(object):
             if not multi_threading:
                 if on_progress:
                     on_progress.__call__(chunks_done, total_chunks)
-                self.download_chunk(file_name, chunks_done, segment, HEADERS)
+                self.download_chunk(file_name, chunks_done, segment)
                 chunks_done += 1
                 if print_progress:
                     print(f"{chunks_done}/{total_chunks} done.")
@@ -414,7 +390,7 @@ class Episode(object):
                 threads.append(
                     Process(
                         target=self.download_chunk,
-                        args=(file_name, cur_chunk, segment, HEADERS,),
+                        args=(file_name, cur_chunk, segment,),
                     )
                 )
                 cur_chunk += 1
@@ -431,7 +407,7 @@ class Episode(object):
             for x in range(0, total_chunks):
                 if x == 0:
                     concat += f":chunks\/{file_name}-{x}.chunk.ts"
-                else:   
+                else:
                     concat += f"|chunks\/{file_name}-{x}.chunk.ts"
             concat += '"'
             subprocess.run(f'ffmpeg -i {concat} -c copy "{file_name}.mp4"')

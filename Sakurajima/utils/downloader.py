@@ -1,18 +1,15 @@
-import requests
 import os
 from Crypto.Cipher import AES
 from Sakurajima.utils.merger import ChunkMerger, FFmpegMerger, ChunkRemover
 from threading import Thread, Lock
 from progress.bar import IncrementalBar
 from Sakurajima.utils.progress_tracker import ProgressTracker
-import pickle
 
 
 class Downloader(object):
     def __init__(
         self,
-        headers: dict,
-        cookies: dict,
+        session,
         m3u8,
         file_name: str,
         use_ffmpeg: bool = True,
@@ -20,8 +17,7 @@ class Downloader(object):
         delete_chunks: bool = True,
         on_progress=None,
     ):
-        self.headers = headers
-        self.cookies = cookies
+        self.__session = session
         self.m3u8 = m3u8
         self.file_name = file_name
         self.use_ffmpeg = use_ffmpeg
@@ -29,12 +25,11 @@ class Downloader(object):
         self.delete_chunks = delete_chunks
         self.on_progress = on_progress
 
-    
     def init_tracker(self):
         self.progress_tracker = ProgressTracker().init_tracker(
-            {   
-                "headers": self.headers,
-                "cookies": self.cookies,
+            {
+                "headers": self.__session.headers,
+                "cookies": self.__session.cookies,
                 "segments": self.m3u8.data["segments"],
                 "file_name": self.file_name,
                 "total_chunks": self.total_chunks,
@@ -54,16 +49,16 @@ class Downloader(object):
         except FileExistsError:
             pass
 
-        self.progress_bar = IncrementalBar("Downloading", max = self.total_chunks)
+        self.progress_bar = IncrementalBar("Downloading", max=self.total_chunks)
         self.init_tracker()
 
         for chunk_number, segment in enumerate(self.m3u8.data["segments"]):
             file_name = f"chunks\/{self.file_name}-{chunk_number}.chunk.ts"
-            ChunkDownloader(self.headers, self.cookies, segment, file_name).download()
+            ChunkDownloader(self.__session, segment, file_name).download()
             self.progress_bar.next()
             self.progress_tracker.update_chunks_done(chunk_number)
             if self.on_progress:
-                self.on_progress.__call__(chunk_number+1, self.total_chunks)
+                self.on_progress.__call__(chunk_number + 1, self.total_chunks)
 
         self.progress_bar.finish()
 
@@ -78,17 +73,14 @@ class Downloader(object):
 
 
 class ChunkDownloader(object):
-    def __init__(self, headers, cookies, segment, file_name):
-        self.headers = headers
-        self.cookies = cookies
+    def __init__(self, session, segment, file_name):
+        self.__session = session
         self.segment = segment
         self.file_name = file_name
 
     def download(self):
         with open(self.file_name, "wb") as videofile:
-            res = requests.get(
-                self.segment["uri"], headers=self.headers, cookies=self.cookies
-            )
+            res = self.__session.get(self.segment["uri"])
             chunk = res.content
             key_dict = self.segment.get("key", None)
             if key_dict is not None:
@@ -99,7 +91,7 @@ class ChunkDownloader(object):
                 videofile.write(chunk)
 
     def get_decrypt_key(self, uri):
-        res = requests.get(uri, headers=self.headers, cookies=self.cookies)
+        res = self.__session.get(uri)
         return res.content
 
     def decrypt_chunk(self, chunk, key):
@@ -110,8 +102,7 @@ class ChunkDownloader(object):
 class MultiThreadDownloader(object):
     def __init__(
         self,
-        headers: dict,
-        cookies: dict,
+        session,
         m3u8,
         file_name: str,
         max_threads: int = None,
@@ -119,8 +110,7 @@ class MultiThreadDownloader(object):
         include_intro: bool = False,
         delete_chunks: bool = True,
     ):
-        self.headers = headers
-        self.cookies = cookies
+        self.__session = session
         self.m3u8 = m3u8
         self.file_name = file_name
         self.use_ffmpeg = use_ffmpeg
@@ -129,18 +119,18 @@ class MultiThreadDownloader(object):
         self.threads = []
         self.progress_tracker = ProgressTracker()
         self.__lock = Lock()
-        
+
         if not include_intro:
             for segment in self.m3u8.data["segments"]:
                 if "img.aniwatch.me" in segment["uri"]:
                     self.m3u8.data["segments"].remove(segment)
         self.total_chunks = len(self.m3u8.data["segments"])
-        
+
         if max_threads is None:
             self.max_threads = self.total_chunks
         else:
             self.max_threads = max_threads
-        
+
         try:
             os.makedirs("chunks")
         except FileExistsError:
@@ -149,12 +139,12 @@ class MultiThreadDownloader(object):
     def init_tracker(self):
         self.progress_tracker.init_tracker(
             {
-                "headers" : self.headers,
-                "cookies" : self.cookies,
-                "segments" : self.m3u8.data["segments"],
-                "file_name" : self.file_name,
-                "total_chunks": self.total_chunks
-            }            
+                "headers": self.__session.headers,
+                "cookies": self.__session.cookies,
+                "segments": self.m3u8.data["segments"],
+                "file_name": self.file_name,
+                "total_chunks": self.total_chunks,
+            }
         )
 
     def start_threads(self):
@@ -165,9 +155,9 @@ class MultiThreadDownloader(object):
 
     def reset_threads(self):
         self.threads = []
-    
-    def assign_target(self, headers, cookies, segment, file_name, chunk_number):
-        ChunkDownloader(headers, cookies, segment, file_name).download()
+
+    def assign_target(self, session, segment, file_name, chunk_number):
+        ChunkDownloader(session, segment, file_name).download()
         with self.__lock:
             self.progress_tracker.update_chunks_done(chunk_number)
             self.progress_bar.next()
@@ -183,8 +173,8 @@ class MultiThreadDownloader(object):
                     file_name = f"chunks\/{self.file_name}-{chunk_number}.chunk.ts"
                     self.threads.append(
                         Thread(
-                            target = self.assign_target,
-                            args = (self.headers, self.cookies, segment, file_name, chunk_number)
+                            target=self.assign_target,
+                            args=(self.__session, segment, file_name, chunk_number),
                         )
                     )
                 self.start_threads()

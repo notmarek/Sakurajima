@@ -1,6 +1,7 @@
 import pickle
 import os
 
+
 class ProgressTracker(object):
     def __init__(self):
         self.resume_data = None
@@ -11,12 +12,12 @@ class ProgressTracker(object):
             pickle.dump(resume_data, resume_data_file)
         with open("chunks\/.chunks_done", "wb") as chunks_done_file:
             pickle.dump(self.chunks_done, chunks_done_file)
-    
+
     def update_chunks_done(self, chunk_done: int):
         self.chunks_done.append(chunk_done)
         with open("chunks\/.chunks_done", "wb") as chunks_done_file:
             pickle.dump(self.chunks_done, chunks_done_file)
-    
+
     def get_progress_data(self):
         try:
             with open("chunks\/.resume_data", "rb") as resume_data_file:

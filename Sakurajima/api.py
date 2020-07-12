@@ -30,15 +30,16 @@ class Sakurajima:
     ):
         xsrf_token = self.__generate_xsrf_token()
         self.userId = userId
-        self.headers = {
+        self.session = requests.Session()
+        headers = {
             "x-xsrf-token": xsrf_token,
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36",
         }
-        self.cookies = {"xsrf-token": xsrf_token}
+        cookies = {"xsrf-token": xsrf_token}
 
         self.API_URL = endpoint
         if username is not None and userId is not None and authToken is not None:
-            self.headers["x-auth"] = authToken
+            headers["x-auth"] = authToken
             session_token = (
                 '{"userid":'
                 + str(userId)
@@ -48,10 +49,10 @@ class Sakurajima:
                 + str(authToken)
                 + '","remember_login":true}'
             )
-            self.cookies["SESSION"] = session_token
-            self.headers[
-                "COOKIE"
-            ] = f"SESSION={session_token}; XSRF-TOKEN={xsrf_token};"
+            cookies["SESSION"] = session_token
+            headers["COOKIE"] = f"SESSION={session_token}; XSRF-TOKEN={xsrf_token};"
+        self.session.headers.update(headers)
+        self.session.cookies.update(cookies)
 
     def __generate_xsrf_token(self):
         characters = [
@@ -81,9 +82,7 @@ class Sakurajima:
         return "".join(random.choice(characters) for i in range(32))
 
     def __post(self, data):
-        with requests.post(
-            self.API_URL, headers=self.headers, json=data, cookies=self.cookies
-        ) as url:
+        with self.session.post(self.API_URL, json=data) as url:
             return json.loads(url.text)
 
     def get_episode(self, episode_id, lang="en-US"):
@@ -104,7 +103,7 @@ class Sakurajima:
         }
         return EpisodeList(
             [
-                Episode(data_dict, self.headers, self.cookies, self.API_URL, anime_id)
+                Episode(data_dict, self.session, self.API_URL, anime_id)
                 for data_dict in self.__post(data)["episodes"]
             ]
         )
@@ -112,10 +111,7 @@ class Sakurajima:
     def get_anime(self, anime_id):
         data = {"controller": "Anime", "action": "getAnime", "detail_id": str(anime_id)}
         return Anime(
-            self.__post(data)["anime"],
-            headers=self.headers,
-            cookies=self.cookies,
-            api_url=self.API_URL,
+            self.__post(data)["anime"], session=self.session, api_url=self.API_URL,
         )
 
     def get_recommendations(self, anime_id):
@@ -125,7 +121,7 @@ class Sakurajima:
             "detail_id": str(anime_id),
         }
         return [
-            RecommendationEntry(data_dict, self.headers, self.cookies, self.API_URL)
+            RecommendationEntry(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)["entries"]
         ]
 
@@ -145,36 +141,34 @@ class Sakurajima:
             "current_year": year,
         }
         return [
-            Anime(data_dict, self.headers, self.cookies, self.API_URL)
+            Anime(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)["entries"]
         ]
 
     def get_latest_releases(self):
         data = {"controller": "Anime", "action": "getLatestReleases"}
         return [
-            Anime(data_dict, self.headers, self.cookies, self.API_URL)
+            Anime(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)["entries"]
         ]
 
     def get_latest_uploads(self):
         data = {"controller": "Anime", "action": "getLatestUploads"}
         return [
-            Anime(data_dict, self.headers, self.cookies, self.API_URL)
+            Anime(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)["entries"]
         ]
 
     def get_latest_anime(self):
         data = {"controller": "Anime", "action": "getLatestAnime"}
         return [
-            Anime(data_dict, self.headers, self.cookies, self.API_URL)
+            Anime(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)["entries"]
         ]
 
     def get_random_anime(self):
         data = {"controller": "Anime", "action": "getRandomAnime"}
-        return Anime(
-            self.__post(data)["entries"][0], self.headers, self.cookies, self.API_URL
-        )
+        return Anime(self.__post(data)["entries"][0], self.session, self.API_URL)
 
     def get_airing_anime(self, randomize=False):
         data = {
@@ -186,43 +180,42 @@ class Sakurajima:
         airing_anime = {}
         for day, animes in airing_anime_response.items():
             airing_anime[day] = [
-                Anime(anime_dict, self.headers, self.cookies, self.API_URL)
-                for anime_dict in animes
+                Anime(anime_dict, self.session, self.API_URL) for anime_dict in animes
             ]
         return airing_anime
 
     def get_popular_anime(self, page=1):
         data = {"controller": "Anime", "action": "getPopularAnime", "page": page}
         return [
-            Anime(data_dict, self.headers, self.cookies, self.API_URL)
+            Anime(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)["entries"]
         ]
 
     def get_popular_seasonal_anime(self, page=1):
         data = {"controller": "Anime", "action": "getPopularSeasonals", "page": page}
         return [
-            Anime(data_dict, self.headers, self.cookies, self.API_URL)
+            Anime(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)["entries"]
         ]
 
     def get_popular_upcoming_anime(self, page=1):
         data = {"controller": "Anime", "action": "getPopularUpcomings", "page": page}
         return [
-            Anime(data_dict, self.headers, self.cookies, self.API_URL)
+            Anime(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)["entries"]
         ]
 
     def get_hot_anime(self, page=1):
         data = {"controller": "Anime", "action": "getHotAnime", "page": page}
         return [
-            Anime(data_dict, self.headers, self.cookies, self.API_URL)
+            Anime(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)["entries"]
         ]
 
     def get_best_rated_anime(self, page=1):
         data = {"controller": "Anime", "action": "getBestRatedAnime", "page": page}
         return [
-            Anime(data_dict, self.headers, self.cookies, self.API_URL)
+            Anime(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)["entries"]
         ]
 
@@ -255,7 +248,7 @@ class Sakurajima:
             "page": page,
         }
         return [
-            ChronicleEntry(data_dict, self.headers, self.cookies, self.API_URL)
+            ChronicleEntry(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)["chronicle"]
         ]
 
@@ -266,7 +259,7 @@ class Sakurajima:
             "profile_id": str(self.userId),
         }
         return [
-            UserAnimeListEntry(data_dict, self.headers, self.cookies, self.API_URL)
+            UserAnimeListEntry(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)["animelist"]
         ]
 
@@ -278,7 +271,7 @@ class Sakurajima:
             "page": page,
         }
         return [
-            UserMedia(data_dict, self.headers, self.cookies, self.API_URL)
+            UserMedia(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)["entries"]
         ]
 
@@ -344,7 +337,7 @@ class Sakurajima:
     def get_notifications(self):
         data = {"controller": "Profile", "action": "getNotifications"}
         return [
-            Notification(data_dict, self.headers, self.cookies, self.API_URL)
+            Notification(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)["notifications"]
         ]
 
@@ -384,7 +377,7 @@ class Sakurajima:
             "page": page,
         }
         return [
-            ChronicleEntry(data_dict, self.headers, self.cookies, self.API_URL)
+            ChronicleEntry(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)["chronicle"]
         ]
 
@@ -411,7 +404,7 @@ class Sakurajima:
     def get_unread_notifications(self):
         data = {"controller": "Profile", "action": "getUnreadNotifications"}
         return [
-            Notification(data_dict, self.headers, self.cookies, self.API_URL)
+            Notification(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)["notifications"]
         ]
 
@@ -514,7 +507,7 @@ class Sakurajima:
             "page": page,
         }
         return [
-            WatchListEntry(data_dict, self.headers, self.cookies, self.API_URL)
+            WatchListEntry(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)["entries"]
         ]
 
@@ -558,12 +551,11 @@ class Sakurajima:
             "hasRelation": False,
         }
         return [
-            Anime(data_dict, self.headers, self.cookies, self.API_URL)
+            Anime(data_dict, self.session, self.API_URL)
             for data_dict in self.__post(data)
         ]
 
     def get_media(self, anime_id):
         data = {"controller": "Media", "action": "getMedia", "detail_id": str(anime_id)}
-        return Media(
-            self.__post(data), self.headers, self.cookies, self.API_URL, anime_id
-        )
+        return Media(self.__post(data), self.session, self.API_URL, anime_id)
+

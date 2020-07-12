@@ -4,9 +4,8 @@ import datetime
 
 
 class ChronicleEntry(object):
-    def __init__(self, data_dict, headers, cookies, api_url):
-        self.__headers = headers
-        self.__cookies = cookies
+    def __init__(self, data_dict, session, api_url):
+        self.__session = session
         self.__API_URL = api_url
         self.episode = data_dict.get("episode", None)
         self.anime_id = data_dict.get("id", None)
@@ -14,14 +13,12 @@ class ChronicleEntry(object):
         self.ep_title = data_dict.get("ep_title", None)
         self.chronicle_id = data_dict.get("chronicle_id", None)
         try:
-            self.date = datetime.utcfromtimestamp(data_dict["date"])
-        except:
+            self.date = datetime.datetime.utcfromtimestamp(data_dict["date"])
+        except Exception:
             self.date = None
 
     def __post(self, data):
-        with requests.post(
-            self.__API_URL, headers=self.__headers, json=data, cookies=self.__cookies
-        ) as url:
+        with self.__session.post(self.__API_URL, json=data) as url:
             return json.loads(url.text)
 
     def __repr__(self):
