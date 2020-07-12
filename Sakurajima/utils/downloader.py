@@ -12,11 +12,14 @@ class Downloader(object):
         session,
         m3u8,
         file_name: str,
+        path: str = None,
         use_ffmpeg: bool = True,
         include_intro: bool = False,
         delete_chunks: bool = True,
         on_progress=None,
     ):
+        if path is not None:
+            os.chdir(path)
         self.__session = session
         self.m3u8 = m3u8
         self.file_name = file_name
@@ -105,11 +108,14 @@ class MultiThreadDownloader(object):
         session,
         m3u8,
         file_name: str,
+        path: str = None,
         max_threads: int = None,
         use_ffmpeg: bool = True,
         include_intro: bool = False,
         delete_chunks: bool = True,
     ):
+        if path is not None:
+            os.chdir(path)
         self.__session = session
         self.m3u8 = m3u8
         self.file_name = file_name
@@ -172,10 +178,7 @@ class MultiThreadDownloader(object):
                     chunk_number, segment = stateful_segment_list.next()
                     file_name = f"chunks\/{self.file_name}-{chunk_number}.chunk.ts"
                     self.threads.append(
-                        Thread(
-                            target=self.assign_target,
-                            args=(self.__session, segment, file_name, chunk_number),
-                        )
+                        Thread(target=self.assign_target, args=(self.__session, segment, file_name, chunk_number),)
                     )
                 self.start_threads()
                 self.reset_threads()
