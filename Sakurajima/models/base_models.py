@@ -44,9 +44,7 @@ class Anime(object):
         self.episode_max = data_dict.get("episode_max", None)
         self.type = data_dict.get("type", None)
         try:
-            self.broadcast_start = datetime.utcfromtimestamp(
-                data_dict.get("broadcast_start")
-            )
+            self.broadcast_start = datetime.utcfromtimestamp(data_dict.get("broadcast_start"))
         except:
             self.broadcast_start = None
         try:
@@ -85,13 +83,7 @@ class Anime(object):
         else:
             self.__episodes = EpisodeList(
                 [
-                    Episode(
-                        data_dict,
-                        self.__session,
-                        self.__API_URL,
-                        self.anime_id,
-                        self.title,
-                    )
+                    Episode(data_dict, self.__session, self.__API_URL, self.anime_id, self.title,)
                     for data_dict in self.__post(data)["episodes"]
                 ]
             )
@@ -119,8 +111,7 @@ class Anime(object):
             "detail_id": str(self.anime_id),
         }
         return [
-            RecommendationEntry(data_dict, self.__session, self.__API_URL)
-            for data_dict in self.__post(data)["entries"]
+            RecommendationEntry(data_dict, self.__session, self.__API_URL) for data_dict in self.__post(data)["entries"]
         ]
 
     def get_chronicle(self, page=1):
@@ -131,8 +122,7 @@ class Anime(object):
             "page": page,
         }
         return [
-            ChronicleEntry(data_dict, self.__session, self.__API_URL)
-            for data_dict in self.__post(data)["chronicle"]
+            ChronicleEntry(data_dict, self.__session, self.__API_URL) for data_dict in self.__post(data)["chronicle"]
         ]
 
     def mark_as_completed(self):
@@ -277,7 +267,7 @@ class Episode(object):
             return self.__m3u8
         else:
             REFERER = self.__generate_referer()
-            self.__session.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
+            self.__session.headers.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
             aniwatch_episode = self.get_aniwatch_episode()
             res = self.__session.get(aniwatch_episode.stream.sources[quality])
             self.__m3u8 = M3U8(res.text)
@@ -325,23 +315,10 @@ class Episode(object):
 
         if multi_threading:
             dlr = MultiThreadDownloader(
-                self.__session,
-                m3u8,
-                file_name,
-                max_threads,
-                use_ffmpeg,
-                include_intro,
-                delete_chunks,
+                self.__session, m3u8, file_name, max_threads, use_ffmpeg, include_intro, delete_chunks,
             )
         else:
-            dlr = Downloader(
-                self.__session,
-                m3u8,
-                file_name,
-                use_ffmpeg,
-                include_intro,
-                delete_chunks,
-            )
+            dlr = Downloader(self.__session, m3u8, file_name, use_ffmpeg, include_intro, delete_chunks,)
         dlr.download()
         dlr.merge()
         if delete_chunks:
@@ -365,9 +342,7 @@ class Episode(object):
                 file_name = f"{self.anime_title[:128]}-{self.number}"  # limit anime title lenght to 128 chars so we don't surpass the filename limit
         m3u8 = self.get_m3u8(quality)
         REFERER = self.__generate_referer()
-        self.__session.headers.update(
-            {"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"}
-        )
+        self.__session.headers.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
         chunks_done = 0
         threads = []
         cur_chunk = 0
@@ -387,12 +362,7 @@ class Episode(object):
                 if print_progress:
                     print(f"{chunks_done}/{total_chunks} done.")
             else:
-                threads.append(
-                    Process(
-                        target=self.download_chunk,
-                        args=(file_name, cur_chunk, segment,),
-                    )
-                )
+                threads.append(Process(target=self.download_chunk, args=(file_name, cur_chunk, segment,),))
                 cur_chunk += 1
         if multi_threading:
             for p in threads:
@@ -415,9 +385,7 @@ class Episode(object):
         else:
             print("Merging chunks into mp4")
             with open(f"{file_name}.mp4", "wb") as merged:
-                for ts_file in [
-                    f"chunks\/{file_name}-{x}.chunk.ts" for x in range(0, total_chunks)
-                ]:
+                for ts_file in [f"chunks\/{file_name}-{x}.chunk.ts" for x in range(0, total_chunks)]:
                     with open(ts_file, "rb") as ts:
                         shutil.copyfileobj(ts, merged)
         if delete_chunks:

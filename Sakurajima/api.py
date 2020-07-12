@@ -22,12 +22,7 @@ from Sakurajima.utils.episode_list import EpisodeList
 
 class Sakurajima:
     def __init__(
-        self,
-        username=None,
-        userId=None,
-        authToken=None,
-        proxies=None,
-        endpoint="https://aniwatch.me/api/ajax/APIHandle",
+        self, username=None, userId=None, authToken=None, proxies={}, endpoint="https://aniwatch.me/api/ajax/APIHandle",
     ):
 
         xsrf_token = self.__generate_xsrf_token()
