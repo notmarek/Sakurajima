@@ -1,4 +1,3 @@
-import requests
 import json
 from Sakurajima.models import base_models as bm
 

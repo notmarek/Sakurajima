@@ -168,7 +168,7 @@ class MultiThreadDownloader(object):
         self.init_tracker()
         while True:
             try:
-                for x in range(self.max_threads):
+                for _ in range(self.max_threads):
                     chunk_number, segment = stateful_segment_list.next()
                     file_name = f"chunks\/{self.file_name}-{chunk_number}.chunk.ts"
                     self.threads.append(
