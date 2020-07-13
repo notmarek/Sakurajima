@@ -301,6 +301,7 @@ class Episode(object):
         self,
         quality: str,
         file_name: str = None,
+        path: str = None,
         multi_threading: bool = False,
         max_threads: int = None,
         use_ffmpeg: bool = True,
@@ -323,10 +324,10 @@ class Episode(object):
 
         if multi_threading:
             dlr = MultiThreadDownloader(
-                self.__session, m3u8, file_name, max_threads, use_ffmpeg, include_intro, delete_chunks,
+                self.__session, m3u8, file_name, path, max_threads, use_ffmpeg, include_intro, delete_chunks,
             )
         else:
-            dlr = Downloader(self.__session, m3u8, file_name, use_ffmpeg, include_intro, delete_chunks,)
+            dlr = Downloader(self.__session, m3u8, file_name, path, use_ffmpeg, include_intro, delete_chunks,)
         dlr.download()
         dlr.merge()
         if delete_chunks:
