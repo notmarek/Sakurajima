@@ -70,7 +70,7 @@ class UserMedia(object):
             return res.json
         except Exception as e:
             self.__session.close()
-            raise e)
+            raise e
 
     def __repr__(self):
         return f"UserMedia: {self.title}"
