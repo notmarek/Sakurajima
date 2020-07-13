@@ -92,7 +92,7 @@ class Anime(object):
     def __post(self, data):
         try:
             res = self.__session.post(self.__API_URL, json=data)
-            return res.json
+            return res.json()
         except Exception as e:
             self.__session.close()
             raise e
@@ -222,7 +222,7 @@ class Episode(object):
         self.anime_title = anime_title
         self.__session = session
         self.anime_id = anime_id
-        self.API_URL = api_url
+        self.__API_URL = api_url
         self.number = data_dict.get("number", None)
         self.title = data_dict.get("title", None)
         self.description = data_dict.get("description", None)
@@ -238,8 +238,12 @@ class Episode(object):
         self.__m3u8 = None
 
     def __post(self, data):
-        with self.__session.post(self.API_URL, json=data) as url:
-            return json.loads(url.text)
+        try:
+            res = self.__session.post(self.__API_URL, json=data)
+            return res.json()
+        except Exception as e:
+            self.__session.close()
+            raise e
 
     def __generate_referer(self):
         return f"https://aniwatch.me/anime/{self.anime_id}/{self.number}"

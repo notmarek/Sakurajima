@@ -81,8 +81,8 @@ class Sakurajima:
 
     def __post(self, data):
         try:
-            res = self.session.post(self.__API_URL, json=data)
-            return res.json
+            res = self.session.post(self.API_URL, json=data)
+            return res.json()
         except Exception as e:
             self.session.close()
             raise e

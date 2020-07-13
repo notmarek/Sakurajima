@@ -27,7 +27,7 @@ class UserAnimeListEntry(object):
     def __post(self, data):
         try:
             res = self.__session.post(self.__API_URL, json=data)
-            return res.json
+            return res.json()
         except Exception as e:
             self.__session.close()
             raise e
@@ -38,9 +38,7 @@ class UserAnimeListEntry(object):
             "action": "getAnime",
             "detail_id": str(self.anime_id),
         }
-        return bm.Anime(
-            self.__post(data)["anime"], session=self.__session, api_url=self.__API_URL,
-        )
+        return bm.Anime(self.__post(data)["anime"], session=self.__session, api_url=self.__API_URL,)
 
     def __repr__(self):
         return f"<AnimeListEntry: {self.title}>"

@@ -21,7 +21,7 @@ class RecommendationEntry(object):
     def __post(self, data):
         try:
             res = self.__session.post(self.__API_URL, json=data)
-            return res.json
+            return res.json()
         except Exception as e:
             self.__session.close()
             raise e
