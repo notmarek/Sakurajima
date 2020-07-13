@@ -25,8 +25,12 @@ class UserAnimeListEntry(object):
             self.status = "dropped"
 
     def __post(self, data):
-        with self.__session.post(self.__API_URL, json=data) as url:
-            return json.loads(url.text)
+        try:
+            res = self.__session.post(self.__API_URL, json=data)
+            return res.json
+        except Exception as e:
+            self.__session.close()
+            raise e
 
     def get_anime(self):
         data = {

@@ -19,8 +19,12 @@ class RecommendationEntry(object):
         self.cur_episodes = data_dict.get("cur_episodes", None)
 
     def __post(self, data):
-        with self.__session.post(self.__API_URL, json=data) as url:
-            return json.loads(url.text)
+        try:
+            res = self.__session.post(self.__API_URL, json=data)
+            return res.json
+        except Exception as e:
+            self.__session.close()
+            raise e
 
     def __repr__(self):
         return f"<RecommendationEntry: {self.title}>"
@@ -31,6 +35,4 @@ class RecommendationEntry(object):
             "action": "getAnime",
             "detail_id": str(self.anime_id),
         }
-        return bm.Anime(
-            self.__post(data)["anime"], session=self.__session, api_url=self.__API_URL,
-        )
+        return bm.Anime(self.__post(data)["anime"], session=self.__session, api_url=self.__API_URL,)

@@ -80,8 +80,12 @@ class Sakurajima:
         return "".join(random.choice(characters) for i in range(32))
 
     def __post(self, data):
-        with self.session.post(self.API_URL, json=data) as url:
-            return json.loads(url.text)
+        try:
+            res = self.session.post(self.__API_URL, json=data)
+            return res.json
+        except Exception as e:
+            self.session.close()
+            raise e
 
     def get_episode(self, episode_id, lang="en-US"):
         data = {

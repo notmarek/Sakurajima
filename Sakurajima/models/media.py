@@ -10,21 +10,11 @@ class Media(object):
         self.__API_URL = api_url
         self.anime_id = anime_id
         self.theme_songs = [
-            MediaEntry(data, self.__session, self.__API_URL)
-            for data in data_dict.get("Theme Songs", [])
+            MediaEntry(data, self.__session, self.__API_URL) for data in data_dict.get("Theme Songs", [])
         ]
-        self.openings = [
-            MediaEntry(data, self.__session, self.__API_URL)
-            for data in data_dict.get("Openings", [])
-        ]
-        self.endings = [
-            MediaEntry(data, self.__session, self.__API_URL)
-            for data in data_dict.get("Endings", [])
-        ]
-        self.osts = [
-            MediaEntry(data, self.__session, self.__API_URL)
-            for data in data_dict.get("OSTs", [])
-        ]
+        self.openings = [MediaEntry(data, self.__session, self.__API_URL) for data in data_dict.get("Openings", [])]
+        self.endings = [MediaEntry(data, self.__session, self.__API_URL) for data in data_dict.get("Endings", [])]
+        self.osts = [MediaEntry(data, self.__session, self.__API_URL) for data in data_dict.get("OSTs", [])]
 
     def __repr__(self):
         return f"<Media for Anime: {self.anime_id}>"
@@ -47,8 +37,12 @@ class MediaEntry(object):
         self.thumbnail = data_dict.get("media_thumb", None)
 
     def __post(self, data):
-        with self.__session.post(self.API_URL, json=data) as url:
-            return json.loads(url.text)
+        try:
+            res = self.__session.post(self.__API_URL, json=data)
+            return res.json
+        except Exception as e:
+            self.__session.close()
+            raise e
 
     def __repr__(self):
         return f"<Media Entry {self.title}>"
@@ -71,8 +65,12 @@ class UserMedia(object):
             self.date = None
 
     def __post(self, data):
-        with self.__session.post(self.API_URL, json=data) as url:
-            return json.loads(url.text)
+        try:
+            res = self.__session.post(self.__API_URL, json=data)
+            return res.json
+        except Exception as e:
+            self.__session.close()
+            raise e)
 
     def __repr__(self):
         return f"UserMedia: {self.title}"
