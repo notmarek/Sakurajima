@@ -22,8 +22,10 @@ if __name__ == "__main__":
     threads = []
     with open(sys.argv[1], "r", encoding="utf-8") as f:
         lol = [x.replace("\n", "") for x in f.readlines()]
+    lol = list(dict.fromkeys(lol))
+    print(f"Removed duplicates - {len(lol)} left")
     for proxy in lol:
-        threads.append(threading.Thread(target=check_proxy, args=(proxy, int(sys.argv[2]),)))
+        threads.append(threading.Thread(target=check_proxy, args=(proxy, float(sys.argv[2]),)))
     for thread in threads:
         thread.start()
     for thread in threads:

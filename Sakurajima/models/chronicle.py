@@ -4,8 +4,8 @@ import datetime
 
 
 class ChronicleEntry(object):
-    def __init__(self, data_dict, session, api_url):
-        self.__session = session
+    def __init__(self, data_dict, network, api_url):
+        self.__network = network
         self.__API_URL = api_url
         self.episode = data_dict.get("episode", None)
         self.anime_id = data_dict.get("id", None)
@@ -17,14 +17,6 @@ class ChronicleEntry(object):
         except Exception:
             self.date = None
 
-    def __post(self, data):
-        try:
-            res = self.__session.post(self.__API_URL, json=data)
-            return res.json()
-        except Exception as e:
-            self.__session.close()
-            raise e
-
     def __repr__(self):
         return f"<ChronicleEntry: {self.chronicle_id}>"
 
@@ -34,4 +26,4 @@ class ChronicleEntry(object):
             "action": "removeChronicleEntry",
             "chronicle_id": self.chronicle_id,
         }
-        return self.__post(data)
+        return self.__network.post(data)

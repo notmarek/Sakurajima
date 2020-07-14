@@ -4,8 +4,8 @@ from Sakurajima.models import base_models as bm
 
 
 class UserAnimeListEntry(object):
-    def __init__(self, data_dict, session, api_url):
-        self.__session = session
+    def __init__(self, data_dict, network, api_url):
+        self.__network = network
         self.__API_URL = api_url
         self.title = data_dict.get("title", None)
         self.episodes_max = data_dict.get("episodes_max", None)
@@ -24,21 +24,13 @@ class UserAnimeListEntry(object):
         elif data_dict.get("dropped", None) == 1:
             self.status = "dropped"
 
-    def __post(self, data):
-        try:
-            res = self.__session.post(self.__API_URL, json=data)
-            return res.json()
-        except Exception as e:
-            self.__session.close()
-            raise e
-
     def get_anime(self):
         data = {
             "controller": "Anime",
             "action": "getAnime",
             "detail_id": str(self.anime_id),
         }
-        return bm.Anime(self.__post(data)["anime"], session=self.__session, api_url=self.__API_URL,)
+        return bm.Anime(self.__post(data)["anime"], network=self.__network, api_url=self.__API_URL,)
 
     def __repr__(self):
         return f"<AnimeListEntry: {self.title}>"

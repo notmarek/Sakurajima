@@ -9,7 +9,7 @@ from Sakurajima.utils.progress_tracker import ProgressTracker
 class Downloader(object):
     def __init__(
         self,
-        session,
+        network,
         m3u8,
         file_name: str,
         path: str = None,
@@ -20,7 +20,7 @@ class Downloader(object):
     ):
         if path is not None:
             os.chdir(path)
-        self.__session = session
+        self.__network = network
         self.m3u8 = m3u8
         self.file_name = file_name
         self.use_ffmpeg = use_ffmpeg
@@ -31,8 +31,8 @@ class Downloader(object):
     def init_tracker(self):
         self.progress_tracker = ProgressTracker().init_tracker(
             {
-                "headers": self.__session.headers,
-                "cookies": self.__session.cookies,
+                "headers": self.__network.headers,
+                "cookies": self.__network.cookies,
                 "segments": self.m3u8.data["segments"],
                 "file_name": self.file_name,
                 "total_chunks": self.total_chunks,
@@ -57,7 +57,7 @@ class Downloader(object):
 
         for chunk_number, segment in enumerate(self.m3u8.data["segments"]):
             file_name = f"chunks\/{self.file_name}-{chunk_number}.chunk.ts"
-            ChunkDownloader(self.__session, segment, file_name).download()
+            ChunkDownloader(self.__network, segment, file_name).download()
             self.progress_bar.next()
             self.progress_tracker.update_chunks_done(chunk_number)
             if self.on_progress:
@@ -76,14 +76,14 @@ class Downloader(object):
 
 
 class ChunkDownloader(object):
-    def __init__(self, session, segment, file_name):
-        self.__session = session
+    def __init__(self, network, segment, file_name):
+        self.__network = network
         self.segment = segment
         self.file_name = file_name
 
     def download(self):
         with open(self.file_name, "wb") as videofile:
-            res = self.__session.get(self.segment["uri"])
+            res = self.__network.get(self.segment["uri"])
             chunk = res.content
             key_dict = self.segment.get("key", None)
             if key_dict is not None:
@@ -94,7 +94,7 @@ class ChunkDownloader(object):
                 videofile.write(chunk)
 
     def get_decrypt_key(self, uri):
-        res = self.__session.get(uri)
+        res = self.__network.get(uri)
         return res.content
 
     def decrypt_chunk(self, chunk, key):
@@ -105,7 +105,7 @@ class ChunkDownloader(object):
 class MultiThreadDownloader(object):
     def __init__(
         self,
-        session,
+        network,
         m3u8,
         file_name: str,
         path: str = None,
@@ -116,7 +116,7 @@ class MultiThreadDownloader(object):
     ):
         if path is not None:
             os.chdir(path)
-        self.__session = session
+        self.__network = network
         self.m3u8 = m3u8
         self.file_name = file_name
         self.use_ffmpeg = use_ffmpeg
@@ -145,8 +145,8 @@ class MultiThreadDownloader(object):
     def init_tracker(self):
         self.progress_tracker.init_tracker(
             {
-                "headers": self.__session.headers,
-                "cookies": self.__session.cookies,
+                "headers": self.__network.headers,
+                "cookies": self.__network.cookies,
                 "segments": self.m3u8.data["segments"],
                 "file_name": self.file_name,
                 "total_chunks": self.total_chunks,
@@ -162,8 +162,8 @@ class MultiThreadDownloader(object):
     def reset_threads(self):
         self.threads = []
 
-    def assign_target(self, session, segment, file_name, chunk_number):
-        ChunkDownloader(session, segment, file_name).download()
+    def assign_target(self, network, segment, file_name, chunk_number):
+        ChunkDownloader(network, segment, file_name).download()
         with self.__lock:
             self.progress_tracker.update_chunks_done(chunk_number)
             self.progress_bar.next()
@@ -178,7 +178,7 @@ class MultiThreadDownloader(object):
                     chunk_number, segment = stateful_segment_list.next()
                     file_name = f"chunks\/{self.file_name}-{chunk_number}.chunk.ts"
                     self.threads.append(
-                        Thread(target=self.assign_target, args=(self.__session, segment, file_name, chunk_number),)
+                        Thread(target=self.assign_target, args=(self.__network, segment, file_name, chunk_number),)
                     )
                 self.start_threads()
                 self.reset_threads()

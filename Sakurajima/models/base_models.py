@@ -23,8 +23,8 @@ class Anime(object):
     (called as detail_id by AniWatch backend), title, airing date etc.
     Use the get_episodes method to get a list of available episodes"""
 
-    def __init__(self, data_dict: dict, session: requests.Session, api_url: str):
-        self.__session = session
+    def __init__(self, data_dict: dict, network, api_url: str):
+        self.__network = network
         self.__API_URL = api_url
         self.data_dict = data_dict
         self.anime_id = data_dict.get("detail_id", None)
@@ -83,19 +83,11 @@ class Anime(object):
         else:
             self.__episodes = EpisodeList(
                 [
-                    Episode(data_dict, self.__session, self.__API_URL, self.anime_id, self.title,)
-                    for data_dict in self.__post(data)["episodes"]
+                    Episode(data_dict, self.__network, self.__API_URL, self.anime_id, self.title,)
+                    for data_dict in self.__network.post(data)["episodes"]
                 ]
             )
             return self.__episodes
-
-    def __post(self, data):
-        try:
-            res = self.__session.post(self.__API_URL, json=data)
-            return res.json()
-        except Exception as e:
-            self.__session.close()
-            raise e
 
     def __repr__(self):
         return f"<Anime: {self.title}>"
@@ -106,7 +98,7 @@ class Anime(object):
             "action": "getRelation",
             "relation_id": self.relation_id,
         }
-        return Relation(self.__post(data)["relation"])
+        return Relation(self.__network.post(data)["relation"])
 
     def get_recommendations(self):
         data = {
@@ -115,7 +107,8 @@ class Anime(object):
             "detail_id": str(self.anime_id),
         }
         return [
-            RecommendationEntry(data_dict, self.__session, self.__API_URL) for data_dict in self.__post(data)["entries"]
+            RecommendationEntry(data_dict, self.__network, self.__API_URL)
+            for data_dict in self.__network.post(data)["entries"]
         ]
 
     def get_chronicle(self, page=1):
@@ -126,7 +119,8 @@ class Anime(object):
             "page": page,
         }
         return [
-            ChronicleEntry(data_dict, self.__session, self.__API_URL) for data_dict in self.__post(data)["chronicle"]
+            ChronicleEntry(data_dict, self.__network, self.__API_URL)
+            for data_dict in self.__network.post(data)["chronicle"]
         ]
 
     def mark_as_completed(self):
@@ -135,7 +129,7 @@ class Anime(object):
             "action": "markAsCompleted",
             "detail_id": str(self.anime_id),
         }
-        return self.__post(data)["success"]
+        return self.__network.post(data)["success"]
 
     def mark_as_plan_to_watch(self):
         data = {
@@ -143,7 +137,7 @@ class Anime(object):
             "action": "markAsPlannedToWatch",
             "detail_id": str(self.anime_id),
         }
-        return self.__post(data)["success"]
+        return self.__network.post(data)["success"]
 
     def mark_as_on_hold(self):
         data = {
@@ -151,7 +145,7 @@ class Anime(object):
             "action": "markAsOnHold",
             "detail_id": str(self.anime_id),
         }
-        return self.__post(data)["success"]
+        return self.__network.post(data)["success"]
 
     def mark_as_dropped(self):
         data = {
@@ -159,7 +153,7 @@ class Anime(object):
             "action": "markAsDropped",
             "detail_id": str(self.anime_id),
         }
-        return self.__post(data)["success"]
+        return self.__network.post(data)["success"]
 
     def mark_as_watching(self):
         data = {
@@ -167,7 +161,7 @@ class Anime(object):
             "action": "markAsWatching",
             "detail_id": str(self.anime_id),
         }
-        return self.__post(data)["success"]
+        return self.__network.post(data)["success"]
 
     def remove_from_list(self):
         data = {
@@ -175,7 +169,7 @@ class Anime(object):
             "action": "removeAnime",
             "detail_id": str(self.anime_id),
         }
-        return self.__post(data)["success"]
+        return self.__network.post(data)["success"]
 
     def rate(self, rating):
         # Rate 0 to remove rating
@@ -185,7 +179,7 @@ class Anime(object):
             "detail_id": str(self.anime_id),
             "rating": rating,
         }
-        return self.__post(data)["success"]
+        return self.__network.post(data)["success"]
 
     def get_media(self):
         data = {
@@ -193,7 +187,7 @@ class Anime(object):
             "action": "getMedia",
             "detail_id": str(self.anime_id),
         }
-        return Media(self.__post(data), self.__session, self.__API_URL, self.anime_id,)
+        return Media(self.__network.post(data), self.__network, self.__API_URL, self.anime_id,)
 
     def get_complete_object(self):
         data = {
@@ -201,8 +195,8 @@ class Anime(object):
             "action": "getAnime",
             "detail_id": str(self.anime_id),
         }
-        data_dict = self.__post(data)["anime"]
-        return Anime(data_dict, self.__session, api_url=self.__API_URL,)
+        data_dict = self.__network.post(data)["anime"]
+        return Anime(data_dict, self.__network, api_url=self.__API_URL,)
 
     def add_recommendation(self, recommended_anime_id):
         data = {
@@ -211,16 +205,16 @@ class Anime(object):
             "detail_id": str(self.anime_id),
             "recommendation": str(recommended_anime_id),
         }
-        return self.__post(data)
+        return self.__network.post(data)
 
     def get_dict(self):
         return self.data_dict
 
 
 class Episode(object):
-    def __init__(self, data_dict, session, api_url, anime_id, anime_title=None):
+    def __init__(self, data_dict, netwok, api_url, anime_id, anime_title=None):
         self.anime_title = anime_title
-        self.__session = session
+        self.__network = network
         self.anime_id = anime_id
         self.__API_URL = api_url
         self.number = data_dict.get("number", None)
@@ -237,19 +231,11 @@ class Episode(object):
         self.__aniwatch_episode = None
         self.__m3u8 = None
 
-    def __post(self, data):
-        try:
-            res = self.__session.post(self.__API_URL, json=data)
-            return res.json()
-        except Exception as e:
-            self.__session.close()
-            raise e
-
     def __generate_referer(self):
         return f"https://aniwatch.me/anime/{self.anime_id}/{self.number}"
 
     def __get_decrypt_key(self, url):
-        res = self.__session.get(url)
+        res = self.__network.get(url)
         return res.content
 
     def __decrypt_chunk(self, chunk, key):
@@ -267,7 +253,7 @@ class Episode(object):
                 "ep_id": self.ep_id,
                 "hoster": "",
             }
-            self.__aniwatch_episode = AniWatchEpisode(self.__post(data), self.ep_id)
+            self.__aniwatch_episode = AniWatchEpisode(self.__network.post(data), self.ep_id)
             return self.__aniwatch_episode
 
     def get_m3u8(self, quality: str):
@@ -275,9 +261,9 @@ class Episode(object):
             return self.__m3u8
         else:
             REFERER = self.__generate_referer()
-            self.__session.headers.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
+            self.__network.headers.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
             aniwatch_episode = self.get_aniwatch_episode()
-            res = self.__session.get(aniwatch_episode.stream.sources[quality])
+            res = self.__network.get(aniwatch_episode.stream.sources[quality])
             self.__m3u8 = M3U8(res.text)
             return self.__m3u8
 
@@ -287,7 +273,7 @@ class Episode(object):
         except FileExistsError:
             pass
         with open(f"chunks\/{file_name}-{chunk_num}.chunk.ts", "wb") as videofile:
-            res = self.__session.get(segment["uri"])
+            res = self.__network.get(segment["uri"])
             chunk = res.content
             key_dict = segment.get("key", None)
             if key_dict is not None:
@@ -324,10 +310,10 @@ class Episode(object):
 
         if multi_threading:
             dlr = MultiThreadDownloader(
-                self.__session, m3u8, file_name, path, max_threads, use_ffmpeg, include_intro, delete_chunks,
+                self.__network, m3u8, file_name, path, max_threads, use_ffmpeg, include_intro, delete_chunks,
             )
         else:
-            dlr = Downloader(self.__session, m3u8, file_name, path, use_ffmpeg, include_intro, delete_chunks,)
+            dlr = Downloader(self.__network, m3u8, file_name, path, use_ffmpeg, include_intro, delete_chunks,)
         dlr.download()
         dlr.merge()
         if delete_chunks:
@@ -351,7 +337,7 @@ class Episode(object):
                 file_name = f"{self.anime_title[:128]}-{self.number}"  # limit anime title lenght to 128 chars so we don't surpass the filename limit
         m3u8 = self.get_m3u8(quality)
         REFERER = self.__generate_referer()
-        self.__session.headers.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
+        self.__network.headers.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
         chunks_done = 0
         threads = []
         cur_chunk = 0
@@ -413,7 +399,7 @@ class Episode(object):
             "detail_id": str(self.anime_id),
             "episode_id": self.ep_id,
         }
-        return self.__post(data)["success"]
+        return self.__network.post(data)["success"]
 
     def __repr__(self):
         return f"<Episode {self.number}: {self.title}>"

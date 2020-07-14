@@ -4,8 +4,8 @@ import datetime
 
 
 class Notification(object):
-    def __init__(self, data_dict, session, api_url):
-        self.__session = session
+    def __init__(self, data_dict, network, api_url):
+        self.__network = network
         self.__API_URL = api_url
         self.data_dict = data_dict
         self.id = data_dict.get("id", None)
@@ -20,14 +20,6 @@ class Notification(object):
         self.href_blank = data_dict.get("href_blank", None)
         self.href = data_dict.get("href", None)
 
-    def __post(self, data):
-        try:
-            res = self.__session.post(self.__API_URL, json=data)
-            return res.json()
-        except Exception as e:
-            self.__session.close()
-            raise e
-
     def get_dict(self):
         return self.data_dict
 
@@ -37,11 +29,11 @@ class Notification(object):
             "action": "toggleNotificationSeen",
             "id": self.id,
         }
-        return self.__post(data)["success"]
+        return self.__network.post(data)["success"]
 
     def delete(self):
         data = {"controller": "Profile", "action": "deleteNotification", "id": self.id}
-        return self.__post(data)["success"]
+        return self.__network.post(data)["success"]
 
     def __repr__(self):
         return f"<Notification ID: {self.id}, Date: {self.time}>"
