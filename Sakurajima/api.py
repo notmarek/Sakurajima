@@ -26,7 +26,7 @@ class Sakurajima:
         self, username=None, userId=None, authToken=None, proxies={}, endpoint="https://aniwatch.me/api/ajax/APIHandle",
     ):
         self.API_URL = endpoint
-        self.network = Network(username, userId, authToken, endpoint)
+        self.network = Network(username, userId, authToken, proxies, endpoint)
 
     def get_episode(self, episode_id, lang="en-US"):
         data = {

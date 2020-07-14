@@ -3,9 +3,10 @@ from requests import Session
 
 
 class Network:
-    def __init__(self, username: str, user_id: str, auth_token: str, endpoint):
+    def __init__(self, username: str, user_id: str, auth_token: str, proxies, endpoint):
         self.__API_URL = endpoint
         self.session = Session()
+        self.session.proxies = proxies
         self.headers = self.session.headers  # Expose session headers
         self.cookies = self.session.cookies  # Expose session cookies
         xsrf_token = Misc().generate_xsrf_token()

@@ -212,7 +212,7 @@ class Anime(object):
 
 
 class Episode(object):
-    def __init__(self, data_dict, netwok, api_url, anime_id, anime_title=None):
+    def __init__(self, data_dict, network, api_url, anime_id, anime_title=None):
         self.anime_title = anime_title
         self.__network = network
         self.anime_id = anime_id
