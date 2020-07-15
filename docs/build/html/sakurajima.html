@@ -1,0 +1,961 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Sakurajima &mdash; Sakurajima  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to Sakurajima’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Sakurajima
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Sakurajima</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Sakurajima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Sakurajima</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/sakurajima.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-Sakurajima.api">
+<span id="sakurajima"></span><h1>Sakurajima<a class="headerlink" href="#module-Sakurajima.api" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="Sakurajima.api.Sakurajima">
+<em class="property">class </em><code class="sig-prename descclassname">Sakurajima.api.</code><code class="sig-name descname">Sakurajima</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">userId</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">authToken</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">proxies</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">endpoint</span><span class="o">=</span><span class="default_value">'https://aniwatch.me/api/ajax/APIHandle'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sakurajima at its core, is a wrapper around the aniwatch.me API. However,
+it does include some additional functionality, namely the ability to download 
+episodes of your favorite anime in your prefered quality.</p>
+<p>Sakurajima requires you to have an aniwatch account. It requires you to provide 
+your username, your user ID and your auth token. For instructions on how to get
+those, checkout <a class="reference external" href="https://github.com/veselysps/Sakurajima/wiki/How-to-get-username,-user-ID,-authorization-token.">this</a> wiki.</p>
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.add_recommendation">
+<code class="sig-name descname">add_recommendation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">recommended_anime_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.add_recommendation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Submit a recommendation for an anime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anime_id</strong> (<em>int</em>) – The ID of the anime where you want to submit the recommendation.</p></li>
+<li><p><strong>recommended_anime_id</strong> (<em>int</em>) – The ID of the anime that you want to recommend.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.delete_all_notifications">
+<code class="sig-name descname">delete_all_notifications</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.delete_all_notifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes all notifications.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>[description]</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.delete_notification">
+<code class="sig-name descname">delete_notification</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">notification_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.delete_notification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a specific notification.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>notification_id</strong> (<em>int</em>) – The ID of the notification you want to delete.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.favorite_media">
+<code class="sig-name descname">favorite_media</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">media_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.favorite_media" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks a media as favorite.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>media_id</strong> (<em>int</em>) – The ID of the media that you want to marks as favorite.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_airing_anime">
+<code class="sig-name descname">get_airing_anime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">randomize</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_airing_anime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets currently airing anime arranged according to weekdays.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>randomize</strong> (<em>bool</em><em>, </em><em>optional</em>) – [description],
+defaults to False</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary with weekdays as keys and corresponding list of Anime
+objects as values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_anime">
+<code class="sig-name descname">get_anime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_anime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an anime by its ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>anime_id</strong> (<em>int</em>) – ID of the anime you want to get.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns an Anime object that has all the relevant details regarding
+a single anime like title, description, score, number of episodes etc.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Anime</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_anime_chronicle">
+<code class="sig-name descname">get_anime_chronicle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">page</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_anime_chronicle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the user’s anime specific chronicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anime_id</strong> (<em>int</em>) – The ID of the anime whose chronicle you want.</p></li>
+<li><p><strong>page</strong> (<em>int</em><em>, </em><em>optional</em>) – The page number of the chronicle that you want, defaults to 1</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of ChronicleEntry objects.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[ChronicleEntry]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_best_rated_anime">
+<code class="sig-name descname">get_best_rated_anime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">page</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_best_rated_anime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the highest rated animes on “aniwatch.me”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>page</strong> (<em>int</em><em>, </em><em>optional</em>) – Page number of the popularity chart that you want, defaults to 1</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of Anime objetcs.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[Anime]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_episode">
+<code class="sig-name descname">get_episode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">episode_id</span></em>, <em class="sig-param"><span class="n">lang</span><span class="o">=</span><span class="default_value">'en-US'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_episode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an AniWatchEpisode by its episode ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>episode_id</strong> (<em>int</em>) – The episode ID of the episode you want to get.</p></li>
+<li><p><strong>lang</strong> (<em>str</em><em>, </em><em>optional</em>) – Language of the episode you want to get, defaults to “en-US”
+(English Subbed)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An AniWatchEpisode object which has data like streams and lamguages.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>AniWatchEpisode</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_episodes">
+<code class="sig-name descname">get_episodes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_episodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an EpisodeList object which contains all the
+available episodes of a given anime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>anime_id</strong> (<em>int</em>) – The ID of the anime whose episodes you want.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns an EpisodeList object. An EpisodeList is very similar to a normal list,
+you can access item on a specific index the same way you would do for
+a normal list. Check out the EpisodeList documentation for further details.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>EpisodeList</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_latest_anime">
+<code class="sig-name descname">get_latest_anime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_latest_anime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the latest animes on “aniwatch.me”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of Anime objects.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[Anime]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_latest_releases">
+<code class="sig-name descname">get_latest_releases</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_latest_releases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the latest anime releases. This includes currently airing 
+animes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of Anime objects.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[Anime]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_latest_uploads">
+<code class="sig-name descname">get_latest_uploads</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_latest_uploads" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets latest uploads on “aniwatch.me”. This includes animes that are not airing 
+currently.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of Anime objects.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[Anime]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_media">
+<code class="sig-name descname">get_media</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_media" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets an anime’s media.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>anime_id</strong> (<em>int</em>) – The ID of the anime whose media you want.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Media object. A Media object has properties like opennings, endings, OSTs etc
+that each contain a list of MediaEntry objects representing the respective media.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Media</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_notifications">
+<code class="sig-name descname">get_notifications</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_notifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the user’s unread notifications.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of Notification objects. A Notificaton object contains 
+data like date, notification ID and the content etc.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[Notification]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_popular_anime">
+<code class="sig-name descname">get_popular_anime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">page</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_popular_anime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all time popular anime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>page</strong> (<em>int</em><em>, </em><em>optional</em>) – Page number of the popularity chart that you want, defaults to 1</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of Anime objects</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[Anime]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_popular_seasonal_anime">
+<code class="sig-name descname">get_popular_seasonal_anime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">page</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_popular_seasonal_anime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets popular anime of the current season.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>page</strong> (<em>int</em><em>, </em><em>optional</em>) – Page number of the popularity chart that you want, defaults to 1</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of Anime objects.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[Anime]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_popular_upcoming_anime">
+<code class="sig-name descname">get_popular_upcoming_anime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">page</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_popular_upcoming_anime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets popular anime that have not started airing yet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>page</strong> (<em>int</em><em>, </em><em>optional</em>) – Page number of the popularity chart that you want, defaults to 1</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of Anime objects.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[Anime]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_random_anime">
+<code class="sig-name descname">get_random_anime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_random_anime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a random anime from the aniwatch.me library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An Anime object representing a random anime.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Anime</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_recommendations">
+<code class="sig-name descname">get_recommendations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_recommendations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of recommendations for an anime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>anime_id</strong> (<em>int</em>) – The ID of the anime whose recommendation you want to get.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of ReccomendationEntry object where each object represents a 
+single recommendation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[RecommendationEntry]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_relation">
+<code class="sig-name descname">get_relation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">relation_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_relation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the relations of an anime by its relation ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>relation_id</strong> (<em>int</em>) – Relation ID of the anime whose relations you want to get.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Relation object that contains all the details of a relation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Relation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_seasonal_anime">
+<code class="sig-name descname">get_seasonal_anime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">'null'</span></em>, <em class="sig-param"><span class="n">year</span><span class="o">=</span><span class="default_value">'null'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_seasonal_anime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets current seasonal animes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>str</em><em>, </em><em>optional</em>) – [description], defaults to “null”</p></li>
+<li><p><strong>year</strong> (<em>str</em><em>, </em><em>optional</em>) – [description], defaults to “null”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of  Anime objects.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[Anime]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_stats">
+<code class="sig-name descname">get_stats</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the aniwatch.me site stats. This includes things like the total
+number of streams of a given quality, total users, total number of anime, movie, 
+special entries in the aniwatch.me library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An AniwatchStats object which wraps all the relevant statistics.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>AniwatchStats</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_unread_notifications">
+<code class="sig-name descname">get_unread_notifications</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_unread_notifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a user’s unread notifications.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of Notification objects.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[Notification]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_user_anime_list">
+<code class="sig-name descname">get_user_anime_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_user_anime_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the user’s aniwatch.me anime list. This list includes animes 
+that are marked by the user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of UserAnimeListEntry objects. An UserAnimeListEntry objects
+contains information like the status, progress and total episodes etc.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[UserAnimeListEntry]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_user_chronicle">
+<code class="sig-name descname">get_user_chronicle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">page</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_user_chronicle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the user’s chronicle. A chronicle tracks a user’s watch history.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>page</strong> (<em>int</em><em>, </em><em>optional</em>) – The page number of the chronicle that you 
+want, defaults to 1</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of ChronicleEntry objects, each object wraps all the 
+information related to an entry like episode number, date, anime ID.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[ChronicleEntry]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_user_media">
+<code class="sig-name descname">get_user_media</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">page</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_user_media" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the users favorite media.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>page</strong> (<em>int</em><em>, </em><em>optional</em>) – The page number of the favorites page that you want, defaults to 1</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of UserMedia objects. A UserMedia object has data like title and 
+media ID</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[UserMedia]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_user_overview">
+<code class="sig-name descname">get_user_overview</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_user_overview" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a breif user overview which includes stats like total hours watched,
+total number of animes completed etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Returns a UserOverview object that wraps all the relevant details 
+regarding the given user.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>UserOverview</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.get_watchlist">
+<code class="sig-name descname">get_watchlist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">page</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_watchlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the user’s current watchlist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>page</strong> (<em>int</em><em>, </em><em>optional</em>) – The page number of the watchlist that you want to get, defaults to 1</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.mark_all_notifications_as_read">
+<code class="sig-name descname">mark_all_notifications_as_read</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.mark_all_notifications_as_read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks all notification as read.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>[description]</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.mark_as_completed">
+<code class="sig-name descname">mark_as_completed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.mark_as_completed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks an anime as completed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>anime_id</strong> (<em>int</em>) – The ID of the anime that you want to mark as “complete”.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.mark_as_dropped">
+<code class="sig-name descname">mark_as_dropped</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.mark_as_dropped" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks an anime as “dropped”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>anime_id</strong> (<em>int</em>) – The ID of the anime that you want to mark as dropped.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.mark_as_on_hold">
+<code class="sig-name descname">mark_as_on_hold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.mark_as_on_hold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks an anime as “on hold”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>anime_id</strong> (<em>int</em>) – The ID of the anime that you want to mark as “on hold”.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.mark_as_plan_to_watch">
+<code class="sig-name descname">mark_as_plan_to_watch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.mark_as_plan_to_watch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks an anime as plan to watch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>anime_id</strong> (<em>int</em>) – The ID of the anime that you want to mark as “plan to watch”.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.mark_as_watching">
+<code class="sig-name descname">mark_as_watching</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.mark_as_watching" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks an anime as “watching”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>anime_id</strong> (<em>int</em>) – The ID of the anime that you want to mark as watching.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.rateAnime">
+<code class="sig-name descname">rateAnime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">rating</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.rateAnime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the user’s rating for a given anime. Rate an anime zero inorder to 
+remove the user’s rating.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anime_id</strong> (<em>int</em>) – The ID of the anime that you want to rate.</p></li>
+<li><p><strong>rating</strong> (<em>int</em>) – The number of stars that you want to the rate the given anime.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.remove_chronicle_entry">
+<code class="sig-name descname">remove_chronicle_entry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">chronicle_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.remove_chronicle_entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a specific chronicle entry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>chronicle_id</strong> (<em>int</em>) – The ID of the chronicle that you want to remove.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.remove_from_list">
+<code class="sig-name descname">remove_from_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.remove_from_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes an anime from the user’s anime list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>anime_id</strong> (<em>int</em>) – The ID of the anime that you want to remove from the list.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.report_missing_anime">
+<code class="sig-name descname">report_missing_anime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_name</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.report_missing_anime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reports a missing anime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>anime_name</strong> (<em>str</em>) – The name of the anime that you want to report.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.report_missing_streams">
+<code class="sig-name descname">report_missing_streams</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.report_missing_streams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reports a missing stream.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>anime_id</strong> (<em>int</em>) – The ID of the anime whose strean you want to report as missing.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.search">
+<code class="sig-name descname">search</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">query</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Searches the aniwatch.me library for the given anime title.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>query</strong> (<em>str</em>) – The title of the anime that you want to search. Aniwatch also 
+stores synonyms, english names for animes so those can be used too.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of Anime objects.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.toggle_mark_as_watched">
+<code class="sig-name descname">toggle_mark_as_watched</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">episode_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.toggle_mark_as_watched" title="Permalink to this definition">¶</a></dt>
+<dd><p>Toggles the mark as watched status of a particular episode of an anime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anime_id</strong> (<em>int</em>) – The ID of the anime to which the episode belongs.</p></li>
+<li><p><strong>episode_id</strong> (<em>int</em>) – The ID of the episode that you want to toggle the status for.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.toggle_notification_seen">
+<code class="sig-name descname">toggle_notification_seen</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">notification_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.toggle_notification_seen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Toggles the mark as seen status of a notification.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>notification_id</strong> (<em>int</em>) – The ID of the notification whose status you want to 
+toggle.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Sakurajima’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Not Marek
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

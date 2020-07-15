@@ -1,0 +1,6 @@
+Models
+======
+.. module:: Sakurajima.api
+
+.. autoclass:: Sakurajima
+   :members:
