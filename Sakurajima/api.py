@@ -45,7 +45,7 @@ class Sakurajima:
         self.network = Network(username, userId, authToken, proxies, endpoint)
 
     def get_episode(self, episode_id, lang="en-US"):
-        """Returns an AniWatchEpisode by its episode ID.
+        """Gets an AniWatchEpisode by its episode ID.
 
         :param episode_id: The episode ID of the episode you want to get.
         :type episode_id: int
@@ -65,12 +65,12 @@ class Sakurajima:
         return AniWatchEpisode(self.network.post(data), episode_id)
 
     def get_episodes(self, anime_id: int):
-        """Returns an EpisodeList object which contains all the
+        """Gets an EpisodeList object which contains all the
         available episodes of a given anime.
 
         :param anime_id: The ID of the anime whose episodes you want.
         :type anime_id: int
-        :return: Returns an EpisodeList object. An EpisodeList is very similar to a normal list,
+        :return: An EpisodeList object. An EpisodeList is very similar to a normal list,
                  you can access item on a specific index the same way you would do for
                  a normal list. Check out the EpisodeList documentation for further details.
         :rtype: EpisodeList
@@ -88,11 +88,11 @@ class Sakurajima:
         )
 
     def get_anime(self, anime_id: int):
-        """Returns an anime by its ID.
+        """Gets an anime by its ID.
 
         :param anime_id: ID of the anime you want to get.
         :type anime_id: int
-        :return: Returns an Anime object that has all the relevant details regarding
+        :return: An Anime object that has all the relevant details regarding
                  a single anime like title, description, score, number of episodes etc.
         :rtype: Anime
         """
@@ -100,7 +100,7 @@ class Sakurajima:
         return Anime(self.network.post(data)["anime"], network=self.network, api_url=self.API_URL,)
 
     def get_recommendations(self, anime_id: int):
-        """Returns a list of recommendations for an anime.
+        """Gets a list of recommendations for an anime.
 
         :param anime_id: The ID of the anime whose recommendation you want to get.
         :type anime_id: int
@@ -292,7 +292,7 @@ class Sakurajima:
         """Gets a breif user overview which includes stats like total hours watched,
         total number of animes completed etc. 
 
-        :return: Returns a UserOverview object that wraps all the relevant details 
+        :return: An UserOverview object that wraps all the relevant details 
                  regarding the given user. 
         :rtype: UserOverview
         """

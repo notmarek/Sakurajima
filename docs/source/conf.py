@@ -19,8 +19,8 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = 'Sakurajima'
-copyright = '2020, Not Marek'
-author = 'Not Marek'
+copyright = '2020, Not Marek, Dhanraj Hira'
+author = 'Not Marek, Dhanraj Hira'
 
 
 # -- General configuration ---------------------------------------------------

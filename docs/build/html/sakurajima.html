@@ -250,13 +250,13 @@ objects as values.</p>
 <dl class="py method">
 <dt id="Sakurajima.api.Sakurajima.get_anime">
 <code class="sig-name descname">get_anime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_anime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an anime by its ID.</p>
+<dd><p>Gets an anime by its ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>anime_id</strong> (<em>int</em>) – ID of the anime you want to get.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Returns an Anime object that has all the relevant details regarding
+<dd class="field-even"><p>An Anime object that has all the relevant details regarding
 a single anime like title, description, score, number of episodes etc.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
@@ -305,7 +305,7 @@ a single anime like title, description, score, number of episodes etc.</p>
 <dl class="py method">
 <dt id="Sakurajima.api.Sakurajima.get_episode">
 <code class="sig-name descname">get_episode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">episode_id</span></em>, <em class="sig-param"><span class="n">lang</span><span class="o">=</span><span class="default_value">'en-US'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_episode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an AniWatchEpisode by its episode ID.</p>
+<dd><p>Gets an AniWatchEpisode by its episode ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -326,14 +326,14 @@ a single anime like title, description, score, number of episodes etc.</p>
 <dl class="py method">
 <dt id="Sakurajima.api.Sakurajima.get_episodes">
 <code class="sig-name descname">get_episodes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_episodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an EpisodeList object which contains all the
+<dd><p>Gets an EpisodeList object which contains all the
 available episodes of a given anime.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>anime_id</strong> (<em>int</em>) – The ID of the anime whose episodes you want.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Returns an EpisodeList object. An EpisodeList is very similar to a normal list,
+<dd class="field-even"><p>An EpisodeList object. An EpisodeList is very similar to a normal list,
 you can access item on a specific index the same way you would do for
 a normal list. Check out the EpisodeList documentation for further details.</p>
 </dd>
@@ -488,7 +488,7 @@ data like date, notification ID and the content etc.</p>
 <dl class="py method">
 <dt id="Sakurajima.api.Sakurajima.get_recommendations">
 <code class="sig-name descname">get_recommendations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anime_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_recommendations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a list of recommendations for an anime.</p>
+<dd><p>Gets a list of recommendations for an anime.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>anime_id</strong> (<em>int</em>) – The ID of the anime whose recommendation you want to get.</p>
@@ -630,7 +630,7 @@ media ID</p>
 total number of animes completed etc.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Returns a UserOverview object that wraps all the relevant details 
+<dd class="field-odd"><p>An UserOverview object that wraps all the relevant details 
 regarding the given user.</p>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -923,7 +923,7 @@ toggle.</p>
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2020, Not Marek
+        &copy; Copyright 2020, Not Marek, Dhanraj Hira
 
     </p>
   </div>
