@@ -1,6 +1,7 @@
 import requests
 import json
 from Sakurajima.models import base_models as bm
+from Sakurajima.models.chronicle import ChronicleEntry
 
 
 class UserAnimeListEntry(object):
@@ -70,3 +71,43 @@ class UserOverviewStats(object):
         self.watched_days = data_dict.get("watched_days", None)
         self.mean_score = data_dict.get("mean_score", None)
         self.ratings = data_dict.get("ratings", None)
+
+
+class Friend(object):
+    def __init__(self, network, data_dict):
+        self.network = network
+        self.username = data_dict.get("username", None)
+        self.user_id = data_dict.get("userid", None)
+        self.cover_img = data_dict.get("cover", None)
+        self.friends_since = data_dict.get("date", None)
+
+    def __repr__(self):
+        return f"<Friend {self.username}>"
+
+    def unfriend(self):
+        data = {
+            "controller": "Profile",
+            "action": "removeFriend",
+            "friend_id": self.user_id,
+        }
+        return self.network.post(data)
+
+    def get_overview(self):
+        data = {
+            "controller": "Profile",
+            "action": "getOverview",
+            "profile_id": self.user_id,
+        }
+        return UserOverview(self.network.post(data)["overview"])
+
+    def get_chronicle(self, page=1):
+        data = {
+            "controller": "Profile",
+            "action": "getChronicle",
+            "profile_id": self.user_id,
+            "page": page,
+        }
+        return [
+            ChronicleEntry(data_dict, self.network, self.network.API_URL)
+            for data_dict in self.network.post(data)["chronicle"]
+        ]

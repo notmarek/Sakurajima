@@ -17,12 +17,13 @@ from Sakurajima.models import (
     WatchListEntry,
     Media,
 )
+from Sakurajima.models.user_models import Friend
 from Sakurajima.utils.episode_list import EpisodeList
 from Sakurajima.utils.network import Network
 
 
 class Sakurajima:
-    
+
     """
     Sakurajima at its core, is a wrapper around the aniwatch.me API. However,
     it does include some additional functionality, namely the ability to download 
@@ -35,11 +36,8 @@ class Sakurajima:
     """
 
     def __init__(
-        self,username=None, 
-        userId=None, 
-        authToken=None, 
-        proxies={}, 
-        endpoint="https://aniwatch.me/api/ajax/APIHandle"):
+        self, username=None, userId=None, authToken=None, proxies={}, endpoint="https://aniwatch.me/api/ajax/APIHandle"
+    ):
 
         self.API_URL = endpoint
         self.network = Network(username, userId, authToken, proxies, endpoint)
@@ -244,7 +242,7 @@ class Sakurajima:
         return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data)["entries"]]
 
     def get_hot_anime(self, page=1):
-        #TODO inspect this to figure out a correct description.
+        # TODO inspect this to figure out a correct description.
         data = {"controller": "Anime", "action": "getHotAnime", "page": page}
         return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data)["entries"]]
 
@@ -288,10 +286,11 @@ class Sakurajima:
         data = {"controller": "XML", "action": "getStatsData"}
         return AniwatchStats(self.network.post(data))
 
-    def get_user_overview(self, userId):
-        """Gets a breif user overview which includes stats like total hours watched,
+    def get_user_overview(self, user_id):
+        """Gets a brief user overview which includes stats like total hours watched,
         total number of animes completed etc. 
-
+        :param user_id: The id of the target user
+        :type user_id: int, str
         :return: An UserOverview object that wraps all the relevant details 
                  regarding the given user. 
         :rtype: UserOverview
@@ -299,13 +298,14 @@ class Sakurajima:
         data = {
             "controller": "Profile",
             "action": "getOverview",
-            "profile_id": str(userId),
+            "profile_id": str(user_id),
         }
         return UserOverview(self.network.post(data)["overview"])
 
-    def get_user_chronicle(self, page=1):
+    def get_user_chronicle(self, user_id, page=1):
         """Gets the user's chronicle. A chronicle tracks a user's watch history.
-
+        :param user_id: The id of the target user
+        :type user_id: int, str
         :param page: The page number of the chronicle that you 
                      want, defaults to 1
         :type page: int, optional
@@ -316,7 +316,7 @@ class Sakurajima:
         data = {
             "controller": "Profile",
             "action": "getChronicle",
-            "profile_id": str(self.userId),
+            "profile_id": str(user_id),
             "page": page,
         }
         return [
@@ -369,10 +369,12 @@ class Sakurajima:
         }
         return self.network.post(data)
 
-    def get_user_friends(self, page=1):
+    def get_friends(self, page=1):
         data = {"controller": "Profile", "action": "getFriends", "page": page}
-        return self.network.post(data)
-
+        resp = self.network.post(data)
+        resp['friends'] = [Friend(self.network, x) for x in resp['friends']]
+        return resp
+        
     def add_friend(self, friend_user_id):
         data = {
             "controller": "Profile",
@@ -543,7 +545,7 @@ class Sakurajima:
             for data_dict in self.network.post(data)["notifications"]
         ]
 
-    def toggle_mark_as_watched(self, anime_id: int, episode_id:int):
+    def toggle_mark_as_watched(self, anime_id: int, episode_id: int):
         """Toggles the mark as watched status of a particular episode of an anime.
 
         :param anime_id: The ID of the anime to which the episode belongs.

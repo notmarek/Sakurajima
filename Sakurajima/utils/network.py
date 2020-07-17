@@ -4,7 +4,7 @@ from requests import Session
 
 class Network:
     def __init__(self, username: str, user_id: str, auth_token: str, proxies, endpoint):
-        self.__API_URL = endpoint
+        self.API_URL = endpoint
         self.session = Session()
         self.session.proxies = proxies
         self.headers = self.session.headers  # Expose session headers
@@ -36,7 +36,7 @@ class Network:
 
     def post(self, data):
         try:
-            res = self.session.post(self.__API_URL, json=data)
+            res = self.session.post(self.API_URL, json=data)
             return res.json()
         except Exception as e:
             self.session.close()
