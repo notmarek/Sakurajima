@@ -288,7 +288,7 @@ class Sakurajima:
         data = {"controller": "XML", "action": "getStatsData"}
         return AniwatchStats(self.network.post(data))
 
-    def get_user_overview(self):
+    def get_user_overview(self, userId):
         """Gets a breif user overview which includes stats like total hours watched,
         total number of animes completed etc. 
 
@@ -299,7 +299,7 @@ class Sakurajima:
         data = {
             "controller": "Profile",
             "action": "getOverview",
-            "profile_id": str(self.userId),
+            "profile_id": str(userId),
         }
         return UserOverview(self.network.post(data)["overview"])
 
