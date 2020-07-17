@@ -307,17 +307,22 @@ class Episode(object):
                 .replace("<anititle>", self.anime_title[:128])
             )
         file_name = sanitize_filename(file_name)
-
+        current_path = os.getcwd()
+        if path:
+            os.chdir(path)
+        
         if multi_threading:
             dlr = MultiThreadDownloader(
-                self.__network, m3u8, file_name, path, max_threads, use_ffmpeg, include_intro, delete_chunks,
+                self.__network, m3u8, file_name, self.ep_id, max_threads, use_ffmpeg, include_intro, delete_chunks,
             )
         else:
-            dlr = Downloader(self.__network, m3u8, file_name, path, use_ffmpeg, include_intro, delete_chunks,)
+            dlr = Downloader(self.__network, m3u8, file_name, self.ep_id, use_ffmpeg, include_intro, delete_chunks,)
+        
         dlr.download()
         dlr.merge()
         if delete_chunks:
             dlr.remove_chunks()
+        os.chdir(current_path)
 
     def download(
         self,

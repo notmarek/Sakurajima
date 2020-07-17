@@ -12,14 +12,12 @@ class Downloader(object):
         network,
         m3u8,
         file_name: str,
-        path: str = None,
+        episode_id: int,
         use_ffmpeg: bool = True,
         include_intro: bool = False,
         delete_chunks: bool = True,
         on_progress=None,
     ):
-        if path is not None:
-            os.chdir(path)
         self.__network = network
         self.m3u8 = m3u8
         self.file_name = file_name
@@ -27,9 +25,10 @@ class Downloader(object):
         self.include_intro = include_intro
         self.delete_chunks = delete_chunks
         self.on_progress = on_progress
+        self.progress_tracker = ProgressTracker(episode_id)
 
     def init_tracker(self):
-        self.progress_tracker = ProgressTracker().init_tracker(
+        self.progress_tracker.init_tracker(
             {
                 "headers": self.__network.headers,
                 "cookies": self.__network.cookies,
@@ -38,7 +37,6 @@ class Downloader(object):
                 "total_chunks": self.total_chunks,
             }
         )
-        self.progress_tracker.init_tracker()
 
     def download(self):
         if not self.include_intro:
@@ -108,14 +106,12 @@ class MultiThreadDownloader(object):
         network,
         m3u8,
         file_name: str,
-        path: str = None,
+        episode_id: int,
         max_threads: int = None,
         use_ffmpeg: bool = True,
         include_intro: bool = False,
         delete_chunks: bool = True,
     ):
-        if path is not None:
-            os.chdir(path)
         self.__network = network
         self.m3u8 = m3u8
         self.file_name = file_name
@@ -123,7 +119,7 @@ class MultiThreadDownloader(object):
         self.include_intro = include_intro
         self.delete_chunks = delete_chunks
         self.threads = []
-        self.progress_tracker = ProgressTracker()
+        self.progress_tracker = ProgressTracker(episode_id)
         self.__lock = Lock()
 
         if not include_intro:
