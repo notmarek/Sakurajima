@@ -75,7 +75,7 @@ class UserOverviewStats(object):
 
 class Friend(object):
     def __init__(self, network, data_dict):
-        self.network = network
+        self.__network = network
         self.username = data_dict.get("username", None)
         self.user_id = data_dict.get("userid", None)
         self.cover_img = data_dict.get("cover", None)
@@ -90,7 +90,7 @@ class Friend(object):
             "action": "removeFriend",
             "friend_id": self.user_id,
         }
-        return self.network.post(data)
+        return self.__network.post(data)
 
     def get_overview(self):
         data = {
@@ -98,7 +98,7 @@ class Friend(object):
             "action": "getOverview",
             "profile_id": self.user_id,
         }
-        return UserOverview(self.network.post(data)["overview"])
+        return UserOverview(self.__network.post(data)["overview"])
 
     def get_chronicle(self, page=1):
         data = {
@@ -108,6 +108,48 @@ class Friend(object):
             "page": page,
         }
         return [
-            ChronicleEntry(data_dict, self.network, self.network.API_URL)
-            for data_dict in self.network.post(data)["chronicle"]
+            ChronicleEntry(data_dict, self.__network, self.__network.API_URL)
+            for data_dict in self.__network.post(data)["chronicle"]
         ]
+
+
+class FriendRequestIncoming(object):
+    def __init__(self, network, data_dict):
+        self.__network = network
+        self.username = data_dict.get("username", None)
+        self.user_id = data_dict.get("userid", None)
+        self.cover_img = data_dict.get("cover", None)
+        self.date = data_dict.get("date", None)
+
+    def accept(self):
+        data = {
+            "controller": "Profile",
+            "action": "acceptRequest",
+            "friend_id": self.user_id,
+        }
+        return self.__network.post(data)["success"]
+
+    def decline(self):
+        data = {
+            "controller": "Profile",
+            "action": "rejectRequest",
+            "friend_id": self.user_id,
+        }
+        return self.__network.post(data)["success"]
+
+
+class FriendRequestOutgoing(object):
+    def __init__(self, network, data_dict):
+        self.__network = network
+        self.username = data_dict.get("username", None)
+        self.user_id = data_dict.get("userid", None)
+        self.cover_img = data_dict.get("cover", None)
+        self.date = data_dict.get("date", None)
+
+    def withdraw(self):
+        data = {
+            "controller": "Profile",
+            "action": "withdrawRequest",
+            "friend_id": self.user_id,
+        }
+        return self.__network.post(data)
