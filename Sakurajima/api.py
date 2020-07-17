@@ -17,7 +17,7 @@ from Sakurajima.models import (
     WatchListEntry,
     Media,
 )
-from Sakurajima.models.user_models import Friend
+from Sakurajima.models.user_models import Friend, FriendRequestIncoming, FriendRequestOutgoing
 from Sakurajima.utils.episode_list import EpisodeList
 from Sakurajima.utils.network import Network
 
@@ -372,18 +372,19 @@ class Sakurajima:
     def get_friends(self, page=1):
         data = {"controller": "Profile", "action": "getFriends", "page": page}
         resp = self.network.post(data)
-        return [Friend(self.network, x) for x in resp['friends']]
+        return [Friend(self.network, x) for x in resp["friends"]]
+        
         
     def get_outgoing_request(self, page=1):
         data = {"controller": "Profile", "action": "getFriends", "page": page}
         resp = self.network.post(data)
-        return resp["outgoing"]
+        return [FriendRequestOutgoing(self.network, x) for x in resp["outgoing"]]
 
     def get_friend_requests(self, page=1):
         data = {"controller": "Profile", "action": "getFriends", "page": page}
         resp = self.network.post(data)
-        return resp["incoming"]
-        
+        return [FriendRequestIncoming(self.network, x) for x in resp["incoming"]]
+
     def add_friend(self, friend_user_id):
         data = {
             "controller": "Profile",
