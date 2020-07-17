@@ -372,8 +372,17 @@ class Sakurajima:
     def get_friends(self, page=1):
         data = {"controller": "Profile", "action": "getFriends", "page": page}
         resp = self.network.post(data)
-        resp['friends'] = [Friend(self.network, x) for x in resp['friends']]
-        return resp
+        return [Friend(self.network, x) for x in resp['friends']]
+        
+    def get_outgoing_request(self, page=1):
+        data = {"controller": "Profile", "action": "getFriends", "page": page}
+        resp = self.network.post(data)
+        return resp["outgoing"]
+
+    def get_friend_requests(self, page=1):
+        data = {"controller": "Profile", "action": "getFriends", "page": page}
+        resp = self.network.post(data)
+        return resp["incoming"]
         
     def add_friend(self, friend_user_id):
         data = {
