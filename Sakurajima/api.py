@@ -300,6 +300,7 @@ class Sakurajima:
             "action": "getOverview",
             "profile_id": str(user_id),
         }
+        print(self.network.post(data))
         return UserOverview(self.network.post(data)["overview"])
 
     def get_user_chronicle(self, user_id, page=1):
@@ -373,9 +374,8 @@ class Sakurajima:
         data = {"controller": "Profile", "action": "getFriends", "page": page}
         resp = self.network.post(data)
         return [Friend(self.network, x) for x in resp["friends"]]
-        
-        
-    def get_outgoing_request(self, page=1):
+
+    def get_outgoing_requests(self, page=1):
         data = {"controller": "Profile", "action": "getFriends", "page": page}
         resp = self.network.post(data)
         return [FriendRequestOutgoing(self.network, x) for x in resp["outgoing"]]
@@ -391,7 +391,8 @@ class Sakurajima:
             "action": "addFriend",
             "profile_id": friend_user_id,
         }
-        return self.network.post(data)
+        self.network.post(data)
+        return self.get_outgoing_requests()[-1]
 
     def remove_friend(self, friend_id):
         data = {
