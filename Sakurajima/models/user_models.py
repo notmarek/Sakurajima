@@ -137,6 +137,9 @@ class FriendRequestIncoming(object):
         }
         return self.__network.post(data)["success"]
 
+    def __repr__(self):
+        return f"<FriendRequestIncoming: {self.username}>"
+
 
 class FriendRequestOutgoing(object):
     def __init__(self, network, data_dict):
@@ -153,3 +156,6 @@ class FriendRequestOutgoing(object):
             "friend_id": self.user_id,
         }
         return self.__network.post(data)
+
+    def __repr__(self):
+        return f"<FriendRequestOutgoing: {self.username}>"
