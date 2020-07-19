@@ -11,7 +11,7 @@ Welcome to Sakurajima's documentation!
    :caption: Contents:
    
    sakurajima
-
+   models/models
 
 
 Indices and tables

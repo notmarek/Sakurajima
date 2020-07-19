@@ -10,8 +10,8 @@ Welcome to Sakurajima's documentation!
    :maxdepth: 2
    :caption: Contents:
    
-   sakurajima
-
+   ./sakurajima
+   models/models
 
 
 Indices and tables

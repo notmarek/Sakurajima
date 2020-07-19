@@ -1,0 +1,415 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Episode &mdash; Sakurajima  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Anime" href="anime.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> Sakurajima
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../sakurajima.html">Sakurajima</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="models.html">Models</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="anime.html">Anime</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Episode</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Sakurajima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="models.html">Models</a> &raquo;</li>
+        
+      <li>Episode</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/models/episode.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-Sakurajima.models.base_models">
+<span id="episode"></span><h1>Episode<a class="headerlink" href="#module-Sakurajima.models.base_models" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="Sakurajima.models.base_models.Episode">
+<em class="property">class </em><code class="sig-prename descclassname">Sakurajima.models.base_models.</code><code class="sig-name descname">Episode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_dict</span></em>, <em class="sig-param"><span class="n">network</span></em>, <em class="sig-param"><span class="n">api_url</span></em>, <em class="sig-param"><span class="n">anime_id</span></em>, <em class="sig-param"><span class="n">anime_title</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Episode" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt id="Sakurajima.models.base_models.Episode.added">
+<code class="sig-name descname">added</code><a class="headerlink" href="#Sakurajima.models.base_models.Episode.added" title="Permalink to this definition">¶</a></dt>
+<dd><p>The date when the episode was added.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.base_models.Episode.anime_id">
+<code class="sig-name descname">anime_id</code><a class="headerlink" href="#Sakurajima.models.base_models.Episode.anime_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The anime ID of the anime that the episode belongs to.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.base_models.Episode.anime_title">
+<code class="sig-name descname">anime_title</code><a class="headerlink" href="#Sakurajima.models.base_models.Episode.anime_title" title="Permalink to this definition">¶</a></dt>
+<dd><p>The title of the anime that the episode belongs to.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.base_models.Episode.description">
+<code class="sig-name descname">description</code><a class="headerlink" href="#Sakurajima.models.base_models.Episode.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>The description of the episode.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Episode.download">
+<code class="sig-name descname">download</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">quality</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">file_name</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">multi_threading</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">max_threads</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">use_ffmpeg</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">include_intro</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">delete_chunks</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">on_progress</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">print_progress</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Episode.download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloads the current episode in your selected quality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>quality</strong> (<em>str</em>) – The quality that you want to dowload. All the available 
+are “ld” (360p), “sd” (480p), “hd” (720p) and “fullhd”.
+Note that all qualities may not be available for all episodes.</p></li>
+<li><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – The name of the downloaded file. If left to None, the file will be named
+“[anime_name] - [episode_number].mp4”. Macros are also supported,
+“&lt;anititle&gt;” will be replaced by the anime name, &lt;ep&gt; will be replaced 
+by episode number and &lt;eptitle&gt; will be replaced by the episodes title.
+For example, lets say that the episode in question is the third episode of
+the anime called “Vinland Saga”. The title of the episode is “Troll”. Suppose
+we pass the string <code class="docutils literal notranslate"><span class="pre">&quot;&lt;anititle&gt;</span> <span class="pre">-</span> <span class="pre">&lt;ep&gt;</span> <span class="pre">-</span> <span class="pre">&lt;eptitle&gt;&quot;</span></code>, the resulting file will be 
+named <code class="docutils literal notranslate"><span class="pre">&quot;Vinland</span> <span class="pre">Saga</span> <span class="pre">-</span> <span class="pre">3</span> <span class="pre">-</span> <span class="pre">Troll.mp4&quot;</span></code></p></li>
+<li><p><strong>path</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to where you want the downloaded video to be, defaults to None. If left None
+the current working directory i.e. the directory where the script calling the method 
+lives is taken as the path.</p></li>
+<li><p><strong>multi_threading</strong> (<em>bool</em><em>, </em><em>optional</em>) – Set this to true to enable multithreaded downloading, defaults to False.
+Enabling this can offer significant performance benefits especially on faster
+connections. However this comes with a trade off. Using multi threading negatively
+affects download resumabilty. Therefore it is recommended that this be set to False 
+when using slower connections.</p></li>
+<li><p><strong>max_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Set the maximum number of threads that will be used at once when using multi
+threaded downloading, defaults to None. When None, the maximum number of feasible
+threads will be used i.e one thread per chunk.</p></li>
+<li><p><strong>use_ffmpeg</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable using FFMPEG to combine the downloaded chunks, defaults to True.
+Requires FFMPEG. It is recommended to keep this enabled as not using FFMPEG can cause
+video playback issues on certain players. Using FFMPEG also results in noticibly smaller
+files.</p></li>
+<li><p><strong>include_intro</strong> (<em>bool</em><em>, </em><em>optional</em>) – Set this to true to include the 5 second aniwatch intro, defaults to False.
+It is recommended to skip the intro as this causes issues when combining the chunks 
+with FFMPEG.</p></li>
+<li><p><strong>delete_chunks</strong> (<em>bool</em><em>, </em><em>optional</em>) – Set this to False to not delete the downloaded .ts chunks after they have been, 
+combined into a single mp4 file. Defaults to True</p></li>
+<li><p><strong>on_progress</strong> (<em>function</em><em>, </em><em>optional</em>) – Register a function that is called every time a new chunk is downloaded. The the number
+of chunks done and the total number of chunks are passed as arguments to the function in that
+exact order. Defaults to None.</p></li>
+<li><p><strong>print_progress</strong> (<em>bool</em><em>, </em><em>optional</em>) – Print the number of chunks done and the total number of chunks to the console, 
+defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.base_models.Episode.duration">
+<code class="sig-name descname">duration</code><a class="headerlink" href="#Sakurajima.models.base_models.Episode.duration" title="Permalink to this definition">¶</a></dt>
+<dd><p>The duration of the episode</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.base_models.Episode.ep_id">
+<code class="sig-name descname">ep_id</code><a class="headerlink" href="#Sakurajima.models.base_models.Episode.ep_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ID of the episode</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.base_models.Episode.filler">
+<code class="sig-name descname">filler</code><a class="headerlink" href="#Sakurajima.models.base_models.Episode.filler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is set to 1 if the episode is filler else 0</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Episode.get_aniwatch_episode">
+<code class="sig-name descname">get_aniwatch_episode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lang</span><span class="o">=</span><span class="default_value">'en-US'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Episode.get_aniwatch_episode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the AniWatchEpisode object associated with the episode.
+An AniWatchEpisode has data regarding languages and streams available 
+for the current anime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>lang</strong> (<em>str</em><em>, </em><em>optional</em>) – Used only because the aniwatch API requires it, defaults to “en-US”</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An AniWatchEpisode object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>AniWatchEpisode</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Episode.get_available_qualities">
+<code class="sig-name descname">get_available_qualities</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Episode.get_available_qualities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a list of available qualities for the episode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of available qualities. “ld”, “sd”, “hd” and “fullhd”
+refer to 360p, 480p, 720 and 1080p respectively.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Episode.get_m3u8">
+<code class="sig-name descname">get_m3u8</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">quality</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; m3u8.model.M3U8<a class="headerlink" href="#Sakurajima.models.base_models.Episode.get_m3u8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the episode’s M3U8 data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>quality</strong> (<em>str</em>) – The quality whose M3U8 data you need. All the available 
+are “ld” (360p), “sd” (480p), “hd” (720p) and “fullhd” (1080p).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A M3U8 object, the data can be accessed by calling the <code class="docutils literal notranslate"><span class="pre">data</span></code> property on the
+object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>M3U8</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.base_models.Episode.is_aired">
+<code class="sig-name descname">is_aired</code><a class="headerlink" href="#Sakurajima.models.base_models.Episode.is_aired" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is set to 1 if the episode has aired else 0.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.base_models.Episode.lang">
+<code class="sig-name descname">lang</code><a class="headerlink" href="#Sakurajima.models.base_models.Episode.lang" title="Permalink to this definition">¶</a></dt>
+<dd><p>The language of the episode.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.base_models.Episode.number">
+<code class="sig-name descname">number</code><a class="headerlink" href="#Sakurajima.models.base_models.Episode.number" title="Permalink to this definition">¶</a></dt>
+<dd><p>The episode number of the episode.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.base_models.Episode.thumbnail">
+<code class="sig-name descname">thumbnail</code><a class="headerlink" href="#Sakurajima.models.base_models.Episode.thumbnail" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URL to the thumbnail for the episode.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.base_models.Episode.title">
+<code class="sig-name descname">title</code><a class="headerlink" href="#Sakurajima.models.base_models.Episode.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>The title of the episode.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Episode.toggle_mark_as_watched">
+<code class="sig-name descname">toggle_mark_as_watched</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Episode.toggle_mark_as_watched" title="Permalink to this definition">¶</a></dt>
+<dd><p>Toggles the “mark as watched” status of the episode</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the operation is successful, False if an error occured.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.base_models.Episode.watched">
+<code class="sig-name descname">watched</code><a class="headerlink" href="#Sakurajima.models.base_models.Episode.watched" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is set to 1 if the user has marked the episode as watched else 0</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="anime.html" class="btn btn-neutral float-left" title="Anime" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Not Marek, Dhanraj Hira
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

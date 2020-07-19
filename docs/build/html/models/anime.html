@@ -1,0 +1,458 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Anime &mdash; Sakurajima  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Episode" href="episode.html" />
+    <link rel="prev" title="Models" href="models.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> Sakurajima
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../sakurajima.html">Sakurajima</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="models.html">Models</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Anime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="episode.html">Episode</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Sakurajima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="models.html">Models</a> &raquo;</li>
+        
+      <li>Anime</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/models/anime.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-Sakurajima.models.base_models">
+<span id="anime"></span><h1>Anime<a class="headerlink" href="#module-Sakurajima.models.base_models" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="Sakurajima.models.base_models.Anime">
+<em class="property">class </em><code class="sig-prename descclassname">Sakurajima.models.base_models.</code><code class="sig-name descname">Anime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_dict</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">network</span></em>, <em class="sig-param"><span class="n">api_url</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Anime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps all the relevant data for an anime like anime_id
+(called as detail_id by AniWatch backend), title, airing date etc.
+Use the get_episodes method to get a list of available episodes</p>
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Anime.add_recommendation">
+<code class="sig-name descname">add_recommendation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">recommended_anime_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Anime.add_recommendation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the user’s reccomendation for the anime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>recommended_anime_id</strong> (<em>int</em>) – The aniwatch anime ID of the anime you want to recommend.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Anime.get_chronicle">
+<code class="sig-name descname">get_chronicle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">page</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Anime.get_chronicle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the chronicle for the anime, a chronicle tracks the user’s watch 
+history for a particular anime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>page</strong> (<em>int</em><em>, </em><em>optional</em>) – The page of the chronicle you want to get, defaults to 1</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of ChronicleEntry objects where each object has details like date.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="chronicle_entry.html#Sakurajima.models.chronicle.ChronicleEntry" title="Sakurajima.models.chronicle.ChronicleEntry">ChronicleEntry</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Anime.get_complete_object">
+<code class="sig-name descname">get_complete_object</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Anime.get_complete_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the current anime object but with complete attributes. Sometimes, the Anime
+object that is returned by the API does not contain values for all the attributes 
+that the Anime object has. Use this method to get an object with the maximum amount of 
+data. This method is almost never required but is for edge cases</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An Anime object with values for as many attributes as possible.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#Sakurajima.models.base_models.Anime" title="Sakurajima.models.base_models.Anime">Anime</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Anime.get_dict">
+<code class="sig-name descname">get_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Anime.get_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the JSON response in the form of a dictionary that was used to
+initialize the object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A dictionary of the JSON response</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Anime.get_episodes">
+<code class="sig-name descname">get_episodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Anime.get_episodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a list of all available episodes of the anime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An EpisodeList object, an EpisodeList object is very similar to a 
+normal list. You can access specific indexes using the “[]” syntax.
+In addition to this, an EpisodeList has few convinience methods like
+<code class="docutils literal notranslate"><span class="pre">get_episode_by_number(episode_number)</span></code> which returns an episode with the provided
+episode number.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>EpisodeList</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Anime.get_media">
+<code class="sig-name descname">get_media</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Anime.get_media" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the anime’s associated media from aniwatch.me</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A Media object that has attributes like <code class="docutils literal notranslate"><span class="pre">opening</span></code>, <code class="docutils literal notranslate"><span class="pre">osts</span></code>.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Media</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Anime.get_recommendations">
+<code class="sig-name descname">get_recommendations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Anime.get_recommendations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the recommendations for the anime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of RecommendationEntry objects where each object represents 
+a single recommendation.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[RecommendationEntry]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Anime.get_relations">
+<code class="sig-name descname">get_relations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Anime.get_relations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the relation of the anime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A Relation object that contains all the details of the relation.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Relation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Anime.mark_as_completed">
+<code class="sig-name descname">mark_as_completed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Anime.mark_as_completed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks the anime as “completed” on the user’s aniwatch anime list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the operation is successful, False if an error occurs.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Anime.mark_as_dropped">
+<code class="sig-name descname">mark_as_dropped</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Anime.mark_as_dropped" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks the anime as “dropped” on the user’s aniwatch anime list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the operation is successful, False if an error occurs.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Anime.mark_as_on_hold">
+<code class="sig-name descname">mark_as_on_hold</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Anime.mark_as_on_hold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks the anime as “on hold” on the user’s aniwatch anime list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the operation is successful, False if an error occurs.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Anime.mark_as_plan_to_watch">
+<code class="sig-name descname">mark_as_plan_to_watch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Anime.mark_as_plan_to_watch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks the anime as “plan to watch” on the user’s aniwatch anime list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the operation is successful, False if an error occurs.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Anime.mark_as_watching">
+<code class="sig-name descname">mark_as_watching</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Anime.mark_as_watching" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks the anime as “watching” on the user’s aniwatch anime list</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the operation is successful, False if an error occurs.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Anime.rate">
+<code class="sig-name descname">rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rating</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Anime.rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the user’s rating for the anime on aniwatch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rating</strong> (<em>int</em>) – The rating you want to set, should be between 1 to 10.
+Rate 0 to remove the user’s rating for the anime</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the operation is successful, False if an error occurs.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Sakurajima.models.base_models.Anime.remove_from_list">
+<code class="sig-name descname">remove_from_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.base_models.Anime.remove_from_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the anime from the user’s aniwatch anime list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the operation is successful, False if an error occurs.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="episode.html" class="btn btn-neutral float-right" title="Episode" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="models.html" class="btn btn-neutral float-left" title="Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Not Marek, Dhanraj Hira
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

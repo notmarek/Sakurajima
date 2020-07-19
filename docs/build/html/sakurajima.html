@@ -588,19 +588,21 @@ contains information like the status, progress and total episodes etc.</p>
 
 <dl class="py method">
 <dt id="Sakurajima.api.Sakurajima.get_user_chronicle">
-<code class="sig-name descname">get_user_chronicle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">page</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_user_chronicle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the user’s chronicle. A chronicle tracks a user’s watch history.</p>
+<code class="sig-name descname">get_user_chronicle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_id</span></em>, <em class="sig-param"><span class="n">page</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_user_chronicle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the user’s chronicle. A chronicle tracks a user’s watch history.
+:param user_id: The id of the target user
+:type user_id: int, str
+:param page: The page number of the chronicle that you</p>
+<blockquote>
+<div><p>want, defaults to 1</p>
+</div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>page</strong> (<em>int</em><em>, </em><em>optional</em>) – The page number of the chronicle that you 
-want, defaults to 1</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A list of ChronicleEntry objects, each object wraps all the 
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of ChronicleEntry objects, each object wraps all the 
 information related to an entry like episode number, date, anime ID.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list[ChronicleEntry]</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[ChronicleEntry]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -625,16 +627,18 @@ media ID</p>
 
 <dl class="py method">
 <dt id="Sakurajima.api.Sakurajima.get_user_overview">
-<code class="sig-name descname">get_user_overview</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_user_overview" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets a breif user overview which includes stats like total hours watched,
-total number of animes completed etc.</p>
+<code class="sig-name descname">get_user_overview</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_user_overview" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a brief user overview which includes stats like total hours watched,
+total number of animes completed etc. 
+:param user_id: The id of the target user
+:type user_id: int, str
+:return: An UserOverview object that wraps all the relevant details</p>
+<blockquote>
+<div><p>regarding the given user.</p>
+</div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>An UserOverview object that wraps all the relevant details 
-regarding the given user.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>UserOverview</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>UserOverview</p>
 </dd>
 </dl>
 </dd></dl>
