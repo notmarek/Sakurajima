@@ -2,6 +2,7 @@ import requests
 import json
 from Sakurajima.models import base_models as bm
 from Sakurajima.models.chronicle import ChronicleEntry
+import datetime
 
 
 class UserAnimeListEntry(object):
@@ -79,8 +80,11 @@ class Friend(object):
         self.username = data_dict.get("username", None)
         self.user_id = data_dict.get("userid", None)
         self.cover_img = data_dict.get("cover", None)
-        self.friends_since = data_dict.get("date", None)
-
+        try:
+            self.friends_since = datetime.datetime.utcfromtime(data_dict.get("date", None))
+        except:
+            self.friends_since = None
+    
     def __repr__(self):
         return f"<Friend {self.username}>"
 

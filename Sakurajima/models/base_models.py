@@ -44,11 +44,11 @@ class Anime(object):
         self.episode_max = data_dict.get("episode_max", None)
         self.type = data_dict.get("type", None)
         try:
-            self.broadcast_start = datetime.utcfromtimestamp(data_dict.get("broadcast_start"))
+            self.broadcast_start = datetime.datetime.utcfromtimestamp(data_dict.get("broadcast_start"))
         except:
             self.broadcast_start = None
         try:
-            self.launch_day = datetime.utcfromtimestamp(data_dict.get("launch_day"))
+            self.launch_day = datetime.datetime.utcfromtimestamp(data_dict.get("launch_day"))
         except:
             self.launch_day = None
         self.status = data_dict.get("status", None)
@@ -317,8 +317,7 @@ class Episode(object):
         self.title = data_dict.get("title", None)
         """The title of the episode."""
         self.description = data_dict.get("description", None)
-        """The description of the episode.
-        """
+        """The description of the episode."""
         self.thumbnail = data_dict.get("thumbnail", None)
         """The URL to the thumbnail for the episode."""
         self.added = datetime.utcfromtimestamp(data_dict.get("added", None))
