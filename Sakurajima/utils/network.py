@@ -8,7 +8,7 @@ class Network:
         self.session = Session()
         self.session.proxies = proxies
         self.headers = self.session.headers  # Expose session headers
-        self.headers["Referer"] = "https://aniwatch.me/"
+        self.headers["referer"] = "https://aniwatch.me/"
         self.cookies = self.session.cookies  # Expose session cookies
         xsrf_token = Misc().generate_xsrf_token()
         headers = {

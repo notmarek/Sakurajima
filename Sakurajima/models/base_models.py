@@ -127,7 +127,7 @@ class Anime(object):
             "detail_id": str(self.anime_id),
         }
         return [
-            RecommendationEntry(data_dict, self.__network, self.__API_URL)
+            RecommendationEntry(data_dict, self.__network)
             for data_dict in self.__network.post(data)["entries"]
         ]
 
@@ -259,7 +259,7 @@ class Anime(object):
             "action": "getMedia",
             "detail_id": str(self.anime_id),
         }
-        return Media(self.__network.post(data), self.__network, self.__API_URL, self.anime_id,)
+        return Media(self.__network.post(data), self.__network, self.anime_id,)
 
     def get_complete_object(self):
         """Gets the current anime object but with complete attributes. Sometimes, the Anime
@@ -320,7 +320,7 @@ class Episode(object):
         """The description of the episode."""
         self.thumbnail = data_dict.get("thumbnail", None)
         """The URL to the thumbnail for the episode."""
-        self.added = datetime.utcfromtimestamp(data_dict.get("added", None))
+        self.added = datetime.datetime.utcfromtimestamp(data_dict.get("added", None))
         """The date when the episode was added."""
         self.filler = data_dict.get("filler", None)
         """Is set to 1 if the episode is filler else 0"""
@@ -597,8 +597,11 @@ class Episode(object):
 class AniWatchEpisode(object):
     def __init__(self, data_dict, episode_id):
         self.episode_id = episode_id
+        """The ID of the episode to which the object belongs."""
         self.languages = [Language(lang) for lang in data_dict.get("lang", None)]
+        """List of Language objects available for the episode."""
         self.stream = Stream(data_dict.get("stream", None))
+        """The Stream object associated with the episode."""
 
     def __repr__(self):
         return f"Episode ID: {self.episode_id}"

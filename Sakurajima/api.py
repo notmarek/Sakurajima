@@ -36,12 +36,37 @@ class Sakurajima:
     """
 
     def __init__(
-        self, username=None, userId=None, authToken=None, proxies={}, endpoint="https://aniwatch.me/api/ajax/APIHandle"
+        self, username=None, userId=None, authToken=None, proxies=None, endpoint="https://aniwatch.me/api/ajax/APIHandle"
     ):
 
         self.API_URL = endpoint
         self.network = Network(username, userId, authToken, proxies, endpoint)
 
+    @classmethod
+    def using_proxy(
+        cls, proxy_file=None, username=None, userId=None, authToken=None, endpoint="https://aniwatch.me/api/ajax/APIHandle"
+        ):
+        """An alternate constructor that reads a file containing a list of proxies
+        and chooses a random proxy to use with Sakurajima.
+
+        :param username: The username of the user, defaults to None
+        :type username: str, optional
+        :param userId: The user ID of the user, defaults to None
+        :type userId: int, optional
+        :param authToken: The auth token of the user, defaults to None
+        :type authToken: str, optional
+        :param proxy_file: The file containing the list of proxies, defaults to None
+        :type proxy_file: [type], optional
+        :param endpoint: [description], defaults to "https://aniwatch.me/api/ajax/APIHandle"
+        :type endpoint: str, optional
+        :return: A Sakurajima object configured to use a proxy.
+        :rtype: Sakurajima
+        """
+        with open(proxy_file, "r") as proxy_file_handle:
+            proxies = proxy_file_handle.readlines()
+        proxy = random.choice(proxies).replace("\n", "")
+        return cls(username, userId, authToken, {"https": proxy})            
+    
     def get_episode(self, episode_id, lang="en-US"):
         """Gets an AniWatchEpisode by its episode ID.
 
@@ -112,7 +137,7 @@ class Sakurajima:
             "detail_id": str(anime_id),
         }
         return [
-            RecommendationEntry(data_dict, self.network, self.API_URL)
+            RecommendationEntry(data_dict, self.network)
             for data_dict in self.network.post(data)["entries"]
         ]
 
@@ -338,7 +363,7 @@ class Sakurajima:
             "profile_id": str(self.userId),
         }
         return [
-            UserAnimeListEntry(data_dict, self.network, self.API_URL)
+            UserAnimeListEntry(data_dict, self.network)
             for data_dict in self.network.post(data)["animelist"]
         ]
 
@@ -439,7 +464,7 @@ class Sakurajima:
         """
         data = {"controller": "Profile", "action": "getNotifications"}
         return [
-            Notification(data_dict, self.network, self.API_URL)
+            Notification(data_dict, self.network)
             for data_dict in self.network.post(data)["notifications"]
         ]
 
@@ -552,7 +577,7 @@ class Sakurajima:
         """
         data = {"controller": "Profile", "action": "getUnreadNotifications"}
         return [
-            Notification(data_dict, self.network, self.API_URL)
+            Notification(data_dict, self.network)
             for data_dict in self.network.post(data)["notifications"]
         ]
 
@@ -806,4 +831,4 @@ class Sakurajima:
         :rtype: Media
         """
         data = {"controller": "Media", "action": "getMedia", "detail_id": str(anime_id)}
-        return Media(self.network.post(data), self.network, self.API_URL, anime_id)
+        return Media(self.network.post(data), self.network, anime_id)
