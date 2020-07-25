@@ -22,5 +22,6 @@ setup(
         "requests==2.23.0",
         "pycryptodome==3.9.7",
         "m3u8==0.6.0",
+        "pathvalidate==2.3.0",
     ],
 )
