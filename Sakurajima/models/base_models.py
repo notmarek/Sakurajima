@@ -396,7 +396,7 @@ class Episode(object):
             os.mkdir("chunks")
         except FileExistsError:
             pass
-        with open(f"chunks\/{file_name}-{chunk_num}.chunk.ts", "wb") as videofile:
+        with open(f"chunks/{file_name}-{chunk_num}.chunk.ts", "wb") as videofile:
             res = self.__network.get(segment["uri"])
             chunk = res.content
             key_dict = segment.get("key", None)
@@ -549,22 +549,22 @@ class Episode(object):
             concat = '"concat'
             for x in range(0, total_chunks):
                 if x == 0:
-                    concat += f":chunks\/{file_name}-{x}.chunk.ts"
+                    concat += f":chunks/{file_name}-{x}.chunk.ts"
                 else:
-                    concat += f"|chunks\/{file_name}-{x}.chunk.ts"
+                    concat += f"|chunks/{file_name}-{x}.chunk.ts"
             concat += '"'
             subprocess.run(f'ffmpeg -i {concat} -c copy "{file_name}.mp4"')
 
         else:
             print("Merging chunks into mp4")
             with open(f"{file_name}.mp4", "wb") as merged:
-                for ts_file in [f"chunks\/{file_name}-{x}.chunk.ts" for x in range(0, total_chunks)]:
+                for ts_file in [f"chunks/{file_name}-{x}.chunk.ts" for x in range(0, total_chunks)]:
                     with open(ts_file, "rb") as ts:
                         shutil.copyfileobj(ts, merged)
         if delete_chunks:
             for x in range(0, total_chunks):
                 # Remove chunk files
-                os.remove(f"chunks\/{file_name}-{x}.chunk.ts")
+                os.remove(f"chunks/{file_name}-{x}.chunk.ts")
 
     def get_available_qualities(self):
         """Gets a list of available qualities for the episode.
