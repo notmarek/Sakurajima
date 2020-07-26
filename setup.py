@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="sakurajima",
-    version="0.2.0",
+    version="0.3.0",
     license="MIT",
     author="Not Marek",
     author_email="notmarek@animex.tech",
@@ -22,5 +22,6 @@ setup(
         "requests==2.23.0",
         "pycryptodome==3.9.7",
         "m3u8==0.6.0",
+        "pathvalidate==2.3.0",
     ],
 )
