@@ -1,0 +1,330 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>AniwatchStats &mdash; Sakurajima  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="UserAnimeListEntry" href="user_anime_list_entry.html" />
+    <link rel="prev" title="RelationEntry" href="relation_entry.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> Sakurajima
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../sakurajima.html">Sakurajima</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="models.html">Models</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="anime.html">Anime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="episode.html">Episode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aniwatch_episode.html">AniWatchEpisode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chronicle_entry.html">ChronicleEntry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="media.html">Media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="media_entry.html">MediaEntry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notification.html">Notification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="recommendation_entry.html">RecommendationEntry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="relation.html">Relation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="relation_entry.html">RelationEntry</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AniwatchStats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_anime_list_entry.html">UserAnimeListEntry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_overview.html">UserOverview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_overview_stats.html">UserOverviewStats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_overview_watch_type.html">UserOverviewWatchType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="friend.html">Friend</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Sakurajima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="models.html">Models</a> &raquo;</li>
+        
+      <li>AniwatchStats</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/models/aniwatch_stats.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-Sakurajima.models.stats">
+<span id="aniwatchstats"></span><h1>AniwatchStats<a class="headerlink" href="#module-Sakurajima.models.stats" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="Sakurajima.models.stats.AniwatchStats">
+<em class="property">class </em><code class="sig-prename descclassname">Sakurajima.models.stats.</code><code class="sig-name descname">AniwatchStats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.stats.AniwatchStats" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt id="Sakurajima.models.stats.AniwatchStats.new_registered_users">
+<code class="sig-name descname">new_registered_users</code><a class="headerlink" href="#Sakurajima.models.stats.AniwatchStats.new_registered_users" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total number of users who have registered recently.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.stats.AniwatchStats.new_registered_users_graph_data">
+<code class="sig-name descname">new_registered_users_graph_data</code><a class="headerlink" href="#Sakurajima.models.stats.AniwatchStats.new_registered_users_graph_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>The graph data for the recently joined users.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.stats.AniwatchStats.registered_users">
+<code class="sig-name descname">registered_users</code><a class="headerlink" href="#Sakurajima.models.stats.AniwatchStats.registered_users" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total number of registered users on aniwatch.me</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.stats.AniwatchStats.registered_users_graph_data">
+<code class="sig-name descname">registered_users_graph_data</code><a class="headerlink" href="#Sakurajima.models.stats.AniwatchStats.registered_users_graph_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>The graph data for the total number of registered users on aniwatch.me</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.stats.AniwatchStats.total_1080p_streams">
+<code class="sig-name descname">total_1080p_streams</code><a class="headerlink" href="#Sakurajima.models.stats.AniwatchStats.total_1080p_streams" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total number of 1080p streams on aniwatch.me</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.stats.AniwatchStats.total_360p_streams">
+<code class="sig-name descname">total_360p_streams</code><a class="headerlink" href="#Sakurajima.models.stats.AniwatchStats.total_360p_streams" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total number of 360p streams on aniwatch.me</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.stats.AniwatchStats.total_480p_streams">
+<code class="sig-name descname">total_480p_streams</code><a class="headerlink" href="#Sakurajima.models.stats.AniwatchStats.total_480p_streams" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total number of 480p streams on aniwatch.me</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.stats.AniwatchStats.total_720p_streams">
+<code class="sig-name descname">total_720p_streams</code><a class="headerlink" href="#Sakurajima.models.stats.AniwatchStats.total_720p_streams" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total number of 720p streams on aniwatch.me</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.stats.AniwatchStats.total_animes">
+<code class="sig-name descname">total_animes</code><a class="headerlink" href="#Sakurajima.models.stats.AniwatchStats.total_animes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total number of animes on aniwatch.me</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.stats.AniwatchStats.total_hentais">
+<code class="sig-name descname">total_hentais</code><a class="headerlink" href="#Sakurajima.models.stats.AniwatchStats.total_hentais" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total number of hentais on aniwatch.me</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.stats.AniwatchStats.total_movies">
+<code class="sig-name descname">total_movies</code><a class="headerlink" href="#Sakurajima.models.stats.AniwatchStats.total_movies" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total number of movies on aniwatch.me</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.stats.AniwatchStats.total_shows">
+<code class="sig-name descname">total_shows</code><a class="headerlink" href="#Sakurajima.models.stats.AniwatchStats.total_shows" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total number of shows on aniwatch, this is the sum total of all the
+animes, specials, movies and hentais.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.stats.AniwatchStats.total_specials">
+<code class="sig-name descname">total_specials</code><a class="headerlink" href="#Sakurajima.models.stats.AniwatchStats.total_specials" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total number of specials on aniwatch.me</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.stats.AniwatchStats.total_streams">
+<code class="sig-name descname">total_streams</code><a class="headerlink" href="#Sakurajima.models.stats.AniwatchStats.total_streams" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total number of streams on aniwatch.me</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="Sakurajima.models.stats.AniwatchStats.total_unknowns">
+<code class="sig-name descname">total_unknowns</code><a class="headerlink" href="#Sakurajima.models.stats.AniwatchStats.total_unknowns" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total number of shows that don’t fall into any of the categories.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="user_anime_list_entry.html" class="btn btn-neutral float-right" title="UserAnimeListEntry" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="relation_entry.html" class="btn btn-neutral float-left" title="RelationEntry" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Not Marek, Dhanraj Hira
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

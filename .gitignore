@@ -1,5 +1,9 @@
 test.py
 
+# Ignore downloaded videos and chunks folder
+*.mp4
+chunks
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -10,7 +14,6 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
 dist/
 downloads/

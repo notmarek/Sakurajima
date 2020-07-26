@@ -1,9 +1,9 @@
 from Sakurajima.models import base_models as bm
 
+
 class WatchListEntry(object):
-    def __init__(self, data_dict, headers, cookies, api_url):
-        self.__headers = headers
-        self.__cookies = cookies
+    def __init__(self, data_dict, network, api_url):
+        self.__network = network
         self.__API_URL = api_url
         self.title = data_dict.get("title", None)
         self.type = data_dict.get("type", None)
@@ -17,8 +17,7 @@ class WatchListEntry(object):
         self.cover = data_dict.get("cover", None)
         self.available_episodes = data_dict.get("available_episodes", None)
         self.episodes = [
-            bm.Episode(data, self.__headers, self.__cookies, self.__API_URL, self.anime_id)
-            for data in data_dict.get("episodes", [])
+            bm.Episode(data, self.__network, self.__API_URL, self.anime_id) for data in data_dict.get("episodes", [])
         ]
 
     def __repr__(self):
