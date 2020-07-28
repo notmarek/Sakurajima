@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>UserAnimeListEntry &mdash; Sakurajima  documentation</title>
+  <title>FriendRequestOutgoing &mdash; Sakurajima  documentation</title>
   
 
   
@@ -36,8 +36,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="UserOverview" href="user_overview.html" />
-    <link rel="prev" title="AniwatchStats" href="aniwatch_stats.html" /> 
+    <link rel="prev" title="FriendRequestIncoming" href="friend_request_incoming.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,13 +96,13 @@
 <li class="toctree-l2"><a class="reference internal" href="relation.html">Relation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="relation_entry.html">RelationEntry</a></li>
 <li class="toctree-l2"><a class="reference internal" href="aniwatch_stats.html">AniwatchStats</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">UserAnimeListEntry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_anime_list_entry.html">UserAnimeListEntry</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_overview.html">UserOverview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_overview_stats.html">UserOverviewStats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_overview_watch_type.html">UserOverviewWatchType</a></li>
 <li class="toctree-l2"><a class="reference internal" href="friend.html">Friend</a></li>
 <li class="toctree-l2"><a class="reference internal" href="friend_request_incoming.html">FriendRequestIncoming</a></li>
-<li class="toctree-l2"><a class="reference internal" href="friend_request_outgoing.html">FriendRequestOutgoing</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">FriendRequestOutgoing</a></li>
 </ul>
 </li>
 </ul>
@@ -154,13 +153,13 @@
         
           <li><a href="models.html">Models</a> &raquo;</li>
         
-      <li>UserAnimeListEntry</li>
+      <li>FriendRequestOutgoing</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/models/user_anime_list_entry.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/models/friend_request_outgoing.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -174,75 +173,23 @@
            <div itemprop="articleBody">
             
   <div class="section" id="module-Sakurajima.models.user_models">
-<span id="useranimelistentry"></span><h1>UserAnimeListEntry<a class="headerlink" href="#module-Sakurajima.models.user_models" title="Permalink to this headline">¶</a></h1>
+<span id="friendrequestoutgoing"></span><h1>FriendRequestOutgoing<a class="headerlink" href="#module-Sakurajima.models.user_models" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="Sakurajima.models.user_models.UserAnimeListEntry">
-<em class="property">class </em><code class="sig-prename descclassname">Sakurajima.models.user_models.</code><code class="sig-name descname">UserAnimeListEntry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_dict</span></em>, <em class="sig-param"><span class="n">network</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.user_models.UserAnimeListEntry" title="Permalink to this definition">¶</a></dt>
-<dd><p>A UserAnimeListEntry represents a single show on a user’s aniwatch.me 
-anime list.</p>
-<dl class="py attribute">
-<dt id="Sakurajima.models.user_models.UserAnimeListEntry.airing_start">
-<code class="sig-name descname">airing_start</code><a class="headerlink" href="#Sakurajima.models.user_models.UserAnimeListEntry.airing_start" title="Permalink to this definition">¶</a></dt>
-<dd><p>The season the anime started airing.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="Sakurajima.models.user_models.UserAnimeListEntry.anime_id">
-<code class="sig-name descname">anime_id</code><a class="headerlink" href="#Sakurajima.models.user_models.UserAnimeListEntry.anime_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>The ID of the anime.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="Sakurajima.models.user_models.UserAnimeListEntry.cover">
-<code class="sig-name descname">cover</code><a class="headerlink" href="#Sakurajima.models.user_models.UserAnimeListEntry.cover" title="Permalink to this definition">¶</a></dt>
-<dd><p>The URL to the cover image of the anime.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="Sakurajima.models.user_models.UserAnimeListEntry.cur_episodes">
-<code class="sig-name descname">cur_episodes</code><a class="headerlink" href="#Sakurajima.models.user_models.UserAnimeListEntry.cur_episodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>The total number of episodes that have already aired.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="Sakurajima.models.user_models.UserAnimeListEntry.episodes_max">
-<code class="sig-name descname">episodes_max</code><a class="headerlink" href="#Sakurajima.models.user_models.UserAnimeListEntry.episodes_max" title="Permalink to this definition">¶</a></dt>
-<dd><p>The total number of episodes the anime has.</p>
-</dd></dl>
-
+<dt id="Sakurajima.models.user_models.FriendRequestOutgoing">
+<em class="property">class </em><code class="sig-prename descclassname">Sakurajima.models.user_models.</code><code class="sig-name descname">FriendRequestOutgoing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span></em>, <em class="sig-param"><span class="n">data_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.user_models.FriendRequestOutgoing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a friend request that the user has sent.</p>
 <dl class="py method">
-<dt id="Sakurajima.models.user_models.UserAnimeListEntry.get_anime">
-<code class="sig-name descname">get_anime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.user_models.UserAnimeListEntry.get_anime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the Anime object of the entry.</p>
+<dt id="Sakurajima.models.user_models.FriendRequestOutgoing.withdraw">
+<code class="sig-name descname">withdraw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.models.user_models.FriendRequestOutgoing.withdraw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Withdraws the friend request.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="anime.html#Sakurajima.models.base_models.Anime" title="Sakurajima.models.base_models.Anime">Anime</a></p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the operation was successful, False if an error occured.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="Sakurajima.models.user_models.UserAnimeListEntry.progress">
-<code class="sig-name descname">progress</code><a class="headerlink" href="#Sakurajima.models.user_models.UserAnimeListEntry.progress" title="Permalink to this definition">¶</a></dt>
-<dd><p>The total number of episodes that the user has watched for this anime.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="Sakurajima.models.user_models.UserAnimeListEntry.status">
-<code class="sig-name descname">status</code><a class="headerlink" href="#Sakurajima.models.user_models.UserAnimeListEntry.status" title="Permalink to this definition">¶</a></dt>
-<dd><p>The watch status of the anime.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="Sakurajima.models.user_models.UserAnimeListEntry.title">
-<code class="sig-name descname">title</code><a class="headerlink" href="#Sakurajima.models.user_models.UserAnimeListEntry.title" title="Permalink to this definition">¶</a></dt>
-<dd><p>The title of the anime.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="Sakurajima.models.user_models.UserAnimeListEntry.type">
-<code class="sig-name descname">type</code><a class="headerlink" href="#Sakurajima.models.user_models.UserAnimeListEntry.type" title="Permalink to this definition">¶</a></dt>
-<dd><p>The type of the show. For example, the type can anime, special or movie etc.</p>
 </dd></dl>
 
 </dd></dl>
@@ -257,10 +204,8 @@ anime list.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="user_overview.html" class="btn btn-neutral float-right" title="UserOverview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="aniwatch_stats.html" class="btn btn-neutral float-left" title="AniwatchStats" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="friend_request_incoming.html" class="btn btn-neutral float-left" title="FriendRequestIncoming" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

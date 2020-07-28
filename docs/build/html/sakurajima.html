@@ -231,6 +231,21 @@ those, checkout <a class="reference external" href="https://github.com/veselysps
 </dd></dl>
 
 <dl class="py method">
+<dt id="Sakurajima.api.Sakurajima.from_cookie">
+<em class="property">classmethod </em><code class="sig-name descname">from_cookie</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cookie_file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.from_cookie" title="Permalink to this definition">¶</a></dt>
+<dd><p>An alternate constructor that reads a cookie file and automatically extracts
+the data neccasary to initialize Sakurajime</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cookie_file</strong> (<em>str</em>) – The file containing the cookie.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#Sakurajima.api.Sakurajima" title="Sakurajima.api.Sakurajima"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sakurajima</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="Sakurajima.api.Sakurajima.get_airing_anime">
 <code class="sig-name descname">get_airing_anime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">randomize</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Sakurajima.api.Sakurajima.get_airing_anime" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets currently airing anime arranged according to weekdays.</p>
@@ -320,7 +335,7 @@ a single anime like title, description, score, number of episodes etc.</p>
 <dd class="field-even"><p>An AniWatchEpisode object which has data like streams and lamguages.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>AniWatchEpisode</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AniWatchEpisode</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -340,7 +355,7 @@ you can access item on a specific index the same way you would do for
 a normal list. Check out the EpisodeList documentation for further details.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>EpisodeList</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">EpisodeList</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -402,7 +417,7 @@ currently.</p>
 that each contain a list of MediaEntry objects representing the respective media.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Media</p>
+<dd class="field-odd"><p><a class="reference internal" href="models/media.html#Sakurajima.models.media.Media" title="Sakurajima.models.media.Media">Media</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -417,7 +432,7 @@ that each contain a list of MediaEntry objects representing the respective media
 data like date, notification ID and the content etc.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list[Notification]</p>
+<dd class="field-even"><p>list[<a class="reference internal" href="models/notification.html#Sakurajima.models.notification.Notification" title="Sakurajima.models.notification.Notification">Notification</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -500,7 +515,7 @@ data like date, notification ID and the content etc.</p>
 single recommendation.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list[RecommendationEntry]</p>
+<dd class="field-odd"><p>list[<a class="reference internal" href="models/recommendation_entry.html#Sakurajima.models.recommendation.RecommendationEntry" title="Sakurajima.models.recommendation.RecommendationEntry">RecommendationEntry</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -517,7 +532,7 @@ single recommendation.</p>
 <dd class="field-even"><p>A Relation object that contains all the details of a relation.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Relation</p>
+<dd class="field-odd"><p><a class="reference internal" href="models/relation.html#Sakurajima.models.relation.Relation" title="Sakurajima.models.relation.Relation">Relation</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -553,7 +568,7 @@ special entries in the aniwatch.me library.</p>
 <dd class="field-odd"><p>An AniwatchStats object which wraps all the relevant statistics.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>AniwatchStats</p>
+<dd class="field-even"><p><a class="reference internal" href="models/aniwatch_stats.html#Sakurajima.models.stats.AniwatchStats" title="Sakurajima.models.stats.AniwatchStats">AniwatchStats</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -567,7 +582,7 @@ special entries in the aniwatch.me library.</p>
 <dd class="field-odd"><p>A list of Notification objects.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list[Notification]</p>
+<dd class="field-even"><p>list[<a class="reference internal" href="models/notification.html#Sakurajima.models.notification.Notification" title="Sakurajima.models.notification.Notification">Notification</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -583,7 +598,7 @@ that are marked by the user.</p>
 contains information like the status, progress and total episodes etc.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list[UserAnimeListEntry]</p>
+<dd class="field-even"><p>list[<a class="reference internal" href="models/user_anime_list_entry.html#Sakurajima.models.user_models.UserAnimeListEntry" title="Sakurajima.models.user_models.UserAnimeListEntry">UserAnimeListEntry</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -640,7 +655,7 @@ total number of animes completed etc.
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>UserOverview</p>
+<dd class="field-odd"><p><a class="reference internal" href="models/user_overview.html#Sakurajima.models.user_models.UserOverview" title="Sakurajima.models.user_models.UserOverview">UserOverview</a></p>
 </dd>
 </dl>
 </dd></dl>

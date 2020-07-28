@@ -84,6 +84,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="sakurajima.html">Sakurajima</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models/models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils/utils.html">Utils</a></li>
 </ul>
 
             
@@ -174,6 +175,8 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="models/friend_request_incoming.html#Sakurajima.models.user_models.FriendRequestIncoming.accept">accept() (Sakurajima.models.user_models.FriendRequestIncoming method)</a>
+</li>
       <li><a href="sakurajima.html#Sakurajima.api.Sakurajima.add_recommendation">add_recommendation() (Sakurajima.api.Sakurajima method)</a>
 
       <ul>
@@ -232,10 +235,16 @@
 </li>
       <li><a href="models/chronicle_entry.html#Sakurajima.models.chronicle.ChronicleEntry">ChronicleEntry (class in Sakurajima.models.chronicle)</a>
 </li>
+      <li><a href="utils/downloaders.html#Sakurajima.utils.downloader.ChunkDownloader">ChunkDownloader (class in Sakurajima.utils.downloader)</a>
+</li>
+      <li><a href="utils/mergers.html#Sakurajima.utils.merger.ChunkMerger">ChunkMerger (class in Sakurajima.utils.merger)</a>
+</li>
       <li><a href="models/relation_entry.html#Sakurajima.models.relation.RelationEntry.completed">completed (Sakurajima.models.relation.RelationEntry attribute)</a>
 </li>
       <li><a href="models/notification.html#Sakurajima.models.notification.Notification.content">content (Sakurajima.models.notification.Notification attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="models/recommendation_entry.html#Sakurajima.models.recommendation.RecommendationEntry.cover">cover (Sakurajima.models.recommendation.RecommendationEntry attribute)</a>
 
       <ul>
@@ -246,8 +255,6 @@
         <li><a href="models/user_overview.html#Sakurajima.models.user_models.UserOverview.cover">(Sakurajima.models.user_models.UserOverview attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="models/recommendation_entry.html#Sakurajima.models.recommendation.RecommendationEntry.cur_episodes">cur_episodes (Sakurajima.models.recommendation.RecommendationEntry attribute)</a>
 
       <ul>
@@ -266,14 +273,16 @@
 </li>
       <li><a href="models/chronicle_entry.html#Sakurajima.models.chronicle.ChronicleEntry.date">date (Sakurajima.models.chronicle.ChronicleEntry attribute)</a>
 </li>
+      <li><a href="models/friend_request_incoming.html#Sakurajima.models.user_models.FriendRequestIncoming.decline">decline() (Sakurajima.models.user_models.FriendRequestIncoming method)</a>
+</li>
       <li><a href="models/notification.html#Sakurajima.models.notification.Notification.delete">delete() (Sakurajima.models.notification.Notification method)</a>
 </li>
       <li><a href="sakurajima.html#Sakurajima.api.Sakurajima.delete_all_notifications">delete_all_notifications() (Sakurajima.api.Sakurajima method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sakurajima.html#Sakurajima.api.Sakurajima.delete_notification">delete_notification() (Sakurajima.api.Sakurajima method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="models/episode.html#Sakurajima.models.base_models.Episode.description">description (Sakurajima.models.base_models.Episode attribute)</a>
 
       <ul>
@@ -281,7 +290,13 @@
 </li>
       </ul></li>
       <li><a href="models/episode.html#Sakurajima.models.base_models.Episode.download">download() (Sakurajima.models.base_models.Episode method)</a>
+
+      <ul>
+        <li><a href="utils/downloaders.html#Sakurajima.utils.downloader.ChunkDownloader.download">(Sakurajima.utils.downloader.ChunkDownloader method)</a>
 </li>
+        <li><a href="utils/downloaders.html#Sakurajima.utils.downloader.MultiThreadDownloader.download">(Sakurajima.utils.downloader.MultiThreadDownloader method)</a>
+</li>
+      </ul></li>
       <li><a href="models/episode.html#Sakurajima.models.base_models.Episode.duration">duration (Sakurajima.models.base_models.Episode attribute)</a>
 </li>
   </ul></td>
@@ -300,11 +315,13 @@
 </li>
       <li><a href="models/episode.html#Sakurajima.models.base_models.Episode">Episode (class in Sakurajima.models.base_models)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="models/chronicle_entry.html#Sakurajima.models.chronicle.ChronicleEntry.episode">episode (Sakurajima.models.chronicle.ChronicleEntry attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="models/aniwatch_episode.html#Sakurajima.models.base_models.AniWatchEpisode.episode_id">episode_id (Sakurajima.models.base_models.AniWatchEpisode attribute)</a>
+</li>
+      <li><a href="utils/episode_list.html#Sakurajima.utils.episode_list.EpisodeList">EpisodeList (class in Sakurajima.utils.episode_list)</a>
 </li>
       <li><a href="models/user_overview_watch_type.html#Sakurajima.models.user_models.UserOverviewWatchType.episodes">episodes (Sakurajima.models.user_models.UserOverviewWatchType attribute)</a>
 </li>
@@ -330,13 +347,21 @@
       </ul></li>
       <li><a href="models/media_entry.html#Sakurajima.models.media.MediaEntry.favorites">favorites (Sakurajima.models.media.MediaEntry attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="utils/mergers.html#Sakurajima.utils.merger.FFmpegMerger">FFmpegMerger (class in Sakurajima.utils.merger)</a>
+</li>
       <li><a href="models/episode.html#Sakurajima.models.base_models.Episode.filler">filler (Sakurajima.models.base_models.Episode attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="models/friend.html#Sakurajima.models.user_models.Friend">Friend (class in Sakurajima.models.user_models)</a>
 </li>
       <li><a href="models/user_overview.html#Sakurajima.models.user_models.UserOverview.friend">friend (Sakurajima.models.user_models.UserOverview attribute)</a>
+</li>
+      <li><a href="models/friend_request_incoming.html#Sakurajima.models.user_models.FriendRequestIncoming">FriendRequestIncoming (class in Sakurajima.models.user_models)</a>
+</li>
+      <li><a href="models/friend_request_outgoing.html#Sakurajima.models.user_models.FriendRequestOutgoing">FriendRequestOutgoing (class in Sakurajima.models.user_models)</a>
+</li>
+      <li><a href="sakurajima.html#Sakurajima.api.Sakurajima.from_cookie">from_cookie() (Sakurajima.api.Sakurajima class method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -374,6 +399,10 @@
 </li>
       <li><a href="sakurajima.html#Sakurajima.api.Sakurajima.get_episode">get_episode() (Sakurajima.api.Sakurajima method)</a>
 </li>
+      <li><a href="utils/episode_list.html#Sakurajima.utils.episode_list.EpisodeList.get_episode_by_number">get_episode_by_number() (Sakurajima.utils.episode_list.EpisodeList method)</a>
+</li>
+      <li><a href="utils/episode_list.html#Sakurajima.utils.episode_list.EpisodeList.get_episode_by_title">get_episode_by_title() (Sakurajima.utils.episode_list.EpisodeList method)</a>
+</li>
       <li><a href="sakurajima.html#Sakurajima.api.Sakurajima.get_episodes">get_episodes() (Sakurajima.api.Sakurajima method)</a>
 
       <ul>
@@ -386,10 +415,10 @@
 </li>
       <li><a href="sakurajima.html#Sakurajima.api.Sakurajima.get_latest_uploads">get_latest_uploads() (Sakurajima.api.Sakurajima method)</a>
 </li>
-      <li><a href="models/episode.html#Sakurajima.models.base_models.Episode.get_m3u8">get_m3u8() (Sakurajima.models.base_models.Episode method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="models/episode.html#Sakurajima.models.base_models.Episode.get_m3u8">get_m3u8() (Sakurajima.models.base_models.Episode method)</a>
+</li>
       <li><a href="sakurajima.html#Sakurajima.api.Sakurajima.get_media">get_media() (Sakurajima.api.Sakurajima method)</a>
 
       <ul>
@@ -482,6 +511,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="models/aniwatch_episode.html#Sakurajima.models.base_models.AniWatchEpisode.languages">languages (Sakurajima.models.base_models.AniWatchEpisode attribute)</a>
 </li>
+      <li><a href="utils/episode_list.html#Sakurajima.utils.episode_list.EpisodeList.last">last() (Sakurajima.utils.episode_list.EpisodeList method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -522,12 +553,20 @@
       </ul></li>
       <li><a href="models/user_overview_stats.html#Sakurajima.models.user_models.UserOverviewStats.mean_score">mean_score (Sakurajima.models.user_models.UserOverviewStats attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="models/media.html#Sakurajima.models.media.Media">Media (class in Sakurajima.models.media)</a>
 </li>
       <li><a href="models/media_entry.html#Sakurajima.models.media.MediaEntry">MediaEntry (class in Sakurajima.models.media)</a>
 </li>
+      <li><a href="utils/downloaders.html#Sakurajima.utils.downloader.MultiThreadDownloader.merge">merge() (Sakurajima.utils.downloader.MultiThreadDownloader method)</a>
+
+      <ul>
+        <li><a href="utils/mergers.html#Sakurajima.utils.merger.ChunkMerger.merge">(Sakurajima.utils.merger.ChunkMerger method)</a>
+</li>
+        <li><a href="utils/mergers.html#Sakurajima.utils.merger.FFmpegMerger.merge">(Sakurajima.utils.merger.FFmpegMerger method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     module
 
@@ -548,10 +587,18 @@
 </li>
         <li><a href="models/aniwatch_stats.html#module-Sakurajima.models.stats">Sakurajima.models.stats</a>
 </li>
-        <li><a href="models/friend.html#module-Sakurajima.models.user_models">Sakurajima.models.user_models</a>, <a href="models/user_anime_list_entry.html#module-Sakurajima.models.user_models">[1]</a>, <a href="models/user_overview.html#module-Sakurajima.models.user_models">[2]</a>, <a href="models/user_overview_stats.html#module-Sakurajima.models.user_models">[3]</a>, <a href="models/user_overview_watch_type.html#module-Sakurajima.models.user_models">[4]</a>
+        <li><a href="models/friend.html#module-Sakurajima.models.user_models">Sakurajima.models.user_models</a>, <a href="models/friend_request_incoming.html#module-Sakurajima.models.user_models">[1]</a>, <a href="models/friend_request_outgoing.html#module-Sakurajima.models.user_models">[2]</a>, <a href="models/user_anime_list_entry.html#module-Sakurajima.models.user_models">[3]</a>, <a href="models/user_overview.html#module-Sakurajima.models.user_models">[4]</a>, <a href="models/user_overview_stats.html#module-Sakurajima.models.user_models">[5]</a>, <a href="models/user_overview_watch_type.html#module-Sakurajima.models.user_models">[6]</a>
+</li>
+        <li><a href="utils/downloaders.html#module-Sakurajima.utils.downloader">Sakurajima.utils.downloader</a>
+</li>
+        <li><a href="utils/episode_list.html#module-Sakurajima.utils.episode_list">Sakurajima.utils.episode_list</a>
+</li>
+        <li><a href="utils/mergers.html#module-Sakurajima.utils.merger">Sakurajima.utils.merger</a>
 </li>
       </ul></li>
       <li><a href="models/user_overview.html#Sakurajima.models.user_models.UserOverview.movie">movie (Sakurajima.models.user_models.UserOverview attribute)</a>
+</li>
+      <li><a href="utils/downloaders.html#Sakurajima.utils.downloader.MultiThreadDownloader">MultiThreadDownloader (class in Sakurajima.utils.downloader)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -629,6 +676,8 @@
         <li><a href="models/chronicle_entry.html#Sakurajima.models.chronicle.ChronicleEntry.remove_chronicle_entry">(Sakurajima.models.chronicle.ChronicleEntry method)</a>
 </li>
       </ul></li>
+      <li><a href="utils/downloaders.html#Sakurajima.utils.downloader.MultiThreadDownloader.remove_chunks">remove_chunks() (Sakurajima.utils.downloader.MultiThreadDownloader method)</a>
+</li>
       <li><a href="sakurajima.html#Sakurajima.api.Sakurajima.remove_from_list">remove_from_list() (Sakurajima.api.Sakurajima method)</a>
 
       <ul>
@@ -689,8 +738,6 @@
         <li><a href="models/recommendation_entry.html#module-Sakurajima.models.recommendation">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     Sakurajima.models.relation
 
@@ -705,11 +752,34 @@
         <li><a href="models/aniwatch_stats.html#module-Sakurajima.models.stats">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     Sakurajima.models.user_models
 
       <ul>
-        <li><a href="models/friend.html#module-Sakurajima.models.user_models">module</a>, <a href="models/user_anime_list_entry.html#module-Sakurajima.models.user_models">[1]</a>, <a href="models/user_overview.html#module-Sakurajima.models.user_models">[2]</a>, <a href="models/user_overview_stats.html#module-Sakurajima.models.user_models">[3]</a>, <a href="models/user_overview_watch_type.html#module-Sakurajima.models.user_models">[4]</a>
+        <li><a href="models/friend.html#module-Sakurajima.models.user_models">module</a>, <a href="models/friend_request_incoming.html#module-Sakurajima.models.user_models">[1]</a>, <a href="models/friend_request_outgoing.html#module-Sakurajima.models.user_models">[2]</a>, <a href="models/user_anime_list_entry.html#module-Sakurajima.models.user_models">[3]</a>, <a href="models/user_overview.html#module-Sakurajima.models.user_models">[4]</a>, <a href="models/user_overview_stats.html#module-Sakurajima.models.user_models">[5]</a>, <a href="models/user_overview_watch_type.html#module-Sakurajima.models.user_models">[6]</a>
+</li>
+      </ul></li>
+      <li>
+    Sakurajima.utils.downloader
+
+      <ul>
+        <li><a href="utils/downloaders.html#module-Sakurajima.utils.downloader">module</a>
+</li>
+      </ul></li>
+      <li>
+    Sakurajima.utils.episode_list
+
+      <ul>
+        <li><a href="utils/episode_list.html#module-Sakurajima.utils.episode_list">module</a>
+</li>
+      </ul></li>
+      <li>
+    Sakurajima.utils.merger
+
+      <ul>
+        <li><a href="utils/mergers.html#module-Sakurajima.utils.merger">module</a>
 </li>
       </ul></li>
       <li><a href="sakurajima.html#Sakurajima.api.Sakurajima.search">search() (Sakurajima.api.Sakurajima method)</a>
@@ -842,11 +912,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="models/episode.html#Sakurajima.models.base_models.Episode.watched">watched (Sakurajima.models.base_models.Episode attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="models/user_overview_stats.html#Sakurajima.models.user_models.UserOverviewStats.watched_days">watched_days (Sakurajima.models.user_models.UserOverviewStats attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="models/user_overview_stats.html#Sakurajima.models.user_models.UserOverviewStats.watched_hours">watched_hours (Sakurajima.models.user_models.UserOverviewStats attribute)</a>
+</li>
+      <li><a href="models/friend_request_outgoing.html#Sakurajima.models.user_models.FriendRequestOutgoing.withdraw">withdraw() (Sakurajima.models.user_models.FriendRequestOutgoing method)</a>
 </li>
   </ul></td>
 </tr></table>

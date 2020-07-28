@@ -7,6 +7,10 @@ from Sakurajima.utils.progress_tracker import ProgressTracker
 
 
 class Downloader(object):
+    """
+    Facilitates downloading an episode from aniwatch.me using a single thread.
+
+    """
     def __init__(
         self,
         network,
@@ -18,6 +22,29 @@ class Downloader(object):
         delete_chunks: bool = True,
         on_progress=None,
     ):
+        """
+        :param network: The Sakurajima :class:`Network` object that is used to make network requests.  
+        :type network: :class:`Network`
+        :param m3u8: The M3U8 data of the episode that is to be downloaded.
+        :type m3u8: :class:`M3U8`
+        :param file_name: The name of the downloaded video file.
+        :type file_name: str
+        :param episode_id: The episode ID of the episode being downloaded.
+                           This is only required to uniquely identify the progree
+                           tracking data of the episode.
+        :type episode_id: int
+        :param use_ffmpeg: Whether to use ``ffmpeg`` to merge the downlaoded chunks, defaults to True
+        :type use_ffmpeg: bool, optional
+        :param include_intro: Whether to include the 5 second aniwatch intro, defaults to False
+        :type include_intro: bool, optional
+        :param delete_chunks: Whether to delete the downloaded chunks after that have been
+                              merged into a single file, defaults to True
+        :type delete_chunks: bool, optional
+        :param on_progress: Register a function that is called every time a chunk is downloaded, the function
+                            passed the chunk number of the downloaded chunk and the total number of chunks as 
+                            parameters, defaults to None
+        :type on_progress:  ``function``, optional
+        """
         self.__network = network
         self.m3u8 = m3u8
         self.file_name = file_name
@@ -39,6 +66,8 @@ class Downloader(object):
         )
 
     def download(self):
+        """Runs the downloader and starts downloading the video file.
+        """
         if not self.include_intro:
             for segment in self.m3u8.data["segments"]:
                 if "img.aniwatch.me" in segment["uri"]:
@@ -64,22 +93,39 @@ class Downloader(object):
         self.progress_bar.finish()
 
     def merge(self):
+        """Merges the downloaded chunks into a single file.
+        """
         if self.use_ffmpeg:
             FFmpegMerger(self.file_name, self.total_chunks).merge()
         else:
             ChunkMerger(self.file_name, self.total_chunks).merge()
 
     def remove_chunks(self):
+        """Deletes the downloaded chunks.
+        """
         ChunkRemover(self.file_name, self.total_chunks).remove()
 
 
 class ChunkDownloader(object):
+    """
+    The object that actually downloads a single chunk.
+    """
     def __init__(self, network, segment, file_name):
+        """
+        :param network: The Sakurajima :class:`Network` object that is used to make network requests. 
+        :type network: :class:`Network`
+        :param segment: The segement data from that M3U8 file that is to be downloaded. 
+        :type segment: :class:`dict`
+        :param file_name: The file name of the downloaded chunk.  
+        :type file_name: :class:`str`
+        """
         self.__network = network
         self.segment = segment
         self.file_name = file_name
 
     def download(self):
+        """Starts downloading the chunk.
+        """
         with open(self.file_name, "wb") as videofile:
             res = self.__network.get(self.segment["uri"])
             chunk = res.content
@@ -101,6 +147,9 @@ class ChunkDownloader(object):
 
 
 class MultiThreadDownloader(object):
+    """
+    Facilitates downloading an episode from aniwatch.me using multiple threads.
+    """
     def __init__(
         self,
         network,
@@ -112,6 +161,27 @@ class MultiThreadDownloader(object):
         include_intro: bool = False,
         delete_chunks: bool = True,
     ):
+        """
+        :param network: The Sakurajima :class:`Network` object that is used to make network requests.
+        :type network: :class:`Network`
+        :type m3u8: :class:`M3U8`
+        :param file_name: The name of the downloaded video file.
+        :type file_name: str
+        :param episode_id: The episode ID of the episode being downloaded.
+                           This is only required to uniquely identify the progree
+                           tracking data of the episode.
+        :type episode_id: int
+        :param max_threads: The maximum number of threads that will be used for downloading, defaults to None,
+                            if None, the maximum possible number of threads will be used.
+        :type max_threads: int, optional
+        :param use_ffmpeg: Whether to use ``ffmpeg`` to merge the downlaoded chunks, defaults to True
+        :type use_ffmpeg: bool, optional
+        :param include_intro: Whether to include the 5 second aniwatch intro, defaults to False
+        :type include_intro: bool, optional
+        :param delete_chunks: Whether to delete the downloaded chunks after that have been
+                              merged into a single file, defaults to True
+        :type delete_chunks: bool, optional
+        """
         self.__network = network
         self.m3u8 = m3u8
         self.file_name = file_name
@@ -165,6 +235,8 @@ class MultiThreadDownloader(object):
             self.progress_bar.next()
 
     def download(self):
+        """Runs the downloader and starts downloading the video file.
+        """
         stateful_segment_list = StatefulSegmentList(self.m3u8.data["segments"])
         self.progress_bar = IncrementalBar("Downloading", max=self.total_chunks)
         self.init_tracker()
@@ -186,12 +258,16 @@ class MultiThreadDownloader(object):
         self.progress_bar.finish()
 
     def merge(self):
+        """Merges the downloaded chunks into a single file.
+        """
         if self.use_ffmpeg:
             FFmpegMerger(self.file_name, self.total_chunks).merge()
         else:
             ChunkMerger(self.file_name, self.total_chunks).merge()
 
     def remove_chunks(self):
+        """Deletes the downloaded chunks.
+        """
         ChunkRemover(self.file_name, self.total_chunks).remove()
 
 

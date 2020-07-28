@@ -2,6 +2,7 @@ import requests
 import json
 import base64
 import random
+from urllib.parse import unquote
 from Sakurajima.models import (
     Anime,
     RecommendationEntry,
@@ -67,6 +68,19 @@ class Sakurajima:
         proxy = random.choice(proxies).replace("\n", "")
         return cls(username, userId, authToken, {"https": proxy})            
     
+    @classmethod
+    def from_cookie(cls, cookie_file):
+        """An alternate constructor that reads a cookie file and automatically extracts
+        the data neccasary to initialize Sakurajime
+
+        :param cookie_file: The file containing the cookie.
+        :type cookie_file: str
+        :rtype: :class:`Sakurajima`
+        """
+        with open(cookie_file, "r") as cookie_file_handle:
+            cookie = json.loads(unquote(cookie_file_handle.read()))
+        return cls(cookie["username"], cookie["userid"], cookie["auth"])
+
     def get_episode(self, episode_id, lang="en-US"):
         """Gets an AniWatchEpisode by its episode ID.
 
@@ -76,7 +90,7 @@ class Sakurajima:
                     (English Subbed)
         :type lang: str, optional
         :return: An AniWatchEpisode object which has data like streams and lamguages. 
-        :rtype: AniWatchEpisode
+        :rtype: :class:`AniWatchEpisode`
         """
         data = {
             "controller": "Anime",
@@ -96,7 +110,7 @@ class Sakurajima:
         :return: An EpisodeList object. An EpisodeList is very similar to a normal list,
                  you can access item on a specific index the same way you would do for
                  a normal list. Check out the EpisodeList documentation for further details.
-        :rtype: EpisodeList
+        :rtype: :class:`EpisodeList`
         """
         data = {
             "controller": "Anime",

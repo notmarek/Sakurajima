@@ -12,6 +12,7 @@ Welcome to Sakurajima's documentation!
    
    sakurajima
    models/models
+   utils/utils
 
 
 Indices and tables
