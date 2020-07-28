@@ -18,4 +18,9 @@ setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.6",
+    install_requires=[
+        "requests==2.23.0",
+        "pycryptodome==3.9.7",
+        "m3u8==0.6.0",
+    ],
 )
