@@ -119,6 +119,9 @@ class ChunkDownloader(object):
         :type segment: :class:`dict`
         :param file_name: The file name of the downloaded chunk.  
         :type file_name: :class:`str`
+        :param chunk_number: The chunk number of the the chunk to be downloaded, required to generate
+                        the AES decryption initialization vector.
+        :type chunk_number: int
         """
         self.__network = network
         self.segment = segment
@@ -147,7 +150,7 @@ class ChunkDownloader(object):
         return bytearray(iv)
 
     def get_decrypt_key(self, uri):
-        res = self.__network.get(uri)
+        res = self.__network.get_with_user_session(uri)
         key = []
         for byte in res.content:
             key.append(byte)

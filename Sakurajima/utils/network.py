@@ -5,19 +5,15 @@ from requests import Session
 class Network:
     def __init__(self, username: str, user_id: str, auth_token: str, proxies, endpoint):
         self.API_URL = endpoint
-        self.session = Session()
+        self.session = Session() 
+        # This session will have all the details that are required to access the API
+        self.userless_session = Session()
+        # This session will only have "USER-AGENT" and "REFERER" 
         self.session.proxies = proxies
         self.headers = self.session.headers  # Expose session headers
-        self.headers["referer"] = "https://aniwatch.me/"
         self.cookies = self.session.cookies  # Expose session cookies
         xsrf_token = Misc().generate_xsrf_token()
-        headers = {
-            "x-xsrf-token": xsrf_token,
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36",
-        }
-        cookies = {"xsrf-token": xsrf_token}
         if username is not None and user_id is not None and user_id is not None:
-            headers["x-auth"] = auth_token
             session_token = (
                 '{"userid":'
                 + str(user_id)
@@ -27,11 +23,27 @@ class Network:
                 + str(auth_token)
                 + '","remember_login":true}'
             )
-            cookies["SESSION"] = session_token
-            headers["COOKIE"] = f"SESSION={session_token}; XSRF-TOKEN={xsrf_token};"
+        headers = {
+            "REFERER": "https://aniwatch.me/",
+            "X-XSRF-TOKEN": xsrf_token,
+            "USER-AGENT": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36",
+            "COOKIE": f"SESSION={session_token}; XSRF-TOKEN={xsrf_token};",
+            "X-AUTH": auth_token
+        }
+        
+        cookies = {
+            "SESSION": session_token,
+            "XSRF-TOKEN": xsrf_token
+        }
+
         self.session.headers.update(headers)
         self.session.cookies.update(cookies)
-
+        self.userless_session.headers.update(
+            {
+                "USER_AGENT": headers["USER-AGENT"],
+                "REFERER": headers["REFERER"]
+            }
+        )
     def __repr__(self):
         return "<Network>"
 
@@ -43,10 +55,19 @@ class Network:
             self.session.close()
             raise e
 
-    def get(self, uri):
+    def get_with_user_session(self, uri, headers = None):
         try:
-            res = self.session.get(uri)
+            res = self.session.get(uri, headers = headers)
             return res
         except Exception as e:
             self.session.close()
             raise e
+
+    def get(self, uri, headers = None):
+        print(uri)
+        try:
+            res = self.userless_session.get(uri, headers = None)
+            print(res.request.headers)
+            return res
+        except Exception as e:
+            raise(e)

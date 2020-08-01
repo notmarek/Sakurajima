@@ -320,7 +320,7 @@ class Episode(object):
         """The description of the episode."""
         self.thumbnail = data_dict.get("thumbnail", None)
         """The URL to the thumbnail for the episode."""
-        self.added = datetime.utcfromtimestamp(data_dict.get("added", None))
+        self.added = datetime.datetime.utcfromtimestamp(data_dict.get("added", None))
         """The date when the episode was added."""
         self.filler = data_dict.get("filler", None)
         """Is set to 1 if the episode is filler else 0"""
@@ -385,9 +385,9 @@ class Episode(object):
             return self.__m3u8
         else:
             REFERER = self.__generate_referer()
-            self.__network.headers.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
+            headers = {"ORIGIN": "https://aniwatch.me"}
             aniwatch_episode = self.get_aniwatch_episode()
-            res = self.__network.get(aniwatch_episode.stream.sources[quality])
+            res = self.__network.get_with_user_session(aniwatch_episode.stream.sources[quality])
             self.__m3u8 = M3U8(res.text)
             return self.__m3u8
 
