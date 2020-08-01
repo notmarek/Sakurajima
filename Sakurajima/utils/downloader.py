@@ -72,7 +72,7 @@ class Downloader(object):
         chunk_tuple_list = []
         # Will hold a list of tuples of the form (chunk_number, chunk).
         # The chunk_number in this list will start from 1.
-        for chunk_number, chunk in enumerate(self.m3u8.data["segments"], start = 1):
+        for chunk_number, chunk in enumerate(self.m3u8.data["segments"]):
             chunk_tuple_list.append((chunk_number, chunk))
 
         if not self.include_intro:
