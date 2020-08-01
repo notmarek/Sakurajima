@@ -24,7 +24,6 @@ class Anime(object):
     Use the get_episodes method to get a list of available episodes"""
 
     def __init__(self, data_dict: dict, network, api_url: str):
-        print(data_dict)
         self.__network = network
         self.__API_URL = api_url
         self.data_dict = data_dict
@@ -388,7 +387,6 @@ class Episode(object):
             REFERER = self.__generate_referer()
             self.__network.headers.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
             aniwatch_episode = self.get_aniwatch_episode()
-            print(aniwatch_episode.stream.sources)
             res = self.__network.get(aniwatch_episode.stream.sources[quality])
             self.__m3u8 = M3U8(res.text)
             return self.__m3u8
