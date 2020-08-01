@@ -339,7 +339,6 @@ class Sakurajima:
             "action": "getOverview",
             "profile_id": str(user_id),
         }
-        print(self.network.post(data))
         return UserOverview(self.network.post(data)["overview"])
 
     def get_user_chronicle(self, user_id, page=1):
