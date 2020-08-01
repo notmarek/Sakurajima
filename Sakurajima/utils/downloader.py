@@ -1,5 +1,6 @@
 import os
 from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
 from Sakurajima.utils.merger import ChunkMerger, FFmpegMerger, ChunkRemover
 from threading import Thread, Lock
 from progress.bar import IncrementalBar
@@ -84,7 +85,7 @@ class Downloader(object):
 
         for chunk_number, segment in enumerate(self.m3u8.data["segments"]):
             file_name = f"chunks\/{self.file_name}-{chunk_number}.chunk.ts"
-            ChunkDownloader(self.__network, segment, file_name).download()
+            ChunkDownloader(self.__network, segment, file_name, chunk_number).download()
             self.progress_bar.next()
             self.progress_tracker.update_chunks_done(chunk_number)
             if self.on_progress:
@@ -110,7 +111,7 @@ class ChunkDownloader(object):
     """
     The object that actually downloads a single chunk.
     """
-    def __init__(self, network, segment, file_name):
+    def __init__(self, network, segment, file_name, chunk_number):
         """
         :param network: The Sakurajima :class:`Network` object that is used to make network requests. 
         :type network: :class:`Network`
@@ -122,6 +123,7 @@ class ChunkDownloader(object):
         self.__network = network
         self.segment = segment
         self.file_name = file_name
+        self.chunk_number = chunk_number
 
     def download(self):
         """Starts downloading the chunk.
@@ -130,6 +132,7 @@ class ChunkDownloader(object):
             res = self.__network.get(self.segment["uri"])
             chunk = res.content
             key_dict = self.segment.get("key", None)
+            
             if key_dict is not None:
                 key = self.get_decrypt_key(key_dict["uri"])
                 decrypted_chunk = self.decrypt_chunk(chunk, key)
@@ -139,10 +142,15 @@ class ChunkDownloader(object):
 
     def get_decrypt_key(self, uri):
         res = self.__network.get(uri)
-        return res.content
+        key = []
+        for byte in res.content:
+            key.append(byte)
+        key[13] = key[13] - 1
+        return bytearray(key)
 
     def decrypt_chunk(self, chunk, key):
-        decryptor = AES.new(key, AES.MODE_CBC)
+        iv=bytearray([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,self.chunk_number+1])
+        decryptor = AES.new(key, AES.MODE_CBC, iv)
         return decryptor.decrypt(chunk)
 
 
@@ -229,7 +237,7 @@ class MultiThreadDownloader(object):
         self.threads = []
 
     def assign_target(self, network, segment, file_name, chunk_number):
-        ChunkDownloader(network, segment, file_name).download()
+        ChunkDownloader(network, segment, file_name, chunk_number).download()
         with self.__lock:
             self.progress_tracker.update_chunks_done(chunk_number)
             self.progress_bar.next()
