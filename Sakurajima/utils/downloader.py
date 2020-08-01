@@ -5,7 +5,7 @@ from Sakurajima.utils.merger import ChunkMerger, FFmpegMerger, ChunkRemover
 from threading import Thread, Lock
 from progress.bar import IncrementalBar
 from Sakurajima.utils.progress_tracker import ProgressTracker
-
+from Sakurajima.utils.decrypter_provider import DecrypterProvider
 
 class Downloader(object):
     """
@@ -69,11 +69,19 @@ class Downloader(object):
     def download(self):
         """Runs the downloader and starts downloading the video file.
         """
+        chunk_tuple_list = []
+        # Will hold a list of tuples of the form (chunk_number, chunk).
+        # The chunk_number in this list will start from 1.
+        for chunk_number, chunk in enumerate(self.m3u8.data["segments"], start = 1):
+            chunk_tuple_list.append((chunk_number, chunk))
+
         if not self.include_intro:
-            for segment in self.m3u8.data["segments"]:
-                if "img.aniwatch.me" in segment["uri"]:
-                    self.m3u8.data["segments"].remove(segment)
-        self.total_chunks = len(self.m3u8.data["segments"])
+            for chunk_tuple in chunk_tuple_list:
+                # Check if the string is in the URI of the chunk
+                if "img.aniwatch.me" in chunk_tuple[1]["uri"]:
+                    # Revome the tuple from the tuple list.
+                    chunk_tuple_list.remove(chunk_tuple) 
+        self.total_chunks = len(chunk_tuple_list)
 
         try:
             os.makedirs("chunks")
@@ -83,9 +91,18 @@ class Downloader(object):
         self.progress_bar = IncrementalBar("Downloading", max=self.total_chunks)
         self.init_tracker()
 
-        for chunk_number, segment in enumerate(self.m3u8.data["segments"]):
+        for chunk_number, chunk_tuple in enumerate(chunk_tuple_list):
+            # We need the chunk number here to name the files. Note that this is
+            # different from the chunk number that is inside the tuple.
             file_name = f"chunks\/{self.file_name}-{chunk_number}.chunk.ts"
-            ChunkDownloader(self.__network, segment, file_name, chunk_number).download()
+            decryter_provider = DecrypterProvider(self__network, self.m3u8)
+            ChunkDownloader(
+                self.__network,
+                chunk_tuple[1], # The segment data
+                file_name,
+                chunk_tuple[0], # The chunk number needed for decryption.
+                decryter_provider
+                ).download()
             self.progress_bar.next()
             self.progress_tracker.update_chunks_done(chunk_number)
             if self.on_progress:
@@ -111,7 +128,7 @@ class ChunkDownloader(object):
     """
     The object that actually downloads a single chunk.
     """
-    def __init__(self, network, segment, file_name, chunk_number):
+    def __init__(self, network, segment, file_name, chunk_number, decrypt_provider: DecrypterProvider):
         """
         :param network: The Sakurajima :class:`Network` object that is used to make network requests. 
         :type network: :class:`Network`
@@ -126,7 +143,8 @@ class ChunkDownloader(object):
         self.__network = network
         self.segment = segment
         self.file_name = file_name
-        self.chunk_number = chunk_number
+        self.chunk_number = chunk_number,
+        self.decrypter_provider = decrypter_provider
 
     def download(self):
         """Starts downloading the chunk.
@@ -137,29 +155,14 @@ class ChunkDownloader(object):
             key_dict = self.segment.get("key", None)
             
             if key_dict is not None:
-                key = self.get_decrypt_key(key_dict["uri"])
-                decrypted_chunk = self.decrypt_chunk(chunk, key)
+                decrypted_chunk = self.decrypt_chunk(chunk)
                 videofile.write(decrypted_chunk)
             else:
                 videofile.write(chunk)
     
-    def create_initialization_vector(self, chunk):
-        iv = [0 for _ in range(0, 16)]
-        for i in range(12, 16):
-            iv[i] = chunk >> 8 * (15 - i) & 255
-        return bytearray(iv)
-
-    def get_decrypt_key(self, uri):
-        res = self.__network.get_with_user_session(uri)
-        key = []
-        for byte in res.content:
-            key.append(byte)
-        key[13] = key[13] - 1
-        return bytearray(key)
-
-    def decrypt_chunk(self, chunk, key):
-        decryptor = AES.new(key, AES.MODE_CBC, self.create_initialization_vector(self.chunk_number + 1))
-        return decryptor.decrypt(chunk)
+    def decrypt_chunk(self, chunk):
+        decryter = self.decrypter_provider.get_decrypter(self.chunk_number)
+        return decryter.decrypt(chunk)
 
 
 class MultiThreadDownloader(object):
