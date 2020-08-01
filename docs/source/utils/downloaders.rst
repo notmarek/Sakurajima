@@ -4,8 +4,7 @@ Downloaders
 .. module:: Sakurajima.utils.downloader
 
 .. autoclass:: Downloader
-   :members:
-   :autoclass_content: both
+   :members: 
 
 .. autoclass:: ChunkDownloader
    :members:
