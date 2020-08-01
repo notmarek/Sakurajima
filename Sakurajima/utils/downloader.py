@@ -139,6 +139,12 @@ class ChunkDownloader(object):
                 videofile.write(decrypted_chunk)
             else:
                 videofile.write(chunk)
+    
+    def create_initialization_vector(self, chunk):
+        iv = [0 for _ in range(0, 16)]
+        for i in range(12, 16):
+            iv[i] = chunk >> 8 * (15 - i) & 255
+        return bytearray(iv)
 
     def get_decrypt_key(self, uri):
         res = self.__network.get(uri)
@@ -149,8 +155,7 @@ class ChunkDownloader(object):
         return bytearray(key)
 
     def decrypt_chunk(self, chunk, key):
-        iv=bytearray([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,self.chunk_number+1])
-        decryptor = AES.new(key, AES.MODE_CBC, iv)
+        decryptor = AES.new(key, AES.MODE_CBC, self.create_initialization_vector(self.chunk_number + 1))
         return decryptor.decrypt(chunk)
 
 
