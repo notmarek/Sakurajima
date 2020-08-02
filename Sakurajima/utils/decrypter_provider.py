@@ -2,11 +2,15 @@ from Crypto.Cipher import AES
 
 class DecrypterProvider(object):
 
-    def __init__(self, network, m3u8):
+    def __init__(self, network, m3u8, get_by_comparison = False):
         self.__network = network
         self.m3u8 = m3u8
         self.key = None
         self.uri = self.m3u8.data["keys"][1]["uri"]
+        if get_by_comparison:
+            self.get_key_by_comparison()
+        else:
+            self.get_key()
 
     def get_key_by_comparison(self) -> bytearray:
         if self.key == None:

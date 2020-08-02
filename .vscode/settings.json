@@ -1,4 +1,4 @@
 {
     "restructuredtext.confPath": "${workspaceFolder}\\docs\\source",
-    "python.pythonPath": "C:\\Python38\\python.exe"
+    "python.pythonPath": "C:\\Python\\python.exe"
 }

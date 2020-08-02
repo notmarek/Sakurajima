@@ -6,6 +6,7 @@ from threading import Thread, Lock
 from progress.bar import IncrementalBar
 from Sakurajima.utils.progress_tracker import ProgressTracker
 from Sakurajima.utils.decrypter_provider import DecrypterProvider
+from concurrent.futures import ThreadPoolExecutor
 
 class Downloader(object):
     """
@@ -204,23 +205,12 @@ class MultiThreadDownloader(object):
         self.m3u8 = m3u8
         self.file_name = file_name
         self.use_ffmpeg = use_ffmpeg
+        self.max_threads = max_threads
         self.include_intro = include_intro
         self.delete_chunks = delete_chunks
         self.threads = []
         self.progress_tracker = ProgressTracker(episode_id)
         self.__lock = Lock()
-
-        if not include_intro:
-            for segment in self.m3u8.data["segments"]:
-                if "img.aniwatch.me" in segment["uri"]:
-                    self.m3u8.data["segments"].remove(segment)
-        self.total_chunks = len(self.m3u8.data["segments"])
-
-        if max_threads is None:
-            self.max_threads = self.total_chunks
-        else:
-            self.max_threads = max_threads
-
         try:
             os.makedirs("chunks")
         except FileExistsError:
@@ -237,42 +227,67 @@ class MultiThreadDownloader(object):
             }
         )
 
-    def start_threads(self):
-        for t in self.threads:
-            t.start()
-        for t in self.threads:
-            t.join()
 
-    def reset_threads(self):
-        self.threads = []
+    def assign_segments(self, segment):
 
-    def assign_target(self, network, segment, file_name, chunk_number):
-        ChunkDownloader(network, segment, file_name, chunk_number).download()
+        ChunkDownloader(
+            segment.network,
+            segment.segment,
+            segment.file_name,
+            segment.chunk_number,
+            segment.decrypter_provider
+        ).download()
         with self.__lock:
-            self.progress_tracker.update_chunks_done(chunk_number)
+            self.progress_tracker.update_chunks_done(segment.chunk_number)
             self.progress_bar.next()
 
     def download(self):
         """Runs the downloader and starts downloading the video file.
         """
-        stateful_segment_list = StatefulSegmentList(self.m3u8.data["segments"])
+
+        decrypter_provider = DecrypterProvider(self.__network, self.m3u8)
+        chunk_tuple_list = []
+        # Will hold a list of tuples of the form (chunk_number, chunk).
+        # The chunk_number in this list will start from 1.
+        for chunk_number, chunk in enumerate(self.m3u8.data["segments"]):
+            chunk_tuple_list.append((chunk_number, chunk))
+
+        if not self.include_intro:
+            for chunk_tuple in chunk_tuple_list:
+                # Check if the string is in the URI of the chunk
+                if "img.aniwatch.me" in chunk_tuple[1]["uri"]:
+                    # Revome the tuple from the tuple list.
+                    chunk_tuple_list.remove(chunk_tuple) 
+        
+        self.total_chunks = len(chunk_tuple_list)
         self.progress_bar = IncrementalBar("Downloading", max=self.total_chunks)
         self.init_tracker()
-        while True:
-            try:
-                for _ in range(self.max_threads):
-                    chunk_number, segment = stateful_segment_list.next()
-                    file_name = f"chunks\/{self.file_name}-{chunk_number}.chunk.ts"
-                    self.threads.append(
-                        Thread(target=self.assign_target, args=(self.__network, segment, file_name, chunk_number),)
-                    )
-                self.start_threads()
-                self.reset_threads()
-            except IndexError:
-                if self.threads != []:
-                    self.start_threads()
-                    self.reset_threads()
-                break
+
+        segment_wrapper_list = []
+
+        for chunk_number, chunk in enumerate(chunk_tuple_list):
+            file_name = f"chunks\/{self.file_name}-{chunk_number}.chunk.ts"
+            segment_wrapper = _SegmentWrapper(
+                self.__network,
+                chunk[1], # Segment data.
+                file_name,
+                chunk[0], # The chunk number needed for decryption.
+                decrypter_provider
+            )
+            segment_wrapper_list.append(segment_wrapper)
+
+        if self.max_threads == None:
+            # If the value for max threads is not provided, then it is set to 
+            # the total number of chunks that are to be downloaded.
+            self.max_threads = self.total_chunks
+
+        self.executor = ThreadPoolExecutor(max_workers = self.max_threads)
+        
+        with self.executor as exe:
+            futures = exe.map(self.assign_segments, segment_wrapper_list)
+            for future in futures: 
+                # This loop servers to run the generator.
+                pass
         self.progress_bar.finish()
 
     def merge(self):
@@ -288,14 +303,12 @@ class MultiThreadDownloader(object):
         """
         ChunkRemover(self.file_name, self.total_chunks).remove()
 
-
-class StatefulSegmentList(object):
-    def __init__(self, segment_list):
-        self.segment_list = segment_list
-        self.index = 0
-
-    def next(self):
-        segment = self.segment_list[self.index]
-        index = self.index
-        self.index += 1
-        return index, segment
+class _SegmentWrapper(object):
+    # As the name suggests, this is only wrapper class introduced with a hope that it 
+    # will lead to more readable code.
+    def __init__(self, network, segment, file_name, chunk_number, decrypter_provider):
+        self.network = network
+        self.segment = segment
+        self.file_name = file_name
+        self.chunk_number = chunk_number
+        self.decrypter_provider = decrypter_provider
