@@ -40,7 +40,7 @@ class Network:
         self.session.cookies.update(cookies)
         self.userless_session.headers.update(
             {
-                "USER_AGENT": headers["USER-AGENT"],
+                "USER-AGENT": headers["USER-AGENT"],
                 "REFERER": headers["REFERER"]
             }
         )
@@ -64,10 +64,8 @@ class Network:
             raise e
 
     def get(self, uri, headers = None):
-        print(uri)
         try:
             res = self.userless_session.get(uri, headers = headers)
-            print(res.request.headers)
             return res
         except Exception as e:
             raise(e)

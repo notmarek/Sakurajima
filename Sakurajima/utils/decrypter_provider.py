@@ -10,10 +10,10 @@ class DecrypterProvider(object):
     def get_key(self) -> bytearray:
         if self.key == None:
             uri = self.m3u8.data["keys"][1]["uri"]
-            key1 = bytearray(self.__network.get_with_user_session(uri))
+            key1 = bytearray(self.__network.get(uri))
             key2 = key1
             while key1 == key2:
-                key2 = bytearray(self.__network.get_with_user_session(uri))
+                key2 = bytearray(self.__network.get(uri))
             final_key = []
             for index in range(len(key1)):
                 smaller = min(key1[index], key2[index])
