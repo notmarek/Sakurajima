@@ -6,14 +6,16 @@ class DecrypterProvider(object):
         self.__network = network
         self.m3u8 = m3u8
         self.key = None
+        self.uri = self.m3u8.data["keys"][1]["uri"]
 
-    def get_key(self) -> bytearray:
+    def get_key_by_comparison(self) -> bytearray:
         if self.key == None:
-            uri = self.m3u8.data["keys"][1]["uri"]
-            key1 = bytearray(self.__network.get(uri))
+            key1 = bytearray(self.__network.get(self.uri).content)
             key2 = key1
-            while key1 == key2:
-                key2 = bytearray(self.__network.get(uri))
+            tries = 1
+            while key1 == key2 and tries <=25:
+                key2 = bytearray(self.__network.get(self.uri).content)
+                tries += 1
             final_key = []
             for index in range(len(key1)):
                 smaller = min(key1[index], key2[index])
@@ -21,6 +23,11 @@ class DecrypterProvider(object):
             self.key = bytearray(final_key)
         return self.key
     
+    def get_key(self) -> bytearray:
+        if self.key == None:
+            self.key = bytearray(self.__network.get(self.uri).content)
+        return self.key
+
     @staticmethod
     def create_initialization_vector(chunk_number) -> bytearray:
         iv = [0 for _ in range(0, 16)]
