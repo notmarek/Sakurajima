@@ -230,6 +230,7 @@ class MultiThreadDownloader(object):
 
     def assign_segments(self, segment):
 
+<<<<<<< HEAD
         ChunkDownloader(
             segment.network,
             segment.segment,
@@ -237,6 +238,10 @@ class MultiThreadDownloader(object):
             segment.chunk_number,
             segment.decrypter_provider
         ).download()
+=======
+    def assign_target(self, network, segment, file_name, chunk_number, decrypter_provider):
+        ChunkDownloader(network, segment, file_name, chunk_number, decrypter_provider).download()
+>>>>>>> dd21b0f4db8899119feb8b1eb04ad6a7ee9b5603
         with self.__lock:
             self.progress_tracker.update_chunks_done(segment.chunk_number)
             self.progress_bar.next()
@@ -262,6 +267,7 @@ class MultiThreadDownloader(object):
         self.total_chunks = len(chunk_tuple_list)
         self.progress_bar = IncrementalBar("Downloading", max=self.total_chunks)
         self.init_tracker()
+<<<<<<< HEAD
 
         segment_wrapper_list = []
 
@@ -288,6 +294,24 @@ class MultiThreadDownloader(object):
             for future in futures: 
                 # This loop servers to run the generator.
                 pass
+=======
+        decrypter_provider = DecrypterProvider(self.__network, self.m3u8)
+        while True:
+            try:
+                for _ in range(self.max_threads):
+                    chunk_number, segment = stateful_segment_list.next()
+                    file_name = f"chunks\/{self.file_name}-{chunk_number}.chunk.ts"
+                    self.threads.append(
+                        Thread(target=self.assign_target, args=(self.__network, segment, file_name, chunk_number, decrypter_provider),)
+                    )
+                self.start_threads()
+                self.reset_threads()
+            except IndexError:
+                if self.threads != []:
+                    self.start_threads()
+                    self.reset_threads()
+                break
+>>>>>>> dd21b0f4db8899119feb8b1eb04ad6a7ee9b5603
         self.progress_bar.finish()
 
     def merge(self):
