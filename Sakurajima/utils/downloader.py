@@ -246,8 +246,8 @@ class MultiThreadDownloader(object):
     def reset_threads(self):
         self.threads = []
 
-    def assign_target(self, network, segment, file_name, chunk_number):
-        ChunkDownloader(network, segment, file_name, chunk_number).download()
+    def assign_target(self, network, segment, file_name, chunk_number, decrypter_provider):
+        ChunkDownloader(network, segment, file_name, chunk_number, decrypter_provider).download()
         with self.__lock:
             self.progress_tracker.update_chunks_done(chunk_number)
             self.progress_bar.next()
@@ -258,13 +258,14 @@ class MultiThreadDownloader(object):
         stateful_segment_list = StatefulSegmentList(self.m3u8.data["segments"])
         self.progress_bar = IncrementalBar("Downloading", max=self.total_chunks)
         self.init_tracker()
+        decrypter_provider = DecrypterProvider(self.__network, self.m3u8)
         while True:
             try:
                 for _ in range(self.max_threads):
                     chunk_number, segment = stateful_segment_list.next()
                     file_name = f"chunks\/{self.file_name}-{chunk_number}.chunk.ts"
                     self.threads.append(
-                        Thread(target=self.assign_target, args=(self.__network, segment, file_name, chunk_number),)
+                        Thread(target=self.assign_target, args=(self.__network, segment, file_name, chunk_number, decrypter_provider),)
                     )
                 self.start_threads()
                 self.reset_threads()
