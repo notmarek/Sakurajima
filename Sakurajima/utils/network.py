@@ -1,6 +1,6 @@
 from Sakurajima.utils.misc import Misc
 from requests import Session
-
+import urllib.parse
 
 class Network:
     def __init__(self, username: str, user_id: str, auth_token: str, proxies, endpoint):
@@ -14,7 +14,7 @@ class Network:
         self.cookies = self.session.cookies  # Expose session cookies
         xsrf_token = Misc().generate_xsrf_token()
         if username is not None and user_id is not None and user_id is not None:
-            session_token = (
+            session_token = urllib.parse.quote(
                 '{"userid":'
                 + str(user_id)
                 + ',"username":"'

@@ -32,9 +32,9 @@ class DecrypterProvider(object):
     def create_initialization_vector(chunk_number) -> bytearray:
         iv = [0 for _ in range(0, 16)]
         for i in range(12, 16):
-            iv[i] = chunk >> 8 * (15 - i) & 255
+            iv[i] = chunk_number[0] >> 8 * (15 - i) & 255
         return bytearray(iv)
     
-    def get_decryptor(self, chunk_number) -> AES:
+    def get_decrypter(self, chunk_number) -> AES:
         iv = self.create_initialization_vector(chunk_number)
         return AES.new(self.get_key(), AES.MODE_CBC, iv = iv)

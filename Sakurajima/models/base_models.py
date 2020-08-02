@@ -387,7 +387,7 @@ class Episode(object):
             REFERER = self.__generate_referer()
             headers = {"ORIGIN": "https://aniwatch.me"}
             aniwatch_episode = self.get_aniwatch_episode()
-            res = self.__network.get(aniwatch_episode.stream.sources[quality])
+            res = self.__network.get_with_user_session(aniwatch_episode.stream.sources[quality])
             self.__m3u8 = M3U8(res.text)
             return self.__m3u8
 
