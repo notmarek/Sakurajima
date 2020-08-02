@@ -66,7 +66,7 @@ class Network:
     def get(self, uri, headers = None):
         print(uri)
         try:
-            res = self.userless_session.get(uri, headers = None)
+            res = self.userless_session.get(uri, headers = headers)
             print(res.request.headers)
             return res
         except Exception as e:

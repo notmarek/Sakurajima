@@ -90,12 +90,11 @@ class Downloader(object):
 
         self.progress_bar = IncrementalBar("Downloading", max=self.total_chunks)
         self.init_tracker()
-
+        decryter_provider = DecrypterProvider(self__network, self.m3u8)
         for chunk_number, chunk_tuple in enumerate(chunk_tuple_list):
             # We need the chunk number here to name the files. Note that this is
             # different from the chunk number that is inside the tuple.
             file_name = f"chunks\/{self.file_name}-{chunk_number}.chunk.ts"
-            decryter_provider = DecrypterProvider(self__network, self.m3u8)
             ChunkDownloader(
                 self.__network,
                 chunk_tuple[1], # The segment data
