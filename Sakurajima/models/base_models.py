@@ -385,8 +385,9 @@ class Episode(object):
             return self.__m3u8
         else:
             REFERER = self.__generate_referer()
-            headers = {"ORIGIN": "https://aniwatch.me"}
+            headers = {"ORIGIN": "https://aniwatch.me", "REFERER": REFERER}
             aniwatch_episode = self.get_aniwatch_episode()
+            self.toggle_mark_as_watched()
             res = self.__network.get_with_user_session(aniwatch_episode.stream.sources[quality])
             self.__m3u8 = M3U8(res.text)
             return self.__m3u8
