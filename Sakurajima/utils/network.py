@@ -23,16 +23,18 @@ class Network:
                 + str(auth_token)
                 + '","remember_login":true}'
             )
+        chat_cookie = '%7B%22userlist_collapsed%22%3Atrue%2C%22scroll_msg%22%3Atrue%2C%22show_time%22%3Atrue%2C%22parse_smileys%22%3Atrue%2C%22show_system_msg%22%3Atrue%2C%22new_msg_beep_sound%22%3Afalse%2C%22auto_connect%22%3Atrue%2C%22retry_reconnection%22%3Atrue%7D'
         headers = {
             "ORIGIN": "https://aniwatch.me/",
             "REFERER": "https://aniwatch.me/",
             "X-XSRF-TOKEN": xsrf_token,
             "USER-AGENT": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36",
-            "COOKIE": f"SESSION={session_token}; XSRF-TOKEN={xsrf_token};",
+            "COOKIE": f"SESSION={session_token}; XSRF-TOKEN={xsrf_token}; ANIWATCH_CHAT_SETTINGS={chat_cookie};",
             "X-AUTH": auth_token
         }
         
         cookies = {
+            "ANIWATCH_CHAT_SETTINGS": chat_cookie.
             "SESSION": session_token,
             "XSRF-TOKEN": xsrf_token
         }
