@@ -21,7 +21,7 @@ from Sakurajima.models import (
 from Sakurajima.models.user_models import Friend, FriendRequestIncoming, FriendRequestOutgoing
 from Sakurajima.utils.episode_list import EpisodeList
 from Sakurajima.utils.network import Network
-
+from Sakurajima.errors import AniwatchError
 
 class Sakurajima:
 
@@ -134,7 +134,16 @@ class Sakurajima:
         :rtype: Anime
         """
         data = {"controller": "Anime", "action": "getAnime", "detail_id": str(anime_id)}
-        return Anime(self.network.post(data)["anime"], network=self.network, api_url=self.API_URL,)
+        headers = {
+            "X-PATH": f"/anime/{anime_id}",
+            "REFERER": f"https://aniwatch.me/anime/{anime_id}"
+        }
+        json = self.network.post(data, headers)
+        if json.get("success", True) != True:
+            error = json["error"]
+            raise AniwatchError(error)
+        else:
+            return Anime(json["anime"], network=self.network, api_url=self.API_URL,)
 
     def get_recommendations(self, anime_id: int):
         """Gets a list of recommendations for an anime.
@@ -832,7 +841,16 @@ class Sakurajima:
             "maxEpisodes": 0,
             "hasRelation": False,
         }
-        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data)]
+        headers = {
+            "X-PATH": "/search",
+            "REFERER": f"https://aniwatch.me/search"
+        }
+        json = self.network.post(data, headers)
+        if json.get("success", True) != True:
+            error = json["error"]
+            raise AniwatchError(error)
+        else:
+            return [Anime(data_dict, self.network, self.API_URL) for data_dict in json]
 
     def get_media(self, anime_id: int):
         """Gets an anime's media.

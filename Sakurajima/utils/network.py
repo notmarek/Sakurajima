@@ -24,6 +24,7 @@ class Network:
                 + '","remember_login":true}'
             )
         headers = {
+            "ORIGIN": "https://aniwatch.me/",
             "REFERER": "https://aniwatch.me/",
             "X-XSRF-TOKEN": xsrf_token,
             "USER-AGENT": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36",
@@ -41,21 +42,22 @@ class Network:
         self.userless_session.headers.update(
             {
                 "USER-AGENT": headers["USER-AGENT"],
+                "ORIGIN": headers["ORIGIN"],
                 "REFERER": headers["REFERER"]
             }
         )
     def __repr__(self):
         return "<Network>"
 
-    def post(self, data):
+    def post(self, data, headers):
         try:
-            res = self.session.post(self.API_URL, json=data)
+            res = self.session.post(self.API_URL, json=data, headers = headers)
             return res.json()
         except Exception as e:
             self.session.close()
             raise e
 
-    def get_with_user_session(self, uri, headers = None):
+    def get_with_user_session(self, uri, headers):
         try:
             res = self.session.get(uri, headers = headers)
             return res
