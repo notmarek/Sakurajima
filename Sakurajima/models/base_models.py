@@ -93,7 +93,7 @@ class Anime(object):
             self.__episodes = EpisodeList(
                 [
                     Episode(data_dict, self.__network, self.__API_URL, self.anime_id, self.title,)
-                    for data_dict in self.__network.post(data)["episodes"]
+                    for data_dict in self.__network.post(data, f"/anime/{self.anime_id}")["episodes"]
                 ]
             )
             return self.__episodes
@@ -112,7 +112,7 @@ class Anime(object):
             "action": "getRelation",
             "relation_id": self.relation_id,
         }
-        return Relation(self.__network.post(data)["relation"])
+        return Relation(self.__network.post(data, f"/anime/{self.anime_id}")["relation"])
 
     def get_recommendations(self):
         """Gets the recommendations for the anime.
@@ -128,7 +128,7 @@ class Anime(object):
         }
         return [
             RecommendationEntry(data_dict, self.__network)
-            for data_dict in self.__network.post(data)["entries"]
+            for data_dict in self.__network.post(data, f"/anime/{self.anime_id}")["entries"]
         ]
 
     def get_chronicle(self, page=1):
@@ -149,7 +149,7 @@ class Anime(object):
         }
         return [
             ChronicleEntry(data_dict, self.__network, self.__API_URL)
-            for data_dict in self.__network.post(data)["chronicle"]
+            for data_dict in self.__network.post(data, f"/anime/{self.anime_id}")["chronicle"]
         ]
 
     def mark_as_completed(self):
@@ -163,7 +163,7 @@ class Anime(object):
             "action": "markAsCompleted",
             "detail_id": str(self.anime_id),
         }
-        return self.__network.post(data)["success"]
+        return self.__network.post(data, f"/anime/{self.anime_id}")["success"]
 
     def mark_as_plan_to_watch(self):
         """Marks the anime as "plan to watch" on the user's aniwatch anime list.
@@ -176,7 +176,7 @@ class Anime(object):
             "action": "markAsPlannedToWatch",
             "detail_id": str(self.anime_id),
         }
-        return self.__network.post(data)["success"]
+        return self.__network.post(data, f"/anime/{self.anime_id}")["success"]
 
     def mark_as_on_hold(self):
         """Marks the anime as "on hold" on the user's aniwatch anime list.
@@ -189,7 +189,7 @@ class Anime(object):
             "action": "markAsOnHold",
             "detail_id": str(self.anime_id),
         }
-        return self.__network.post(data)["success"]
+        return self.__network.post(data, f"/anime/{self.anime_id}")["success"]
 
     def mark_as_dropped(self):
         """Marks the anime as "dropped" on the user's aniwatch anime list.
@@ -202,7 +202,7 @@ class Anime(object):
             "action": "markAsDropped",
             "detail_id": str(self.anime_id),
         }
-        return self.__network.post(data)["success"]
+        return self.__network.post(data, f"/anime/{self.anime_id}")["success"]
 
     def mark_as_watching(self):
         """Marks the anime as "watching" on the user's aniwatch anime list
@@ -215,7 +215,7 @@ class Anime(object):
             "action": "markAsWatching",
             "detail_id": str(self.anime_id),
         }
-        return self.__network.post(data)["success"]
+        return self.__network.post(data, f"/anime/{self.anime_id}")["success"]
 
     def remove_from_list(self):
         """Removes the anime from the user's aniwatch anime list.
@@ -228,7 +228,7 @@ class Anime(object):
             "action": "removeAnime",
             "detail_id": str(self.anime_id),
         }
-        return self.__network.post(data)["success"]
+        return self.__network.post(data, f"/anime/{self.anime_id}")["success"]
 
     def rate(self, rating: int):
         """Set the user's rating for the anime on aniwatch.
@@ -246,7 +246,7 @@ class Anime(object):
             "detail_id": str(self.anime_id),
             "rating": rating,
         }
-        return self.__network.post(data)["success"]
+        return self.__network.post(data, f"/anime/{self.anime_id}")["success"]
 
     def get_media(self):
         """Gets the anime's associated media from aniwatch.me 
@@ -259,7 +259,7 @@ class Anime(object):
             "action": "getMedia",
             "detail_id": str(self.anime_id),
         }
-        return Media(self.__network.post(data), self.__network, self.anime_id,)
+        return Media(self.__network.post(data, f"/anime/{self.anime_id}"), self.__network, self.anime_id,)
 
     def get_complete_object(self):
         """Gets the current anime object but with complete attributes. Sometimes, the Anime
@@ -275,7 +275,7 @@ class Anime(object):
             "action": "getAnime",
             "detail_id": str(self.anime_id),
         }
-        data_dict = self.__network.post(data)["anime"]
+        data_dict = self.__network.post(data, f"/anime/{self.anime_id}")["anime"]
         return Anime(data_dict, self.__network, api_url=self.__API_URL,)
 
     def add_recommendation(self, recommended_anime_id: int):
@@ -292,7 +292,7 @@ class Anime(object):
             "detail_id": str(self.anime_id),
             "recommendation": str(recommended_anime_id),
         }
-        return self.__network.post(data)
+        return self.__network.post(data, f"/anime/{self.anime_id}")
 
     def get_dict(self):
         """Gets the JSON response in the form of a dictionary that was used to
@@ -368,7 +368,7 @@ class Episode(object):
                 "ep_id": self.ep_id,
                 "hoster": "",
             }
-            self.__aniwatch_episode = AniWatchEpisode(self.__network.post(data), self.ep_id)
+            self.__aniwatch_episode = AniWatchEpisode(self.__network.post(data, f"/anime/{self.anime_id}/{self.number}"), self.ep_id)
             return self.__aniwatch_episode
 
     def get_m3u8(self, quality: str) -> M3U8:
@@ -591,7 +591,7 @@ class Episode(object):
             "detail_id": str(self.anime_id),
             "episode_id": self.ep_id,
         }
-        return self.__network.post(data)["success"]
+        return self.__network.post(data, f"/anime/{self.anime_id}/{self.number}")["success"]
 
     def __repr__(self):
         return f"<Episode {self.number}: {self.title}>"

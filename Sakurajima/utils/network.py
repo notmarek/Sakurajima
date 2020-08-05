@@ -47,8 +47,12 @@ class Network:
     def __repr__(self):
         return "<Network>"
 
-    def post(self, data):
+    def post(self, data, path=None):
+        if path is None:
+            print("This endpoint doesn't have a path parameter")
+            return
         try:
+            self.headers['X-PATH'] = path
             res = self.session.post(self.API_URL, json=data)
             return res.json()
         except Exception as e:
