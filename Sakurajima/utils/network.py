@@ -12,7 +12,7 @@ class Network:
         self.session.proxies = proxies
         self.headers = self.session.headers  # Expose session headers
         self.cookies = self.session.cookies  # Expose session cookies
-        xsrf_token = Misc().generate_xsrf_token()
+        self.xsrf_token = Misc().generate_xsrf_token()
         if username is not None and user_id is not None and user_id is not None:
             session_token = urllib.parse.quote(
                 '{"userid":'
@@ -27,16 +27,16 @@ class Network:
         headers = {
             "ORIGIN": "https://aniwatch.me/",
             "REFERER": "https://aniwatch.me/",
-            "X-XSRF-TOKEN": xsrf_token,
+            "X-XSRF-TOKEN": self.xsrf_token,
             "USER-AGENT": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36",
-            "COOKIE": f"SESSION={session_token}; XSRF-TOKEN={xsrf_token}; ANIWATCH_CHAT_SETTINGS={chat_cookie};",
+            "COOKIE": f"SESSION={session_token}; XSRF-TOKEN={self.xsrf_token}; ANIWATCH_CHAT_SETTINGS={chat_cookie};",
             "X-AUTH": auth_token
         }
         
         cookies = {
-            "ANIWATCH_CHAT_SETTINGS": chat_cookie.
+            "ANIWATCH_CHAT_SETTINGS": chat_cookie,
             "SESSION": session_token,
-            "XSRF-TOKEN": xsrf_token
+            "XSRF-TOKEN": self.xsrf_token
         }
 
         self.session.headers.update(headers)
