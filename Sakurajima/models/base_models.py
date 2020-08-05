@@ -215,7 +215,7 @@ class Anime(object):
             "action": "markAsPlannedToWatch",
             "detail_id": str(self.anime_id),
         }
-        return self.__network.post(data)["success"]
+        return self.__network.post(data, f"/anime/{self.anime_id}")["success"]
 
     def mark_as_on_hold(self):
         """Marks the anime as "on hold" on the user's aniwatch anime list.

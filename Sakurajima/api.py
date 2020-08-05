@@ -120,7 +120,7 @@ class Sakurajima:
         return EpisodeList(
             [
                 Episode(data_dict, self.network, self.API_URL, anime_id)
-                for data_dict in self.network.post(data)["episodes"]
+                for data_dict in self.network.post(data, f"/anime/{anime_id}")["episodes"]
             ]
         )
 
@@ -161,7 +161,7 @@ class Sakurajima:
         }
         return [
             RecommendationEntry(data_dict, self.network)
-            for data_dict in self.network.post(data)["entries"]
+            for data_dict in self.network.post(data, f"/anime/{anime_id}")["entries"]
         ]
 
     def get_relation(self, relation_id: int):
@@ -195,7 +195,7 @@ class Sakurajima:
             "current_index": index,
             "current_year": year,
         }
-        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data)["entries"]]
+        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data, "/home")["entries"]]
 
     def get_latest_releases(self):
         """Gets the latest anime releases. This includes currently airing 
@@ -205,7 +205,7 @@ class Sakurajima:
         :rtype: list[Anime]
         """
         data = {"controller": "Anime", "action": "getLatestReleases"}
-        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data)["entries"]]
+        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data, "/home")["entries"]]
 
     def get_latest_uploads(self):
         """Gets latest uploads on "aniwatch.me". This includes animes that are not airing 
@@ -215,7 +215,7 @@ class Sakurajima:
         :rtype: list[Anime]
         """
         data = {"controller": "Anime", "action": "getLatestUploads"}
-        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data)["entries"]]
+        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data, "/home")["entries"]]
 
     def get_latest_anime(self):
         """Gets the latest animes on "aniwatch.me"
@@ -224,7 +224,7 @@ class Sakurajima:
         :rtype: list[Anime]
         """
         data = {"controller": "Anime", "action": "getLatestAnime"}
-        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data)["entries"]]
+        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data, "/home")["entries"]]
 
     def get_random_anime(self):
         """Gets a random anime from the aniwatch.me library.
@@ -233,7 +233,7 @@ class Sakurajima:
         :rtype: Anime
         """
         data = {"controller": "Anime", "action": "getRandomAnime"}
-        return Anime(self.network.post(data)["entries"][0], self.network, self.API_URL)
+        return Anime(self.network.post(data, "/random")["entries"][0], self.network, self.API_URL)
 
     def get_airing_anime(self, randomize=False):
         """Gets currently airing anime arranged according to weekdays.
@@ -250,7 +250,7 @@ class Sakurajima:
             "action": "getAiringAnime",
             "randomize": randomize,
         }
-        airing_anime_response = self.network.post(data)["entries"]
+        airing_anime_response = self.network.post(data, "/airing")["entries"]
         airing_anime = {}
         for day, animes in airing_anime_response.items():
             airing_anime[day] = [Anime(anime_dict, self.network, self.API_URL) for anime_dict in animes]
@@ -265,7 +265,7 @@ class Sakurajima:
         :rtype: list[Anime]
         """
         data = {"controller": "Anime", "action": "getPopularAnime", "page": page}
-        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data)["entries"]]
+        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data, "/top")["entries"]]
 
     def get_popular_seasonal_anime(self, page=1):
         """Gets popular anime of the current season.
@@ -276,7 +276,7 @@ class Sakurajima:
         :rtype: list[Anime]
         """
         data = {"controller": "Anime", "action": "getPopularSeasonals", "page": page}
-        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data)["entries"]]
+        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data, "/seasonal")["entries"]]
 
     def get_popular_upcoming_anime(self, page=1):
         """Gets popular anime that have not started airing yet.
@@ -287,12 +287,12 @@ class Sakurajima:
         :rtype: list[Anime]
         """
         data = {"controller": "Anime", "action": "getPopularUpcomings", "page": page}
-        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data)["entries"]]
+        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data, "/home")["entries"]]
 
     def get_hot_anime(self, page=1):
         # TODO inspect this to figure out a correct description.
         data = {"controller": "Anime", "action": "getHotAnime", "page": page}
-        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data)["entries"]]
+        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data, "/home")["entries"]]
 
     def get_best_rated_anime(self, page=1):
         """Gets the highest rated animes on "aniwatch.me". 
@@ -303,7 +303,7 @@ class Sakurajima:
         :rtype: list[Anime]
         """
         data = {"controller": "Anime", "action": "getBestRatedAnime", "page": page}
-        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data)["entries"]]
+        return [Anime(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data, "/home")["entries"]]
 
     def add_recommendation(self, anime_id: int, recommended_anime_id: int):
         """Submit a recommendation for an anime.
@@ -332,7 +332,7 @@ class Sakurajima:
         :rtype: AniwatchStats
         """
         data = {"controller": "XML", "action": "getStatsData"}
-        return AniwatchStats(self.network.post(data))
+        return AniwatchStats(self.network.post(data, "/stats"))
 
     def get_user_overview(self, user_id):
         """Gets a brief user overview which includes stats like total hours watched,
@@ -348,7 +348,7 @@ class Sakurajima:
             "action": "getOverview",
             "profile_id": str(user_id),
         }
-        return UserOverview(self.network.post(data)["overview"])
+        return UserOverview(self.network.post(data, f"/profile/{user_id}")["overview"])
 
     def get_user_chronicle(self, user_id, page=1):
         """Gets the user's chronicle. A chronicle tracks a user's watch history.
@@ -368,7 +368,7 @@ class Sakurajima:
             "page": page,
         }
         return [
-            ChronicleEntry(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data)["chronicle"]
+            ChronicleEntry(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data, f"/profile/{user_id}")["chronicle"]
         ]
 
     def get_user_anime_list(self):
@@ -386,7 +386,7 @@ class Sakurajima:
         }
         return [
             UserAnimeListEntry(data_dict, self.network)
-            for data_dict in self.network.post(data)["animelist"]
+            for data_dict in self.network.post(data, f"/profile/{user_id}")["animelist"]
         ]
 
     def get_user_media(self, page=1):
@@ -404,7 +404,7 @@ class Sakurajima:
             "profile_id": str(self.userId),
             "page": page,
         }
-        return [UserMedia(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data)["entries"]]
+        return [UserMedia(data_dict, self.network, self.API_URL) for data_dict in self.network.post(data, f"/profile/{user_id}")["entries"]]
 
     def send_image_to_discord(self, episode_id, base64_image, episode_time):
         data = {
