@@ -73,8 +73,7 @@ class Anime(object):
         self.score_rank = data_dict.get("score_rank", None)
         self.__episodes = None
 
-    @staticmethod
-    def __generate_default_headers():
+    def __generate_default_headers(self):
         return {
             "X-PATH": f"/anime/{self.anime_id}",
             "REFERER": f"https://aniwatch.me/anime/{self.anime_id}"
@@ -99,7 +98,7 @@ class Anime(object):
                 "detail_id": str(self.anime_id),
             }
             headers = self.__generate_default_headers()
-            json = self.network.post(data, headers)
+            json = self.__network.post(data, headers)
 
             if json.get("success", True) != True:
                 error = json["error"]
@@ -398,8 +397,7 @@ class Episode(object):
         self.__aniwatch_episode = None
         self.__m3u8 = None
 
-    @staticmethod
-    def __generate_default_headers():
+    def __generate_default_headers(self):
         headers = {
             "REFERER": f"https://aniwatch.me/anime/{self.anime_id}/{self.number}",
             "X-PATH": f"/anime/{self.anime_id}/{self.ep_id}"
@@ -444,13 +442,16 @@ class Episode(object):
         if self.__m3u8:
             return self.__m3u8
         else:
-            headers = self.__generate_default_headers()
-            self.toggle_mark_as_watched()
-            aniwatch_episode = self.get_aniwatch_episode()
-            uri = aniwatch_episode.stream.sources[quality] # The uri to the M3U8 file.
-            res = self.__network.get_with_user_session(uri, headers)
-            self.__m3u8 = M3U8(res.text)
-            return self.__m3u8
+            try:
+                headers = self.__generate_default_headers()
+                self.toggle_mark_as_watched()
+                aniwatch_episode = self.get_aniwatch_episode()
+                uri = aniwatch_episode.stream.sources[quality] # The uri to the M3U8 file.
+                res = self.__network.get_with_user_session(uri, headers)
+                self.__m3u8 = M3U8(res.text)
+                return self.__m3u8
+            except:
+                return None
 
     def download(
         self,
