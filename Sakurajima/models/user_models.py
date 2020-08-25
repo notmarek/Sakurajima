@@ -178,6 +178,8 @@ class Friend(object):
 
 
 class FriendRequestIncoming(object):
+    """Represents a friend requests that the user has recieved.
+    """
     def __init__(self, network, data_dict):
         self.__network = network
         self.username = data_dict.get("username", None)
@@ -186,6 +188,11 @@ class FriendRequestIncoming(object):
         self.date = data_dict.get("date", None)
 
     def accept(self):
+        """Accepts the friend request.
+
+        :return: True if the operation was successful, False if an error occured.
+        :rtype: :class:`bool` 
+        """
         data = {
             "controller": "Profile",
             "action": "acceptRequest",
@@ -194,6 +201,11 @@ class FriendRequestIncoming(object):
         return self.__network.post(data)["success"]
 
     def decline(self):
+        """Declines the friend request.
+
+        :return: True if the operation was successful, False if an error occured.
+        :rtype: :class:`bool`
+        """
         data = {
             "controller": "Profile",
             "action": "rejectRequest",
@@ -206,6 +218,8 @@ class FriendRequestIncoming(object):
 
 
 class FriendRequestOutgoing(object):
+    """Represents a friend request that the user has sent.
+    """
     def __init__(self, network, data_dict):
         self.__network = network
         self.username = data_dict.get("username", None)
@@ -214,12 +228,17 @@ class FriendRequestOutgoing(object):
         self.date = data_dict.get("date", None)
 
     def withdraw(self):
+        """Withdraws the friend request.
+
+        :return: True if the operation was successful, False if an error occured.
+        :rtype: :class:`bool`
+        """
         data = {
             "controller": "Profile",
             "action": "withdrawRequest",
             "friend_id": self.user_id,
         }
-        return self.__network.post(data)
+        return self.__network.post(data)["success"]
 
     def __repr__(self):
         return f"<FriendRequestOutgoing: {self.username}>"

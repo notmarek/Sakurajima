@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 import requests
 import json
 from m3u8 import M3U8
@@ -10,6 +10,7 @@ from Sakurajima.models.media import Media
 from Sakurajima.models.helper_models import Language, Stream
 from Sakurajima.utils.episode_list import EpisodeList
 from Sakurajima.utils.downloader import Downloader, MultiThreadDownloader
+from Sakurajima.errors import AniwatchError
 import subprocess
 from time import sleep
 from pathvalidate import sanitize_filename
@@ -44,7 +45,7 @@ class Anime(object):
         self.episode_max = data_dict.get("episode_max", None)
         self.type = data_dict.get("type", None)
         try:
-            self.broadcast_start = datetime.datetime.utcfromtimestamp(data_dict.get("broadcast_start"))
+            self.broadcast_start = datetime.utcfromtimestamp(data_dict.get("broadcast_start"))
         except:
             self.broadcast_start = None
         try:
@@ -72,6 +73,12 @@ class Anime(object):
         self.score_rank = data_dict.get("score_rank", None)
         self.__episodes = None
 
+    def __generate_default_headers(self):
+        return {
+            "X-PATH": f"/anime/{self.anime_id}",
+            "REFERER": f"https://aniwatch.me/anime/{self.anime_id}"
+            }
+    
     def get_episodes(self):
         """Gets a list of all available episodes of the anime. 
 
@@ -82,20 +89,27 @@ class Anime(object):
                  episode number.
         :rtype: EpisodeList
         """
-        data = {
-            "controller": "Anime",
-            "action": "getEpisodes",
-            "detail_id": str(self.anime_id),
-        }
         if self.__episodes:
             return self.__episodes
         else:
-            self.__episodes = EpisodeList(
-                [
-                    Episode(data_dict, self.__network, self.__API_URL, self.anime_id, self.title,)
-                    for data_dict in self.__network.post(data)["episodes"]
-                ]
-            )
+            data = {
+                "controller": "Anime",
+                "action": "getEpisodes",
+                "detail_id": str(self.anime_id),
+            }
+            headers = self.__generate_default_headers()
+            json = self.__network.post(data, headers)
+
+            if json.get("success", True) != True:
+                error = json["error"]
+                raise AniwatchError(error)
+            else:
+                self.__episodes = EpisodeList(
+                    [
+                        Episode(data_dict, self.__network, self.__API_URL, self.anime_id, self.title,)
+                        for data_dict in json["episodes"]
+                    ]
+                )
             return self.__episodes
 
     def __repr__(self):
@@ -112,7 +126,14 @@ class Anime(object):
             "action": "getRelation",
             "relation_id": self.relation_id,
         }
-        return Relation(self.__network.post(data)["relation"])
+
+        headers = self.__generate_default_headers()
+        json = self.__network.post(data, headers)
+        if json.get("success", True) != True:
+            error = json["error"]
+            raise AniwatchError(error)
+        else:
+            return Relation(json["relation"])
 
     def get_recommendations(self):
         """Gets the recommendations for the anime.
@@ -126,9 +147,16 @@ class Anime(object):
             "action": "getRecommendations",
             "detail_id": str(self.anime_id),
         }
-        return [
-            RecommendationEntry(data_dict, self.__network)
-            for data_dict in self.__network.post(data)["entries"]
+        headers = self.__generate_default_headers()
+        json = self.__network(data, headers)
+
+        if json.get("success", True) != True:
+            error = json["error"]
+            raise AniwatchError(error)
+        else:
+            return [
+                RecommendationEntry(data_dict, self.__network)
+                for data_dict in json["entries"]
         ]
 
     def get_chronicle(self, page=1):
@@ -147,9 +175,16 @@ class Anime(object):
             "detail_id": str(self.anime_id),
             "page": page,
         }
-        return [
-            ChronicleEntry(data_dict, self.__network, self.__API_URL)
-            for data_dict in self.__network.post(data)["chronicle"]
+        headers = self.__generate_default_headers()
+        json = self.__network(data, headers)
+
+        if json.get("success", True) != True:
+            error = json["error"]
+            raise AniwatchError(error)
+        else:
+            return [
+                ChronicleEntry(data_dict, self.__network, self.__API_URL)
+                for data_dict in json["chronicle"]
         ]
 
     def mark_as_completed(self):
@@ -163,7 +198,10 @@ class Anime(object):
             "action": "markAsCompleted",
             "detail_id": str(self.anime_id),
         }
-        return self.__network.post(data)["success"]
+
+        headers = self.__generate_default_headers()
+        json = self.__network.post(data, headers)
+        return json["success"]
 
     def mark_as_plan_to_watch(self):
         """Marks the anime as "plan to watch" on the user's aniwatch anime list.
@@ -176,7 +214,7 @@ class Anime(object):
             "action": "markAsPlannedToWatch",
             "detail_id": str(self.anime_id),
         }
-        return self.__network.post(data)["success"]
+        return self.__network.post(data, f"/anime/{self.anime_id}")["success"]
 
     def mark_as_on_hold(self):
         """Marks the anime as "on hold" on the user's aniwatch anime list.
@@ -189,7 +227,9 @@ class Anime(object):
             "action": "markAsOnHold",
             "detail_id": str(self.anime_id),
         }
-        return self.__network.post(data)["success"]
+        headers = self.__generate_default_headers()
+        json = self.__network.post(data, headers)
+        return json["success"]
 
     def mark_as_dropped(self):
         """Marks the anime as "dropped" on the user's aniwatch anime list.
@@ -202,7 +242,9 @@ class Anime(object):
             "action": "markAsDropped",
             "detail_id": str(self.anime_id),
         }
-        return self.__network.post(data)["success"]
+        headers = self.__generate_default_headers()
+        json = self.__network.post(data, headers)
+        return json["success"]
 
     def mark_as_watching(self):
         """Marks the anime as "watching" on the user's aniwatch anime list
@@ -215,7 +257,9 @@ class Anime(object):
             "action": "markAsWatching",
             "detail_id": str(self.anime_id),
         }
-        return self.__network.post(data)["success"]
+        headers = self.__generate_default_headers()
+        json = self.__network.post(data, headers)
+        return json["success"]
 
     def remove_from_list(self):
         """Removes the anime from the user's aniwatch anime list.
@@ -228,7 +272,9 @@ class Anime(object):
             "action": "removeAnime",
             "detail_id": str(self.anime_id),
         }
-        return self.__network.post(data)["success"]
+        headers = self.__generate_default_headers()
+        json = self.__network.post(data, headers)
+        return json["success"]
 
     def rate(self, rating: int):
         """Set the user's rating for the anime on aniwatch.
@@ -246,7 +292,9 @@ class Anime(object):
             "detail_id": str(self.anime_id),
             "rating": rating,
         }
-        return self.__network.post(data)["success"]
+        headers = self.__generate_default_headers()
+        json = self.__network.post(data, headers)
+        return json["success"]
 
     def get_media(self):
         """Gets the anime's associated media from aniwatch.me 
@@ -254,12 +302,16 @@ class Anime(object):
         :return: A Media object that has attributes like ``opening``, ``osts``.
         :rtype: Media
         """
+        
         data = {
             "controller": "Media",
             "action": "getMedia",
             "detail_id": str(self.anime_id),
         }
-        return Media(self.__network.post(data), self.__network, self.anime_id,)
+
+        headers = self.__generate_default_headers()
+        json = self.__network.post(data, headers)
+        return Media(json, self.__network, self.anime_id,)
 
     def get_complete_object(self):
         """Gets the current anime object but with complete attributes. Sometimes, the Anime
@@ -275,8 +327,14 @@ class Anime(object):
             "action": "getAnime",
             "detail_id": str(self.anime_id),
         }
-        data_dict = self.__network.post(data)["anime"]
-        return Anime(data_dict, self.__network, api_url=self.__API_URL,)
+        headers = self.__generate_default_headers()
+        json = self.__network.post(data, headers)
+        if json.get("success", True) != True:
+            error = json["error"]
+            raise AniwatchError(error)
+        else:
+            data_dict = json["anime"]
+            return Anime(data_dict, self.__network, api_url=self.__API_URL,)
 
     def add_recommendation(self, recommended_anime_id: int):
         """Adds the user's reccomendation for the anime. 
@@ -292,7 +350,9 @@ class Anime(object):
             "detail_id": str(self.anime_id),
             "recommendation": str(recommended_anime_id),
         }
-        return self.__network.post(data)
+        headers = self.__generate_default_headers()
+        json = self.__network.post(data, headers)
+        return json
 
     def get_dict(self):
         """Gets the JSON response in the form of a dictionary that was used to
@@ -337,16 +397,11 @@ class Episode(object):
         self.__aniwatch_episode = None
         self.__m3u8 = None
 
-    def __generate_referer(self):
-        return f"https://aniwatch.me/anime/{self.anime_id}/{self.number}"
-
-    def __get_decrypt_key(self, url):
-        res = self.__network.get(url)
-        return res.content
-
-    def __decrypt_chunk(self, chunk, key):
-        decrytor = AES.new(key, AES.MODE_CBC)
-        return decrytor.decrypt(chunk)
+    def __generate_default_headers(self):
+        headers = {
+            "REFERER": f"https://aniwatch.me/anime/{self.anime_id}/{self.number}",
+            "X-PATH": f"/anime/{self.anime_id}/{self.ep_id}"
+            }
 
     def get_aniwatch_episode(self, lang="en-US"):
         """Gets the AniWatchEpisode object associated with the episode.
@@ -368,7 +423,10 @@ class Episode(object):
                 "ep_id": self.ep_id,
                 "hoster": "",
             }
-            self.__aniwatch_episode = AniWatchEpisode(self.__network.post(data), self.ep_id)
+
+            headers = self.__generate_default_headers()
+            json = self.__network.post(data, headers)
+            self.__aniwatch_episode = AniWatchEpisode(json, self.ep_id)
             return self.__aniwatch_episode
 
     def get_m3u8(self, quality: str) -> M3U8:
@@ -384,28 +442,16 @@ class Episode(object):
         if self.__m3u8:
             return self.__m3u8
         else:
-            REFERER = self.__generate_referer()
-            self.__network.headers.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
-            aniwatch_episode = self.get_aniwatch_episode()
-            res = self.__network.get(aniwatch_episode.stream.sources[quality])
-            self.__m3u8 = M3U8(res.text)
-            return self.__m3u8
-
-    def download_chunk(self, file_name, chunk_num, segment):
-        try:
-            os.mkdir("chunks")
-        except FileExistsError:
-            pass
-        with open(f"chunks/{file_name}-{chunk_num}.chunk.ts", "wb") as videofile:
-            res = requests.get(segment["uri"], cookies=self.__cookies, headers=headers)
-            chunk = res.content
-            key_dict = segment.get("key", None)
-            if key_dict is not None:
-                key = self.__get_decrypt_key(key_dict["uri"])
-                decrypted_chunk = self.__decrypt_chunk(chunk, key)
-                videofile.write(decrypted_chunk)
-            else:
-                videofile.write(chunk)
+            try:
+                headers = self.__generate_default_headers()
+                self.toggle_mark_as_watched()
+                aniwatch_episode = self.get_aniwatch_episode()
+                uri = aniwatch_episode.stream.sources[quality] # The uri to the M3U8 file.
+                res = self.__network.get_with_user_session(uri, headers)
+                self.__m3u8 = M3U8(res.text)
+                return self.__m3u8
+            except:
+                return None
 
     def download(
         self,
@@ -497,77 +543,6 @@ class Episode(object):
             dlr.remove_chunks()
         os.chdir(current_path)
 
-    def download_without_downloader(
-        self,
-        quality: str,
-        file_name: str = None,
-        multi_threading: bool = False,
-        use_ffmpeg: bool = False,
-        include_intro_chunk: bool = False,
-        delete_chunks: bool = True,
-        on_progress=None,
-        print_progress: bool = True,
-    ):
-        if file_name is None:
-            if self.anime_title is None:
-                file_name = f"Download-{self.ep_id}"
-            else:
-                file_name = f"{self.anime_title[:128]}-{self.number}"  # limit anime title lenght to 128 chars so we don't surpass the filename limit
-        m3u8 = self.get_m3u8(quality)
-        REFERER = self.__generate_referer()
-        self.__network.headers.update({"REFERER": REFERER, "ORIGIN": "https://aniwatch.me"})
-        chunks_done = 0
-        threads = []
-        cur_chunk = 0
-        if not include_intro_chunk:
-            for x in m3u8.data["segments"]:
-                # Remove useless segments (intro)
-                if "img.aniwatch.me" in x["uri"]:
-                    m3u8.data["segments"].remove(x)
-        total_chunks = len(m3u8.data["segments"])
-
-        for segment in m3u8.data["segments"]:
-            if not multi_threading:
-                if on_progress:
-                    on_progress.__call__(chunks_done, total_chunks)
-                self.download_chunk(file_name, chunks_done, segment)
-                chunks_done += 1
-                if print_progress:
-                    print(f"{chunks_done}/{total_chunks} done.")
-            else:
-                threads.append(Process(target=self.download_chunk, args=(file_name, cur_chunk, segment,),))
-                cur_chunk += 1
-        if multi_threading:
-            for p in threads:
-                p.start()
-            print(f"[{datetime.now()}] Started download.")
-            for p in threads:
-                p.join()
-            print(f"[{datetime.now()}] Download finishing.")
-        if use_ffmpeg:
-            print("Merging chunks into mp4.")
-            concat = '"concat'
-            for x in range(0, total_chunks):
-                if x == 0:
-                    concat += f":chunks/{file_name}-{x}.chunk.ts"
-                else:
-                    concat += f"|chunks/{file_name}-{x}.chunk.ts"
-            concat += '"'
-            subprocess.run(f'ffmpeg -i {concat} -c copy "{file_name}.mp4"')
-
-        else:
-            print("Merging chunks into mp4")
-            with open(f"{file_name}.mp4", "wb") as merged:
-                for ts_file in [
-                    f"chunks/{file_name}-{x}.chunk.ts" for x in range(0, total_chunks)
-                ]:
-                    with open(ts_file, "rb") as ts:
-                        shutil.copyfileobj(ts, merged)
-        if delete_chunks:
-            for x in range(0, total_chunks):
-                # Remove chunk files
-                os.remove(f"chunks/{file_name}-{x}.chunk.ts")
-
     def get_available_qualities(self):
         """Gets a list of available qualities for the episode.
 
@@ -576,7 +551,7 @@ class Episode(object):
         :rtype: list[str]
         """ 
         aniwatch_episode = self.get_aniwatch_episode()
-        return list(aniwatch_episode.stream.sources.keys())
+        return tuple(aniwatch_episode.stream.sources.keys())
 
     def toggle_mark_as_watched(self):
         """Toggles the "mark as watched" status of the episode
@@ -590,7 +565,9 @@ class Episode(object):
             "detail_id": str(self.anime_id),
             "episode_id": self.ep_id,
         }
-        return self.__network.post(data)["success"]
+        headers = self.__generate_default_headers()
+        json = self.__network.post(data, headers)
+        return json["success"]
 
     def __repr__(self):
         return f"<Episode {self.number}: {self.title}>"

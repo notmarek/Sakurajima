@@ -6,6 +6,10 @@
 
 Sakurajima is a Python API wrapper for [AniWatch](https://aniwatch.me).
 
+## Disclaimer
+
+Using this tool comes with a high risk of getting banned on AniWatch.
+
 ## Installation
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install Sakurajima.

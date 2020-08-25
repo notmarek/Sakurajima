@@ -20,3 +20,5 @@ Models
    user_overview_stats
    user_overview_watch_type
    friend
+   friend_request_incoming
+   friend_request_outgoing
