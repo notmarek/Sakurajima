@@ -846,7 +846,7 @@ class Sakurajima:
             "REFERER": f"https://aniwatch.me/search"
         }
         json = self.network.post(data, headers)
-        if json.get("success", True) != True:
+        if type(json) == dict and json.get("success", True) != True:
             error = json["error"]
             raise AniwatchError(error)
         else:

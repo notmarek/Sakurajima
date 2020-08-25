@@ -19,7 +19,7 @@ class Network:
                 + str(user_id)
                 + ',"username":"'
                 + str(username)
-                + '","usergroup":4,"player_lang":1,"player_quality":0,"player_time_left_side":2,"player_time_right_side":3,"screen_orientation":1,"nsfw":1,"chrLogging":1,"mask_episode_info":0,"blur_thumbnails":0,"autoplay":1,"preview_thumbnails":1,"update_watchlist":1,"playheads":1,"seek_time":5,"cover":null,"title":"Member","premium":1,"lang":"en-US","auth":"'
+                + '","usergroup":4,"player_lang":1,"player_quality":0,"player_time_left_side":2,"player_time_right_side":3,"screen_orientation":1,"nsfw":1,"chrLogging":1,"mask_episode_info":0,"blur_thumbnails":0,"autoplay":1,"preview_thumbnails":1,"update_watchlist":1,"update_watchlist_notification":1,"playheads":1,"seek_time":5,"update_watchlist_percentage":80,"cover":null,"title":"Member","premium":1,"lang":"en-US","auth":"'
                 + str(auth_token)
                 + '","remember_login":true}'
             )
