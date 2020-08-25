@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="sakurajima",
-    version="0.2.1",
+    version="0.3.1",
     license="MIT",
     author="NotMarek, Dhanraj Hira",
     author_email="notmarek1337@gmail.com",
