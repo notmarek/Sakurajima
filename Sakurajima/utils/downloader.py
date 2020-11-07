@@ -23,6 +23,7 @@ class Downloader(object):
         include_intro: bool = False,
         delete_chunks: bool = True,
         on_progress=None,
+        headers=None
     ):
         """
         :param network: The Sakurajima :class:`Network` object that is used to make network requests.  
@@ -54,6 +55,7 @@ class Downloader(object):
         self.include_intro = include_intro
         self.delete_chunks = delete_chunks
         self.on_progress = on_progress
+        self.headers = headers
         self.progress_tracker = ProgressTracker(episode_id)
 
     def init_tracker(self):
@@ -98,10 +100,12 @@ class Downloader(object):
             file_name = f"chunks\/{self.file_name}-{chunk_number}.chunk.ts"
             ChunkDownloader(
                 self.__network,
+                self.headers,
                 chunk_tuple[1], # The segment data
                 file_name,
                 chunk_tuple[0], # The chunk number needed for decryption.
-                decryter_provider
+                decryter_provider,
+                
                 ).download()
             self.progress_bar.next()
             self.progress_tracker.update_chunks_done(chunk_number)
@@ -128,7 +132,7 @@ class ChunkDownloader(object):
     """
     The object that actually downloads a single chunk.
     """
-    def __init__(self, network, segment, file_name, chunk_number, decrypt_provider: DecrypterProvider):
+    def __init__(self, network, segment, file_name, chunk_number, decrypt_provider: DecrypterProvider, headers):
         """
         :param network: The Sakurajima :class:`Network` object that is used to make network requests. 
         :type network: :class:`Network`
@@ -141,6 +145,7 @@ class ChunkDownloader(object):
         :type chunk_number: int
         """
         self.__network = network
+        self.headers = headers
         self.segment = segment
         self.file_name = file_name
         self.chunk_number = chunk_number,
@@ -150,7 +155,7 @@ class ChunkDownloader(object):
         """Starts downloading the chunk.
         """
         with open(self.file_name, "wb") as videofile:
-            res = self.__network.get(self.segment["uri"])
+            res = self.__network.get(self.segment["uri"], headers=self.headers)
             chunk = res.content
             key_dict = self.segment.get("key", None)
             
@@ -179,6 +184,7 @@ class MultiThreadDownloader(object):
         use_ffmpeg: bool = True,
         include_intro: bool = False,
         delete_chunks: bool = True,
+        headers = None
     ):
         """
         :param network: The Sakurajima :class:`Network` object that is used to make network requests.
@@ -209,6 +215,7 @@ class MultiThreadDownloader(object):
         self.include_intro = include_intro
         self.delete_chunks = delete_chunks
         self.threads = []
+        self.headers
         self.progress_tracker = ProgressTracker(episode_id)
         self.__lock = Lock()
         try:
@@ -232,10 +239,12 @@ class MultiThreadDownloader(object):
 
         ChunkDownloader(
             segment.network,
+            self.headers,
             segment.segment,
             segment.file_name,
             segment.chunk_number,
-            segment.decrypter_provider
+            segment.decrypter_provider,
+
         ).download()
         with self.__lock:
             self.progress_tracker.update_chunks_done(segment.chunk_number)

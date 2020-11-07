@@ -16,6 +16,7 @@ from time import sleep
 from pathvalidate import sanitize_filename
 from multiprocessing import Process
 import os
+from base64 import b64decode
 import shutil
 
 
@@ -444,15 +445,24 @@ class Episode(object):
         else:
             try:
                 headers = self.__generate_default_headers()
-                self.toggle_mark_as_watched()
                 aniwatch_episode = self.get_aniwatch_episode()
+                self.toggle_mark_as_watched()
+                self.spoof_download_sprites()
                 uri = aniwatch_episode.stream.sources[quality] # The uri to the M3U8 file.
                 res = self.__network.get_with_user_session(uri, headers)
                 self.__m3u8 = M3U8(res.text)
                 return self.__m3u8
             except:
-                return None
-
+                return Nonec
+    
+    def spoof_download_sprites(self):
+        sprites_url = self.get_aniwatch_episode().stream.sprites
+        headers = self.__generate_default_headers()
+        b64encodeddata = self.__network.get(sprites_url, headers).text
+        decoded = b64decode(b64encodeddata).decode("utf-8")
+        sprite_id = decoded.split(",")[0].replace("[id:","")
+        self.__network.get(f"https://img.aniwatch.me/{sprite_id}", headers=headers)
+        
     def download(
         self,
         quality: str,
@@ -532,10 +542,10 @@ class Episode(object):
         
         if multi_threading:
             dlr = MultiThreadDownloader(
-                self.__network, m3u8, file_name, self.ep_id, max_threads, use_ffmpeg, include_intro, delete_chunks,
+                self.__network, m3u8, file_name, self.ep_id, max_threads, use_ffmpeg, include_intro, delete_chunks, self.__generate_default_headers()
             )
         else:
-            dlr = Downloader(self.__network, m3u8, file_name, self.ep_id, use_ffmpeg, include_intro, delete_chunks,)
+            dlr = Downloader(self.__network, m3u8, file_name, self.ep_id, use_ffmpeg, include_intro, delete_chunks, self.__generate_default_headers())
         
         dlr.download()
         dlr.merge()
@@ -581,6 +591,7 @@ class AniWatchEpisode(object):
         """List of Language objects available for the episode."""
         self.stream = Stream(data_dict.get("stream", None))
         """The Stream object associated with the episode."""
+
 
     def __repr__(self):
         return f"Episode ID: {self.episode_id}"
